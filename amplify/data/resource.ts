@@ -20,7 +20,79 @@ allow.owner()]),
     post: a.belongsTo('Post', 'postId'),
     owner: a.string()
   }).authorization(allow => [allow.guest().to(['read']),
-  allow.owner()])
+  allow.owner()]),
+
+  User: a
+  .model({
+    userIdAMP: a.string(),
+    bikes: a.hasMany('Bike', 'userId'),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
+
+  Bike: a
+  .model({
+    bikeNumber: a.integer(),
+    brand: a.string(),
+    model: a.string(),
+    year: a.integer(),
+    sold: a.boolean(),
+    broken: a.boolean(),
+    ownershipMonths: a.integer(),
+    score: a.float(),
+    userId: a.id(),
+    user: a.belongsTo('User', 'userId'),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
+
+  BrandStats: a
+  .model({
+    brandName: a.string(),
+    avgSatisScore: a.float(),
+    totalNumBikes: a.integer(),
+    numFirstBike: a.integer(),
+    numSecondBike: a.integer(),
+    numThirdPlusBike: a.integer(),
+    numBroken: a.integer(),
+    numSold: a.integer(),
+    avgOwnership: a.float(),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
+
+  ModelStats: a
+  .model({
+    modelName: a.string(),
+    brandName: a.string(),
+    avgSatisScore: a.float(),
+    totalNumBikes: a.integer(),
+    numFirstBike: a.integer(),
+    numSecondBike: a.integer(),
+    numThirdPlusBike: a.integer(),
+    numBroken: a.integer(),
+    numSold: a.integer(),
+    avgOwnership: a.float(),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
+
+  BikeStats: a
+  .model({
+    modelName: a.string(),
+    bikeYear: a.integer(),
+    bikeNum: a.integer(),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
+
+  TotalStats: a
+  .model({
+    totalAvgSatisScore: a.float(),
+    totalNumBikes: a.integer(),
+    totalNumFirst: a.integer(),
+    totalNumSecond: a.integer(),
+    totalNumThird: a.integer(),
+    totalNumBroken: a.integer(),
+    totalNumSold: a.integer(),
+    totalAvgOwnership: a.float(),
+  }).authorization(allow => [allow.guest().to(['read']),
+  allow.owner()]),
 
 });
 
