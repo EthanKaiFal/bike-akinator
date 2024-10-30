@@ -40,21 +40,22 @@ const AddPost = () => {
         />
         </div>   
         <div className="inputField">
-          <p>Is this bike already sold?</p>
-          <select value={bikeSold ? "Yes": "No"} onChange={handleBikeSold}>
-            <option value="">Select...</option>{/*Placeholder*/}
+            <p>Is this bike already sold?</p>
+            <select name="bikeSold" defaultValue="">
+            <option value="" disabled>Select...</option> {/* Placeholder */}
             <option value="Yes">Yes</option>
             <option value="No">No</option>
-          </select>
+            </select>
         </div>
+
         <div className="inputField">
-          <p>Has this bike been significantly broken before?</p>
-          <select value={bikeBroken ? "Yes": "No"} onChange={handleBikeBroken}>
-            <option value="">Select...</option>{/*Placeholder*/}
+            <p>Is this bike already broken?</p>
+            <select name="bikeBroken" defaultValue="">
+            <option value="" disabled>Select...</option> {/* Placeholder */}
             <option value="Yes">Yes</option>
             <option value="No">No</option>
-          </select>
-        </div>  
+            </select>
+        </div> 
         <div className="inputField">
           <p>How many months have you owned this bike?</p>
           <input 
@@ -69,8 +70,8 @@ const AddPost = () => {
           <p>From 1-10 how would rate your experience with this bike? Decimals like 8.8 are usable.</p>
           <input 
           type="number" 
-          value={bikeScore} 
-          onChange={handleBikeScore} 
+          name="bikeScore" 
+          id="handleBikeScore" 
           min="0.0"
           max="10.0"
           step="0.1"
