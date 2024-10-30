@@ -1,5 +1,5 @@
 import React from 'react'
-import { createBike } from '../_actions/actions';
+import { createBike } from '.././app/_actions/actions';
 const AddPost = () => {
     return (
         <form action={createBike} className='p-4 flex flex-col items-center gap-4'>
@@ -33,7 +33,7 @@ const AddPost = () => {
         <div className="inputField">
           <p>Year:</p>
           <input 
-          type="text" 
+          type="number" 
           name="bikeYear"
           id="bikeYear"
           placeholder="Type in your bike year" 

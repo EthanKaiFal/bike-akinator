@@ -73,3 +73,18 @@ export async function fetchUserId(): Promise<string>{
     const { data: users} = await cookieBasedClient.models.User.list();
     return users[0].id;
 }
+
+export async function createBike(formData: FormData) {
+    const {data, errors} = await cookieBasedClient.models.Bike.create({
+        bikeNumber: Number(formData.get("bikeNumber")) || 0,
+        brand: formData.get("bikebrand")?.toString() || "",
+        model: formData.get("bikeModel")?.toString() || "",
+        year: Number(formData.get("bikeYear")) || 0,
+        sold: formData.get("title")?.toString() || "",
+        broken: formData.get("title")?.toString() || "",
+        ownershipMonths: Number(formData.get("monthsOwned"))|| 0,
+        score: Number(formData.get("bikeScore")) || 0,
+})
+    console.log(errors);
+    redirect("/profile");
+}
