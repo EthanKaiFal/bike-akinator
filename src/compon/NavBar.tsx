@@ -54,7 +54,12 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
             loggedIn: true, //makes it so this route only works when logged in
 
         },
-        
+        {
+            href: "/profile",
+            label: "View Profile Info",
+            loggedIn: true, //makes it so this route only works when logged in
+
+        },
 
     ];
 

@@ -29,3 +29,18 @@ export const cookieBasedClient = generateServerClientUsingCookies<Schema>({
     cookies,
     authMode: "userPool",
 })
+
+export const getUser = async () =>
+    await runWithAmplifyServerContext({
+        nextServerContext: {cookies}
+            ,
+            async operation(contextSpec) {
+                try{
+                    const user = await getCurrentUser(contextSpec);
+                    return user;
+                }
+                catch(error){
+                    return null;
+                }
+            }
+    })

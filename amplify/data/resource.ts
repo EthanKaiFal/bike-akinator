@@ -24,9 +24,8 @@ allow.owner()]),
 
   User: a
   .model({
-    userIdAMP: a.string(),
     bikes: a.hasMany('Bike', 'userId'),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [
   allow.owner()]),
 
   Bike: a
