@@ -1,6 +1,6 @@
 "use server"
 
-import { cookieBasedClient } from "@/utils/amplify-utils"
+import { cookieBasedClient } from "@/app/utils/amplify-utils"
 import {redirect} from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { UserProfile, Bike as BikeType } from "@/compon/interfaces";

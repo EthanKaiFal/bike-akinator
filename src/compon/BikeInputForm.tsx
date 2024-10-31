@@ -1,6 +1,8 @@
+
 import React from 'react'
 import { createBike } from '.././app/_actions/actions';
-const AddPost = () => {
+export default async function BikeInputForm() {
+  console.log("inside the bike input form")
     return (
         <form action={createBike} className='p-4 flex flex-col items-center gap-4'>
             <div className="inputField">
@@ -84,5 +86,3 @@ const AddPost = () => {
         </form>
     )
 }
-
-export default AddPost;
