@@ -1,10 +1,10 @@
 
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { cookieBasedClient } from "@/app/utils/amplify-utils"
+import { cookieBasedClient } from "@/utils/amplify-utils"
 import "@aws-amplify/ui-react/styles.css";
 import * as DBWork from "../_actions/actions"
 import Bike from "../../compon/Bike"
-import { isAuthenticated } from "@/app/utils/amplify-utils";
+import { isAuthenticated } from "@/utils/amplify-utils";
 import UpdateForAdd from "@/compon/upDateForAdd";
 import BikeInputForm from "@/compon/BikeInputForm";
 

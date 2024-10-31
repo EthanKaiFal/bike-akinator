@@ -1,5 +1,5 @@
-import { cookieBasedClient } from "@/app/utils/amplify-utils";
-import { isAuthenticated } from "@/app/utils/amplify-utils";
+import { cookieBasedClient } from "@/utils/amplify-utils";
+import { isAuthenticated } from "@/utils/amplify-utils";
 
 const Posts = async({params}: { params: { id: string}}) => {
     if(!params.id) return null;

@@ -11,9 +11,10 @@ import {Hub} from "aws-amplify/utils";
 export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
     const [authCheck, setAuthCheck] = useState(isSignedIn);
     const [isPending, startTransition] = useTransition();
-
     const router = useRouter();
+    console.log("here 4"+isSignedIn);
     useEffect(() => {
+        console.log("here 3"+isSignedIn);
         const hubListenerCancel = Hub.listen("auth", (data) => {
             switch (data.payload.event) {
                 case "signedIn":
@@ -34,7 +35,7 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
         return () => hubListenerCancel();
 
     }, [router]);
-
+    console.log("here 5"+isSignedIn);
     const signOutSignIn = async () => {
         if (authCheck) {
             await signOut();
@@ -50,13 +51,13 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
         },
         {
             href: "/add",
-            label: "Add Title",
+            label: "Add Bike",
             loggedIn: true, //makes it so this route only works when logged in
 
         },
         {
             href: "/profile",
-            label: "View Profile Info",
+            label: "Profile",
             loggedIn: true, //makes it so this route only works when logged in
 
         },
@@ -65,7 +66,7 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
 
     const routes = defaultRoutes.filter(
         (route) => route.loggedIn === authCheck || route.loggedIn ===undefined);
-
+        console.log("here 6"+isSignedIn);
         return (
             <>
                 <Flex

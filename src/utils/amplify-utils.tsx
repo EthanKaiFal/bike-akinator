@@ -1,10 +1,10 @@
 
 import { createServerRunner } from "@aws-amplify/adapter-nextjs";
-import config from '../../../amplify_outputs.json';
+import config from '../../amplify_outputs.json';
 import {cookies} from "next/headers";
 import { getCurrentUser } from "aws-amplify/auth/server";
 import { generateServerClientUsingCookies } from "@aws-amplify/adapter-nextjs/api";
-import { Schema } from "../../../amplify/data/resource";
+import { Schema } from "../../amplify/data/resource";
 
 export const { runWithAmplifyServerContext} = createServerRunner({
     config,
@@ -12,6 +12,7 @@ export const { runWithAmplifyServerContext} = createServerRunner({
 
 export const isAuthenticated = async () =>
     await runWithAmplifyServerContext({
+        
         nextServerContext: {cookies}
             ,
             async operation(contextSpec) {
@@ -20,6 +21,7 @@ export const isAuthenticated = async () =>
                     return !!user;
                 }
                 catch(error){
+                    console.log("here 5");
                     return false;
                 }
             }

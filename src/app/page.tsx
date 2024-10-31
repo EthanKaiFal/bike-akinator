@@ -1,15 +1,26 @@
 import Post from "@/compon/Post";
-import { cookieBasedClient, isAuthenticated } from "@/app/utils/amplify-utils";
+import { cookieBasedClient, isAuthenticated } from "@/utils/amplify-utils";
 import { onDeletePost } from "./_actions/actions";
 
 
 export default async function Home() {
-  const {data: posts} = await cookieBasedClient.models.Post.list({
+  var posts: any[] = [];
+  try{
+    if(await isAuthenticated()){
+  const {data: post, errors} = await cookieBasedClient.models.Post.list({
     selectionSet:["title","id"],
-
+    
     
   })
-  //console.log("post",posts);
+  posts = post;
+  if(errors){
+  console.log("home has errors");
+  }
+}
+else{
+}
+  console.log("here 8");
+
   return (
     <main className="flex flex-col items-center justify-between p-24">
       <h1 className="text-2xl pb-10">List Of ALL Titles</h1>
@@ -26,4 +37,8 @@ export default async function Home() {
     </main>
    
   );
+}
+catch(error){
+  console.log("errorr in home"+error);
+}
 }
