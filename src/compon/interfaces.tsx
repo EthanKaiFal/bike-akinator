@@ -29,43 +29,43 @@ export interface Bike {
 }
 
 export interface brandData{
-        brandName: string,
-        avgSatisScore: number,
-        totalNumBikes: number, // Start counting from 1 for the first entry
-        numFirstBike: number,
-        numSecondBike: number,
-        numThirdPlusBike: number,
-        numBroken: number, // Initialize based on current bike
-        numSold: number, // Initialize based on current bike
-        avgOwnership: number,
+        brandName: string | null,
+        avgSatisScore: number | null,
+        totalNumBikes: number | null, // Start counting from 1 for the first entry
+        numFirstBike: number | null,
+        numSecondBike: number | null,
+        numThirdPlusBike: number | null,
+        numBroken: number | null, // Initialize based on current bike
+        numSold: number | null, // Initialize based on current bike
+        avgOwnership: number | null,
 }
-
+ 
 export interface modelData{
-  modelName: string,
-  brandName: string,
-  avgSatisScore: number,
-  totalNumBikes: number, // Start counting from 1 for the first entry
-  numFirstBike: number,
-  numSecondBike: number,
-  numThirdPlusBike: number,
-  numBroken: number, // Initialize based on current bike
-  numSold: number, // Initialize based on current bike
-  avgOwnership: number,
+  modelName: string | null,
+  brandName: string | null,
+  avgSatisScore: number | null,
+  totalNumBikes: number | null, // Start counting from 1 for the first entry
+  numFirstBike: number | null,
+  numSecondBike: number | null,
+  numThirdPlusBike: number | null,
+  numBroken: number | null, // Initialize based on current bike
+  numSold: number | null, // Initialize based on current bike
+  avgOwnership: number | null,
 }
 
 export interface bikeData{
-  modelName: string,
-  bikeYear: number,
-  bikeNum: number,
+  modelName: string | null,
+  bikeYear: number | null,
+  bikeNum: number | null,
 }
 
 export interface totalData{
-  totalAvgSatisScore: number,
-      totalNumBikes: number,
-      totalNumFirst: number,
-      totalNumSecond: number,
-      totalNumThird: number,
-      totalNumBroken: number,
-      totalNumSold: number,
-      totalAvgOwnership: number,
+  totalAvgSatisScore: number | null,
+      totalNumBikes: number | null,
+      totalNumFirst: number | null,
+      totalNumSecond: number | null,
+      totalNumThird: number | null,
+      totalNumBroken: number | null,
+      totalNumSold: number | null,
+      totalAvgOwnership: number | null,
 }

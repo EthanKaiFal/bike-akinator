@@ -61,6 +61,10 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
             loggedIn: true, //makes it so this route only works when logged in
 
         },
+        {
+            href: "/bikes",
+            label: "Bikes",
+        }
 
     ];
 
