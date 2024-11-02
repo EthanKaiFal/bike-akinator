@@ -1,12 +1,11 @@
 
-import { useAuthenticator } from "@aws-amplify/ui-react";
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import "@aws-amplify/ui-react/styles.css";
 import * as DBWork from "../_actions/actions"
 import Bike from "../../compon/Bike"
 import { isAuthenticated } from "@/utils/amplify-utils";
-import UpdateForAdd from "@/compon/upDateForAdd";
-import BikeInputForm from "@/compon/BikeInputForm";
+import Auth from "@aws-amplify/auth";
+import { getUserName } from "@/utils/amplify-utils";
 
 
 
@@ -22,7 +21,10 @@ export default async function Login() {
       selectionSet:["bikeNumber","brand","model","year","sold","broken","ownershipMonths","score","id","userId"],
     });
 
-  
+  //   async function getUserEmail(): Promise<string | undefined> {
+  //     const { user } = useAuthenticator((context) => [context.user]);
+  //     return user.username
+  // }
   
     // Helper to display user bikes
     const displayUserBikes = () => {
@@ -48,7 +50,7 @@ export default async function Login() {
         <div style={{ display: "grid", gridAutoFlow: "column", justifyContent: "center", gap: "2rem", alignContent: "center", margin: "3rem 0" }}>
         <div key={userId} style={{ display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "2rem", border: "1px solid #ccc", padding: "2rem", borderRadius: "5%" }} className="box">
               <div>
-                <h3>{userId}</h3>
+                <h3>{await getUserName()}</h3>
                 <div>{displayUserBikes()}</div>
               </div>
             </div>

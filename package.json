@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.23",
+    "@aws-amplify/auth": "^6.6.0",
     "@aws-amplify/ui-react": "^6.5.4",
     "aws-amplify": "^6.6.6",
     "next": "^14.2.15",

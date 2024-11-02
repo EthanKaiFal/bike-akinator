@@ -3,7 +3,7 @@
 import { useState, useEffect, useTransition, } from 'react';
 import Link from "next/link";
 import {Button, Divider, Flex } from "@aws-amplify/ui-react";
-import { signOut } from "aws-amplify/auth";
+import { signOut, } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import {Hub} from "aws-amplify/utils";
 

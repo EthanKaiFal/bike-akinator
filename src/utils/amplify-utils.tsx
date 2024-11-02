@@ -21,11 +21,27 @@ export const isAuthenticated = async () =>
                     return !!user;
                 }
                 catch(error){
-                    console.log("here 5");
                     return false;
                 }
             }
     })
+
+    export const getUserName = async () =>
+        await runWithAmplifyServerContext({
+            
+            nextServerContext: {cookies}
+                ,
+                async operation(contextSpec) {
+                    try{
+                        const user = await getCurrentUser(contextSpec);
+                        return user.signInDetails?.loginId;
+                    }
+                    catch(error){
+                        
+                        return false;
+                    }
+                }
+        })
 
 export const cookieBasedClient = generateServerClientUsingCookies<Schema>({
     config,
