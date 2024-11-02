@@ -6,6 +6,7 @@ import {Button, Divider, Flex } from "@aws-amplify/ui-react";
 import { signOut, } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import {Hub} from "aws-amplify/utils";
+import { revalidatePath } from 'next/cache';
 
 
 export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
@@ -21,6 +22,7 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
                     setAuthCheck(true);
                     startTransition(() => router.push("/"));
                     startTransition(() => router.refresh());
+                    revalidatePath("/profile");
                     router.push("/");
                     break;
                 case "signedOut":
@@ -28,6 +30,7 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
                     setAuthCheck(false);
                     startTransition(() => router.push("/"));
                     startTransition(() => router.refresh());
+                    revalidatePath("/profile");
                     router.push("/");
                     break;
             }

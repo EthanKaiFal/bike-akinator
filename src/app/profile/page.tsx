@@ -6,11 +6,11 @@ import Bike from "../../compon/Bike"
 import { isAuthenticated } from "@/utils/amplify-utils";
 import Auth from "@aws-amplify/auth";
 import { getUserName } from "@/utils/amplify-utils";
+import { revalidatePath } from "next/cache";
 
 
 
 export default async function Login() {
-   
    
     DBWork.checkForProfile();
     
