@@ -16,7 +16,7 @@ import {Bike as BikeType} from "./interfaces"
 }) => {
 
 return (
-    <div className="border bg-gray-100 w-full p-4 rounded flex justify-between ">
+    <div className="border bg-gray-100 w-full p-4 rounded flex flex-col justify-between ">
     <p className="bikeDisplayLine">Bike Number: {bike.bikeNumber}</p>
     <p className="bikeDisplayLine">Brand: {bike.brand}</p>
     <p className="bikeDisplayLine">Model: {bike.model}</p>
