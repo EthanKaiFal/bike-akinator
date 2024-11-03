@@ -5,7 +5,6 @@ import BikeModel from "@/compon/bikeModel";
 
 
 export default async function Bikes() {
-  
     const {data: models, errors} = await cookieBasedClient.models.ModelStats.list();
 
 

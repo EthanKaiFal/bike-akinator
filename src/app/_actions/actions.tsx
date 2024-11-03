@@ -80,8 +80,8 @@ export async function createBike(formData: FormData) {
     const bikeData = {
         userId: users[0].id,
         bikeNumber: Number(formData.get("bikeNumber")) || 0,
-        brand: formData.get("bikebrand")?.toString() || "",
-        model: formData.get("bikeModel")?.toString() || "",
+        brandName: formData.get("bikebrand")?.toString() || "",
+        modelName: formData.get("bikeModel")?.toString() || "",
         year: Number(formData.get("bikeYear")) || 0,
         sold: (formData.get("bikeSold")?.toString()==="Yes"? true : false ),
         broken: (formData.get("bikeBroken")?.toString()==="Yes"? true : false ),
@@ -371,4 +371,34 @@ else{
             console.error("error creating new totalStat")
         }
 }
+}
+
+export async function getBrandStats(brandName: string): Promise<brandData>{
+  const{data: brandData, errors} = await cookieBasedClient.models.BrandStats.list({
+    filter:{
+      brandName: {eq: brandName}
+    }
+  });
+  if(errors){
+    console.log("error getting the brand Stat Data");
+  }
+  return brandData[0] as brandData;
+}
+
+export async function getModelStats(modelName: string): Promise<modelData>{
+  const{data: modelData, errors} = await cookieBasedClient.models.ModelStats.list({
+    filter:{
+      modelName: {eq: modelName}
+    }
+  });
+  if(errors){
+    console.log("error getting the brand Stat Data");
+  }
+  return modelData[0] as modelData;
+}
+
+export async function getTotalStats(): Promise<totalData>{
+  const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
+  });
+  return totalData[0]
 }

@@ -22,12 +22,11 @@ const BikeModel = ({
     className="border bg-gray-100 w-full p-4 rounded flex justify-between "
     >
 
-<button onClick={onDetail}>
-    <div className="flex gap-2">
-    
-    <div>{bikeBrand} {bikeModel}</div>
-    </div>
-</button>
+<div role="button" onClick={onDetail} className="cursor-pointer">
+                <div className="flex gap-2">
+                    <div>{bikeBrand} {bikeModel}</div>
+                </div>
+            </div>
 <input type="hidden" name="id" id='id' value={bikeModelId} />
 </div>
     )
