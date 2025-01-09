@@ -1,116 +1,42 @@
 "use server"
-
+//cookie based client is my repo layer
+//this is my service layer
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import {redirect} from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
 
-export async function createPost(formData: FormData) {
-    const {data, errors} = await cookieBasedClient.models.Post.create({
-        title: formData.get("title")?.toString() || ""
-})
-    console.log(formData.get("title"));
-    console.log(errors);
-    redirect("/");
-}
-
-export async function onDeletePost(idName: string) {
-    const toBeDeleted = {
-        id: idName
-    }
-    const{data: deletedPost, errors} = await cookieBasedClient.models.Post.delete(toBeDeleted);
-
-   // console.log("data deleted", deletedPost, errors);
-    revalidatePath("/");
-}
-
-export async function onDeleteBike(idName: string) {
-    const toBeDeleted = {
-        id: idName
-    }
-    const{data: deletedBike, errors} = await cookieBasedClient.models.Bike.delete(toBeDeleted);
-
-   // console.log("data deleted", deletedPost, errors);
-    revalidatePath("/profile");
-}
-
-export async function checkForProfile() {
-    const { data: localProfiles, errors} = await cookieBasedClient.models.User.list();
-    if(errors){
-        console.error("error pulling current user profile from non amplify system")
-    }
-    if(localProfiles.length===0){
-        //need to create a new profile in the Users model
-        createUserProfile();
-    
-    }
-    else{
-        //it exists in the user model
-        console.log("user profiles" + JSON.stringify(localProfiles[0]));
-    }
-
-}
-async function createUserProfile(){
-    const newUserData = {
-        bikesOwned: []
-    };
-    const {data: users, errors} = await cookieBasedClient.models.User.create({
+export async function getBrandStats(brandName: string): Promise<brandData>{
+    const{data: brandData, errors} = await cookieBasedClient.models.BrandStats.list({
+      filter:{
+        brandName: {eq: brandName}
+      }
     });
-        if(errors){
-            console.error("Errors occurred while creating user:", errors);
-        }
-        console.log("creatign user result:"+JSON.stringify(users));
-        
-}
-
-export async function fetchUserbikes(){
-    const { data: users, errors} = await cookieBasedClient.models.User.list();
-    console.log("Bikes"+ users[0].bikes);
-    return users[0].bikes as unknown as BikeType[];
-}
-
-export async function fetchUserId(): Promise<string>{
-    const { data: users} = await cookieBasedClient.models.User.list();
-    console.log("Users"+users);
-    return users[0].id;
-}
-
-export async function createBike(formData: FormData) {
-    const {data: users} = await cookieBasedClient.models.User.list();
-    const bikeData = {
-        userId: users[0].id,
-        bikeNumber: Number(formData.get("bikeNumber")) || 0,
-        brand: formData.get("bikebrand")?.toString() || "",
-        model: formData.get("bikeModel")?.toString() || "",
-        year: Number(formData.get("bikeYear")) || 0,
-        sold: (formData.get("bikeSold")?.toString()==="Yes"? true : false ),
-        broken: (formData.get("bikeBroken")?.toString()==="Yes"? true : false ),
-        ownershipMonths: Number(formData.get("monthsOwned"))|| 0,
-        score: Number(formData.get("bikeScore")) || 0,
-}
-    const {data, errors} = await cookieBasedClient.models.Bike.create(bikeData);
-    console.log("printing"+ JSON.stringify(data));
-    //now i need to update the stats
-    updateAllBikeStats(data as BikeType);
-    redirect("/profile");
-}
-
-//UPDATE STATS FUNCTIONS
-
-async function updateAllBikeStats( bikeData: BikeType){
-  console.log("listing"+ JSON.stringify(bikeData));
-    try{
-        updateBrandStats(bikeData);
-        updateModelStats(bikeData);
-        updateBikeStats(bikeData);
-        updateTotalStats(bikeData);
+    if(errors){
+      console.log("error getting the brand Stat Data");
     }
-    catch{
-        console.error("error updating");
+    return brandData[0] as brandData;
+  }
+  
+  export async function getModelStats(modelName: string): Promise<modelData>{
+    const{data: modelData, errors} = await cookieBasedClient.models.ModelStats.list({
+      filter:{
+        modelName: {eq: modelName}
+      }
+    });
+    if(errors){
+      console.log("error getting the brand Stat Data");
     }
-}
+    return modelData[0] as modelData;
+  }
+  
+  export async function getTotalStats(): Promise<totalData>{
+    const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
+    });
+    return totalData[0]
+  }
 
-async function updateBrandStats(bikeData: BikeType) {
+export async function updateBrandStats(bikeData: BikeType) {
     // Query for existing brand stats
     const {data: brands, errors} = await cookieBasedClient.models.BrandStats.list({
         filter: {
@@ -190,7 +116,8 @@ async function updateBrandStats(bikeData: BikeType) {
     }
   }
 
-  async function updateModelStats(bikeData: BikeType) {
+
+export async function updateModelStats(bikeData: BikeType) {
     // Query for existing model stats
     const {data: models, errors} = await cookieBasedClient.models.ModelStats.list({
         filter: {
@@ -269,7 +196,7 @@ async function updateBrandStats(bikeData: BikeType) {
     }
   }
 
-  async function updateBikeStats(bikeData: BikeType) {
+export async function updateBikeStats(bikeData: BikeType) {
     const {data: bikeStats, errors} = await cookieBasedClient.models.BikeStats.list({
         filter: {
             modelName: {eq: bikeData.model?? undefined},
@@ -309,7 +236,7 @@ async function updateBrandStats(bikeData: BikeType) {
     }
   }
 
-  async function updateTotalStats(bikeData:BikeType){
+export async function updateTotalStats(bikeData:BikeType){
     const {data: entries, errors} = await cookieBasedClient.models.TotalStats.list();
     if(errors){
         console.error("couldnt get total stats");
@@ -372,34 +299,4 @@ else{
             console.error("error creating new totalStat")
         }
 }
-}
-
-export async function getBrandStats(brandName: string): Promise<brandData>{
-  const{data: brandData, errors} = await cookieBasedClient.models.BrandStats.list({
-    filter:{
-      brandName: {eq: brandName}
-    }
-  });
-  if(errors){
-    console.log("error getting the brand Stat Data");
-  }
-  return brandData[0] as brandData;
-}
-
-export async function getModelStats(modelName: string): Promise<modelData>{
-  const{data: modelData, errors} = await cookieBasedClient.models.ModelStats.list({
-    filter:{
-      modelName: {eq: modelName}
-    }
-  });
-  if(errors){
-    console.log("error getting the brand Stat Data");
-  }
-  return modelData[0] as modelData;
-}
-
-export async function getTotalStats(): Promise<totalData>{
-  const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
-  });
-  return totalData[0]
 }

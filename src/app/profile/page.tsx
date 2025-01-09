@@ -22,6 +22,8 @@ export default async function Login() {
       selectionSet:["bikeNumber","brand","model","year","sold","broken","ownershipMonths","score","id","userId"],
     });
 
+    console.log("thingy" + JSON.stringify(bikes));
+
   //   async function getUserEmail(): Promise<string | undefined> {
   //     const { user } = useAuthenticator((context) => [context.user]);
   //     return user.username
