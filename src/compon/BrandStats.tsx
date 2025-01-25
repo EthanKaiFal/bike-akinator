@@ -13,7 +13,7 @@ const BrandStats = async ({brandName}: {
 
     const brandNum = (await brandStat).totalNumBikes;
     const totalNumBikes = (await totalStat).totalNumBikes;
-    console.log("in here");
+    console.log("in here2");
     const numBrokenByBrand = (await brandStat).numBroken;
     const totalNumBroken = (await totalStat).totalNumBroken;
 

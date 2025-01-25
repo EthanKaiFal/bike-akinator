@@ -80,7 +80,7 @@ export async function createBike(formData: FormData) {
     const bikeData = {
         userId: users[0].id,
         bikeNumber: Number(formData.get("bikeNumber")) || 0,
-        brand: formData.get("bikebrand")?.toString() || "",
+        brand: formData.get("bikeBrand")?.toString() || "",
         model: formData.get("bikeModel")?.toString() || "",
         year: Number(formData.get("bikeYear")) || 0,
         sold: (formData.get("bikeSold")?.toString()==="Yes"? true : false ),
