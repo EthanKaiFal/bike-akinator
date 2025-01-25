@@ -332,32 +332,14 @@ else{
 }
 }
 
-export async function getBrandStats(brandName: string): Promise<brandData>{
-  const{data: brandData, errors} = await cookieBasedClient.models.BrandStats.list({
-    filter:{
-      brandName: {eq: brandName}
-    }
-  });
-  if(errors){
-    console.log("error getting the brand Stat Data");
-  }
-  return brandData[0] as brandData;
+export async function getBrandStats(brandName: string){
+  return statsService.getBrandStats(brandName);
 }
 
-export async function getModelStats(modelName: string): Promise<modelData>{
-  const{data: modelData, errors} = await cookieBasedClient.models.ModelStats.list({
-    filter:{
-      modelName: {eq: modelName}
-    }
-  });
-  if(errors){
-    console.log("error getting the brand Stat Data");
-  }
-  return modelData[0] as modelData;
+export async function getModelStats(modelName: string){
+  return statsService.getModelStats(modelName);
 }
 
-export async function getTotalStats(): Promise<totalData>{
-  const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
-  });
-  return totalData[0]
+export async function getTotalStats(){
+  return await statsService.getTotalStats();
 }

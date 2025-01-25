@@ -6,7 +6,7 @@ import {redirect} from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
 
-export async function getBrandStats(brandName: string): Promise<brandData>{
+export async function getBrandStats(brandName: string){
     const{data: brandData, errors} = await cookieBasedClient.models.BrandStats.list({
       filter:{
         brandName: {eq: brandName}
@@ -18,7 +18,7 @@ export async function getBrandStats(brandName: string): Promise<brandData>{
     return brandData[0] as brandData;
   }
   
-  export async function getModelStats(modelName: string): Promise<modelData>{
+  export async function getModelStats(modelName: string){
     const{data: modelData, errors} = await cookieBasedClient.models.ModelStats.list({
       filter:{
         modelName: {eq: modelName}
@@ -30,10 +30,11 @@ export async function getBrandStats(brandName: string): Promise<brandData>{
     return modelData[0] as modelData;
   }
   
-  export async function getTotalStats(): Promise<totalData>{
+  export async function getTotalStats(){
     const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
     });
-    return totalData[0]
+    console.log("total stats" + JSON.stringify(totalData));
+    return totalData[0] as totalData;
   }
 
 export async function updateBrandStats(bikeData: BikeType) {
