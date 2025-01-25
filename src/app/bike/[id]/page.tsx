@@ -9,7 +9,6 @@ const Bike = async ({ params }: { params: { id: string } }) => {
         const { data: bikeInfo } = await cookieBasedClient.models.ModelStats.get({
             id: params.id,
         });
-
         if (!bikeInfo) {
             return <div>Bike not found</div>;
         }

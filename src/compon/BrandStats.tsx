@@ -8,8 +8,8 @@ const BrandStats = async ({brandName}: {
 }
 
 ) => {
-    const brandStat: Promise<brandData> = getBrandStats(brandName);
-    const totalStat: Promise<totalData> = getTotalStats();
+    const brandStat: brandData = await getBrandStats(brandName);
+    const totalStat: totalData= await getTotalStats();
 
     const brandNum = (await brandStat).totalNumBikes;
     const totalNumBikes = (await totalStat).totalNumBikes;

@@ -4,31 +4,16 @@ import { cookieBasedClient } from "@/utils/amplify-utils"
 import {redirect} from 'next/navigation';
 import { revalidatePath } from "next/cache";
 import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
-
-export async function createPost(formData: FormData) {
-    const {data, errors} = await cookieBasedClient.models.Post.create({
-        title: formData.get("title")?.toString() || ""
-})
-    console.log(formData.get("title"));
-    console.log(errors);
-    redirect("/");
-}
-
-export async function onDeletePost(idName: string) {
-    const toBeDeleted = {
-        id: idName
-    }
-    const{data: deletedPost, errors} = await cookieBasedClient.models.Post.delete(toBeDeleted);
-
-   // console.log("data deleted", deletedPost, errors);
-    revalidatePath("/");
-}
+import * as postService from './postService';
+import * as bikeService from './bikeService';
+import * as statsService from './statsService';
+import * as profileService from './profileService'
 
 export async function onDeleteBike(idName: string) {
     const toBeDeleted = {
         id: idName
     }
-    const{data: deletedBike, errors} = await cookieBasedClient.models.Bike.delete(toBeDeleted);
+    bikeService.deleteBike(toBeDeleted);
 
    // console.log("data deleted", deletedPost, errors);
     revalidatePath("/profile");
@@ -41,69 +26,42 @@ export async function checkForProfile() {
     }
     if(localProfiles.length===0){
         //need to create a new profile in the Users model
-        createUserProfile();
+        profileService.createUserProfile();
     
     }
     else{
         //it exists in the user model
-        console.log("user profiles" + JSON.stringify(localProfiles[0]));
+        //console.log("user profiles" + JSON.stringify(localProfiles[0]));
     }
 
 }
-async function createUserProfile(){
-    const newUserData = {
-        bikesOwned: []
-    };
-    const {data: users, errors} = await cookieBasedClient.models.User.create({
-    });
-        if(errors){
-            console.error("Errors occurred while creating user:", errors);
-        }
-        console.log("creatign user result:"+JSON.stringify(users));
-        
-}
 
 export async function fetchUserbikes(){
-    const { data: users, errors} = await cookieBasedClient.models.User.list();
-    console.log("Bikes"+ users[0].bikes);
-    return users[0].bikes as unknown as BikeType[];
+    return profileService.getUserBikes();
 }
 
 export async function fetchUserId(): Promise<string>{
     const { data: users} = await cookieBasedClient.models.User.list();
-    console.log("Users"+users);
+    //console.log("Users"+users);
     return users[0].id;
 }
 
 export async function createBike(formData: FormData) {
-    const {data: users} = await cookieBasedClient.models.User.list();
-    const bikeData = {
-        userId: users[0].id,
-        bikeNumber: Number(formData.get("bikeNumber")) || 0,
-        brand: formData.get("bikeBrand")?.toString() || "",
-        model: formData.get("bikeModel")?.toString() || "",
-        year: Number(formData.get("bikeYear")) || 0,
-        sold: (formData.get("bikeSold")?.toString()==="Yes"? true : false ),
-        broken: (formData.get("bikeBroken")?.toString()==="Yes"? true : false ),
-        ownershipMonths: Number(formData.get("monthsOwned"))|| 0,
-        score: Number(formData.get("bikeScore")) || 0,
-}
-    const {data, errors} = await cookieBasedClient.models.Bike.create(bikeData);
-    console.log("printing"+ JSON.stringify(data));
+    const data: BikeType = await bikeService.createBike(formData);
     //now i need to update the stats
-    updateAllBikeStats(data as BikeType);
+    updateAllBikeStats(data);
     redirect("/profile");
 }
 
 //UPDATE STATS FUNCTIONS
 
 async function updateAllBikeStats( bikeData: BikeType){
-  console.log("listing"+ JSON.stringify(bikeData));
+  //console.log("listing"+ JSON.stringify(bikeData));
     try{
-        updateBrandStats(bikeData);
-        updateModelStats(bikeData);
-        updateBikeStats(bikeData);
-        updateTotalStats(bikeData);
+        statsService.updateBrandStats(bikeData);
+        statsService.updateModelStats(bikeData);
+        statsService.updateBikeStats(bikeData);
+        statsService.updateTotalStats(bikeData);
     }
     catch{
         console.error("error updating");
