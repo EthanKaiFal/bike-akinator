@@ -137,7 +137,6 @@ export async function updateBrandStats(bikeData: BikeType) {
 
 export async function updateModelStats(bikeData: BikeType) {
     // Query for existing model stats
-    console.log("BikeData" + JSON.stringify(bikeData));
     const {data: models, errors} = await cookieBasedClient.models.ModelStats.list({
         filter: {
             modelName: {eq: bikeData.model?? undefined}
@@ -149,7 +148,6 @@ export async function updateModelStats(bikeData: BikeType) {
     }
     
     let modelData :modelData;
-    console.log("models found"+ JSON.stringify(models));
     // Create new model entry if the model does not exist
     if (models.length === 0) {
       modelData = {
@@ -226,7 +224,6 @@ export async function updateModelStats(bikeData: BikeType) {
           id: models[0].id,
           ...fieldsToUpdate,
         }
-        console.log("updatign with this var"+JSON.stringify(update));
         await cookieBasedClient.models.ModelStats.update(update);
         console.log("model stats updated successfully");
       } catch (error) {
@@ -305,6 +302,7 @@ export async function updateTotalStats(bikeData:BikeType){
         pulledStatData = entries[0] as totalData;
 
     }
+    console.log("updatign with this var"+JSON.stringify(pulledStatData));
     const fieldsToUpdate = {
       totalNumBikes : pulledStatData.totalNumBikes,
       totalNumBroken : pulledStatData.totalNumBroken,
@@ -316,42 +314,43 @@ export async function updateTotalStats(bikeData:BikeType){
       totalAvgSatisScore: pulledStatData.totalAvgSatisScore
     }
     // Increment totalNumBikes
-    fieldsToUpdate.totalNumBikes = fieldsToUpdate.totalNumBikes??0 +1;
+    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes??0) +1;
+    console.log("total bikes"+fieldsToUpdate.totalNumBikes);
     if(bikeData.broken){
-    fieldsToUpdate.totalNumBroken = fieldsToUpdate.totalNumBroken??0 +1;
+    fieldsToUpdate.totalNumBroken = (fieldsToUpdate.totalNumBroken??0) +1;
     }
     if(bikeData.sold){
-    fieldsToUpdate.totalNumSold = fieldsToUpdate.totalNumSold??0 +1;
+    fieldsToUpdate.totalNumSold = (fieldsToUpdate.totalNumSold??0) +1;
     }
 
     if(bikeData.bikeNumber === 1){
-    fieldsToUpdate.totalNumFirst = fieldsToUpdate.totalNumFirst??0 +1;
+    fieldsToUpdate.totalNumFirst = (fieldsToUpdate.totalNumFirst??0) +1;
     }
     if(bikeData.bikeNumber === 2){
-    fieldsToUpdate.totalNumSecond = fieldsToUpdate.totalNumSecond??0 +1;
+    fieldsToUpdate.totalNumSecond = (fieldsToUpdate.totalNumSecond??0) +1;
     }
     if((bikeData.bikeNumber??0) >= 3){
-    fieldsToUpdate.totalNumThird = fieldsToUpdate.totalNumThird??0 +1;
+    fieldsToUpdate.totalNumThird = (fieldsToUpdate.totalNumThird??0) +1;
     }
 
     const totalBikes = fieldsToUpdate.totalNumBikes;
-        fieldsToUpdate.totalAvgSatisScore = ((fieldsToUpdate.totalAvgSatisScore??0 * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
-        fieldsToUpdate.totalAvgOwnership = ((fieldsToUpdate.totalAvgOwnership??0 * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
+        fieldsToUpdate.totalAvgSatisScore = (((fieldsToUpdate.totalAvgSatisScore??0) * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
+        fieldsToUpdate.totalAvgOwnership = (((fieldsToUpdate.totalAvgOwnership??0) * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
     if(entries.length!=0){
       console.log("updating total stats");
         const { data ,errors} = await cookieBasedClient.models.TotalStats.update({
         id: entries[0].id,
         ...fieldsToUpdate,
-    })
-    if(errors){
+      })
+      if(errors){
         console.error("error updating totalStat")
-    }
-    else{
+       }
+      else{
       console.log("updated data" + JSON.stringify(data));
+      }
     }
-  }
     else{
-        console.log("creating total stats entry");
+        console.log("creating total stats entry"+ JSON.stringify(fieldsToUpdate));
         const {errors} = await cookieBasedClient.models.TotalStats.create(
         fieldsToUpdate)
         if(errors){
