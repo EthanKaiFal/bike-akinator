@@ -58,10 +58,10 @@ export async function createBike(formData: FormData) {
 async function updateAllBikeStats( bikeData: BikeType){
   //console.log("listing"+ JSON.stringify(bikeData));
     try{
-        //statsService.updateBrandStats(bikeData);
+        statsService.updateBrandStats(bikeData);
         statsService.updateModelStats(bikeData);
-        //statsService.updateBikeStats(bikeData);
-        //statsService.updateTotalStats(bikeData);
+        statsService.updateBikeStats(bikeData);
+        statsService.updateTotalStats(bikeData);
     }
     catch{
         console.error("error updating");

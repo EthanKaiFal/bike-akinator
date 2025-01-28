@@ -31,8 +31,7 @@ export async function getBrandStats(brandName: string){
   }
   
   export async function getTotalStats(){
-    const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list({
-    });
+    const{data: totalData, errors} = await cookieBasedClient.models.TotalStats.list();
     console.log("total stats" + JSON.stringify(totalData));
     return totalData[0] as totalData;
   }
