@@ -22,7 +22,7 @@ export default async function Login() {
       selectionSet:["bikeNumber","brand","model","year","sold","broken","ownershipMonths","score","id","userId"],
     });
 
-    console.log("thingy" + JSON.stringify(bikes));
+    //console.log("bike info grabbed" + JSON.stringify(bikes));
 
   //   async function getUserEmail(): Promise<string | undefined> {
   //     const { user } = useAuthenticator((context) => [context.user]);

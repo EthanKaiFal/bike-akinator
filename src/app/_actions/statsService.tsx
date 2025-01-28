@@ -64,6 +64,13 @@ export async function updateBrandStats(bikeData: BikeType) {
         numSold: bikeData.sold ? 1 : 0, // Initialize based on current bike
         avgOwnership: bikeData.ownershipMonths,
       };
+      if (bikeData.bikeNumber === 1) {
+        brandData.numFirstBike =(brandData.numFirstBike??0) + 1;
+      } else if (bikeData.bikeNumber === 2) {
+        brandData.numSecondBike =(brandData.numFirstBike??0) + 1;
+      } else if (bikeData.bikeNumber??0 >= 3) {
+        brandData.numThirdPlusBike =(brandData.numThirdPlusBike??0) + 1;
+      }
       
       // Save the new brand data
         const {errors} = await cookieBasedClient.models.BrandStats.create(brandData) // Use the model constructor
@@ -75,40 +82,51 @@ export async function updateBrandStats(bikeData: BikeType) {
     else {
       // If brand exists, update the existing entry
       brandData = brands[0] as brandData;
+
+      const fieldsToUpdate = {
+        totalNumBikes : brandData.totalNumBikes,
+        numBroken : brandData.numBroken,
+        numSold : brandData.numSold,
+        numFirstBike : brandData.numFirstBike,
+        numSecondBike : brandData.numSecondBike,
+        numThirdPlusBike : brandData.numThirdPlusBike,
+        avgOwnership: brandData.avgOwnership,
+        avgSatisScore: brandData.avgSatisScore
+      }
   
       // Increment totalNumBikes
-      brandData.totalNumBikes = (brandData.totalNumBikes ?? 0) + 1;
+      fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + 1;
   
       // Update avgSatisScore and avgOwnership
-      const totalBikes = brandData.totalNumBikes;
-        brandData.avgSatisScore = (((brandData.avgSatisScore??0) * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
-        brandData.avgOwnership = (((brandData.avgOwnership??0) * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
+      const totalBikes = fieldsToUpdate.totalNumBikes;
+        fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore??0) * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
+        fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership??0) * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
   
       // Increment broken and sold numbers
       if (bikeData.broken) {
         if (bikeData.broken) {
-            brandData.numBroken = (brandData.numBroken ?? 0) + 1;
+            fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + 1;
         }
         
       }
       if (bikeData.sold) {
-        brandData.numSold = (brandData.numSold ?? 0) + 1;
+        fieldsToUpdate.numSold = (fieldsToUpdate.numSold ?? 0) + 1;
       }
   
       // Increment right bike number
       if (bikeData.bikeNumber === 1) {
-        brandData.numFirstBike =(brandData.numFirstBike??0) + 1;
+        fieldsToUpdate.numFirstBike =(fieldsToUpdate.numFirstBike??0) + 1;
       } else if (bikeData.bikeNumber === 2) {
-        brandData.numSecondBike =(brandData.numFirstBike??0) + 1;
+        fieldsToUpdate.numSecondBike =(fieldsToUpdate.numFirstBike??0) + 1;
       } else if (bikeData.bikeNumber??0 >= 3) {
-        brandData.numThirdPlusBike =(brandData.numThirdPlusBike??0) + 1;
+        fieldsToUpdate.numThirdPlusBike =(fieldsToUpdate.numThirdPlusBike??0) + 1;
       }
   
       // Now create a copy of the existing entry and save the updated data
       try {
         await cookieBasedClient.models.BrandStats.update({
             id: brands[0].id,
-            ...brandData,
+            ...fieldsToUpdate,
         });
         console.log("Brand stats updated successfully");
       } catch (error) {
@@ -120,6 +138,7 @@ export async function updateBrandStats(bikeData: BikeType) {
 
 export async function updateModelStats(bikeData: BikeType) {
     // Query for existing model stats
+    console.log("BikeData" + JSON.stringify(bikeData));
     const {data: models, errors} = await cookieBasedClient.models.ModelStats.list({
         filter: {
             modelName: {eq: bikeData.model?? undefined}
@@ -131,7 +150,7 @@ export async function updateModelStats(bikeData: BikeType) {
     }
     
     let modelData :modelData;
-    
+    console.log("models found"+ JSON.stringify(models));
     // Create new model entry if the model does not exist
     if (models.length === 0) {
       modelData = {
@@ -146,6 +165,14 @@ export async function updateModelStats(bikeData: BikeType) {
         numSold: bikeData.sold ? 1 : 0, // Initialize based on current bike
         avgOwnership: bikeData.ownershipMonths,
       };
+
+      if (bikeData.bikeNumber === 1) {
+        modelData.numFirstBike =(modelData.numFirstBike??0) + 1;
+      } else if (bikeData.bikeNumber === 2) {
+        modelData.numSecondBike =(modelData.numFirstBike??0) + 1;
+      } else if (bikeData.bikeNumber??0 >= 3) {
+        modelData.numThirdPlusBike =(modelData.numThirdPlusBike??0) + 1;
+      }
       
       // Save the new model data
         const {errors} = await cookieBasedClient.models.ModelStats.create(modelData) // Use the model constructor
@@ -157,39 +184,51 @@ export async function updateModelStats(bikeData: BikeType) {
     else {
       // If model exists, update the existing entry
       modelData = models[0] as modelData;
-  
+      
+      const fieldsToUpdate = {
+        totalNumBikes : modelData.totalNumBikes,
+        numBroken : modelData.numBroken,
+        numSold : modelData.numSold,
+        numFirstBike : modelData.numFirstBike,
+        numSecondBike : modelData.numSecondBike,
+        numThirdPlusBike : modelData.numThirdPlusBike,
+        avgOwnership: modelData.avgOwnership,
+        avgSatisScore: modelData.avgSatisScore
+      }
       // Increment totalNumBikes
-      modelData.totalNumBikes = (modelData.totalNumBikes ?? 0) + 1;
+      fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + 1;
   
       // Update avgSatisScore and avgOwnership
-      const totalBikes = modelData.totalNumBikes;
-        modelData.avgSatisScore = (((modelData.avgSatisScore??0) * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
-        modelData.avgOwnership = (((modelData.avgOwnership??0) * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
+      const totalBikes = fieldsToUpdate.totalNumBikes;
+        fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore??0) * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
+        fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership??0) * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
   
       // Increment broken and sold numbers
         if (bikeData.broken) {
-            modelData.numBroken = (modelData.numBroken ?? 0) + 1;
+            fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + 1;
         }
         
       if (bikeData.sold) {
-        modelData.numSold = (modelData.numSold ?? 0) + 1;
+        fieldsToUpdate.numSold = (fieldsToUpdate.numSold ?? 0) + 1;
       }
   
       // Increment right bike number
       if (bikeData.bikeNumber === 1) {
-        modelData.numFirstBike =(modelData.numFirstBike??0) + 1;
+        fieldsToUpdate.numFirstBike =(fieldsToUpdate.numFirstBike??0) + 1;
       } else if (bikeData.bikeNumber === 2) {
-        modelData.numSecondBike =(modelData.numFirstBike??0) + 1;
+        fieldsToUpdate.numSecondBike =(fieldsToUpdate.numFirstBike??0) + 1;
       } else if (bikeData.bikeNumber??0 >= 3) {
-        modelData.numThirdPlusBike =(modelData.numThirdPlusBike??0) + 1;
+        fieldsToUpdate.numThirdPlusBike =(fieldsToUpdate.numThirdPlusBike??0) + 1;
       }
   
       // Now create a copy of the existing entry and save the updated data
       try {
-        await cookieBasedClient.models.ModelStats.update({
-            id: models[0].id,
-            ...modelData,
-        });
+        const update = {
+          id: models[0].id,
+          ...fieldsToUpdate,
+        }
+        console.log("updatign with this var"+JSON.stringify(update));
+        await cookieBasedClient.models.ModelStats.update(update);
         console.log("model stats updated successfully");
       } catch (error) {
         console.error("Error updating model data:", error);
@@ -224,11 +263,14 @@ export async function updateBikeStats(bikeData: BikeType) {
     }
     else{
         pulledBikeStatData = bikeStats[0] as bikeData;
-        pulledBikeStatData.bikeNum = (pulledBikeStatData.bikeNum??0)+1;
+        const fieldsToUpdate = {
+          bikeNum: pulledBikeStatData.bikeNum
+        }
+        fieldsToUpdate.bikeNum = (fieldsToUpdate.bikeNum??0)+1;
 
         const {errors} = await cookieBasedClient.models.BikeStats.update({
             id: bikeStats[0].id,
-            ...pulledBikeStatData
+            ...fieldsToUpdate
         }
         );
         if(errors){
@@ -242,6 +284,9 @@ export async function updateTotalStats(bikeData:BikeType){
     if(errors){
         console.error("couldnt get total stats");
         return;
+    }
+    else{
+      console.log("grabbed total stats");
     }
     var pulledStatData: totalData;
 
@@ -261,41 +306,55 @@ export async function updateTotalStats(bikeData:BikeType){
         pulledStatData = entries[0] as totalData;
 
     }
-
+    const fieldsToUpdate = {
+      totalNumBikes : pulledStatData.totalNumBikes,
+      totalNumBroken : pulledStatData.totalNumBroken,
+      totalNumSold : pulledStatData.totalNumSold,
+      totalNumFirst : pulledStatData.totalNumFirst,
+      totalNumSecond : pulledStatData.totalNumSecond,
+      totalNumThird : pulledStatData.totalNumThird,
+      totalAvgOwnership: pulledStatData.totalAvgOwnership,
+      totalAvgSatisScore: pulledStatData.totalAvgSatisScore
+    }
     // Increment totalNumBikes
-    pulledStatData.totalNumBikes = pulledStatData.totalNumBikes??0 +1;
+    fieldsToUpdate.totalNumBikes = fieldsToUpdate.totalNumBikes??0 +1;
     if(bikeData.broken){
-    pulledStatData.totalNumBroken = pulledStatData.totalNumBroken??0 +1;
+    fieldsToUpdate.totalNumBroken = fieldsToUpdate.totalNumBroken??0 +1;
     }
     if(bikeData.sold){
-    pulledStatData.totalNumSold = pulledStatData.totalNumSold??0 +1;
+    fieldsToUpdate.totalNumSold = fieldsToUpdate.totalNumSold??0 +1;
     }
 
     if(bikeData.bikeNumber === 1){
-    pulledStatData.totalNumFirst = pulledStatData.totalNumFirst??0 +1;
+    fieldsToUpdate.totalNumFirst = fieldsToUpdate.totalNumFirst??0 +1;
     }
     if(bikeData.bikeNumber === 2){
-    pulledStatData.totalNumSecond = pulledStatData.totalNumSecond??0 +1;
+    fieldsToUpdate.totalNumSecond = fieldsToUpdate.totalNumSecond??0 +1;
     }
     if((bikeData.bikeNumber??0) >= 3){
-    pulledStatData.totalNumThird = pulledStatData.totalNumThird??0 +1;
+    fieldsToUpdate.totalNumThird = fieldsToUpdate.totalNumThird??0 +1;
     }
 
-    const totalBikes = pulledStatData.totalNumBikes;
-        pulledStatData.totalAvgSatisScore = ((pulledStatData.totalAvgSatisScore??0 * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
-        pulledStatData.totalAvgOwnership = ((pulledStatData.totalAvgOwnership??0 * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
+    const totalBikes = fieldsToUpdate.totalNumBikes;
+        fieldsToUpdate.totalAvgSatisScore = ((fieldsToUpdate.totalAvgSatisScore??0 * (totalBikes - 1)) + (bikeData.score??0)) / totalBikes;
+        fieldsToUpdate.totalAvgOwnership = ((fieldsToUpdate.totalAvgOwnership??0 * (totalBikes - 1)) + (bikeData.ownershipMonths??0)) / totalBikes;
     if(entries.length!=0){
-        const {errors} = await cookieBasedClient.models.TotalStats.update({
+      console.log("updating total stats");
+        const { data ,errors} = await cookieBasedClient.models.TotalStats.update({
         id: entries[0].id,
-        ...pulledStatData,
+        ...fieldsToUpdate,
     })
     if(errors){
         console.error("error updating totalStat")
     }
-}
-else{
-    const {errors} = await cookieBasedClient.models.TotalStats.create(
-        pulledStatData)
+    else{
+      console.log("updated data" + JSON.stringify(data));
+    }
+  }
+    else{
+        console.log("creating total stats entry");
+        const {errors} = await cookieBasedClient.models.TotalStats.create(
+        fieldsToUpdate)
         if(errors){
             console.error("error creating new totalStat")
         }

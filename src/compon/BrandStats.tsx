@@ -40,7 +40,7 @@ const BrandStats = ({brandName}: {
 
     const brandNum = brandStat?.totalNumBikes;
     const totalNumBikes = totalStat?.totalNumBikes;
-    console.log("in here2");
+    console.log("Total Stats"+JSON.stringify(totalStat));
     const numBrokenByBrand = brandStat?.numBroken;
     const totalNumBroken = totalStat?.totalNumBroken;
 

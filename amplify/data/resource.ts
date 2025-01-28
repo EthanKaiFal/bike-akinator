@@ -40,7 +40,7 @@ allow.owner()]),
     score: a.float(),
     userId: a.id(),
     user: a.belongsTo('User', 'userId'),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [allow.guest().to(['read', 'create']),
   allow.owner()]),
 
   BrandStats: a
@@ -54,7 +54,7 @@ allow.owner()]),
     numBroken: a.integer(),
     numSold: a.integer(),
     avgOwnership: a.float(),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [allow.guest(),
   allow.owner()]),
 
   ModelStats: a
@@ -69,7 +69,7 @@ allow.owner()]),
     numBroken: a.integer(),
     numSold: a.integer(),
     avgOwnership: a.float(),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [allow.guest(),
   allow.owner()]),
 
   BikeStats: a
@@ -77,7 +77,7 @@ allow.owner()]),
     modelName: a.string(),
     bikeYear: a.integer(),
     bikeNum: a.integer(),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [allow.guest(),
   allow.owner()]),
 
   TotalStats: a
@@ -90,7 +90,7 @@ allow.owner()]),
     totalNumBroken: a.integer(),
     totalNumSold: a.integer(),
     totalAvgOwnership: a.float(),
-  }).authorization(allow => [allow.guest().to(['read']),
+  }).authorization(allow => [allow.guest(),
   allow.owner()]),
 
 });
