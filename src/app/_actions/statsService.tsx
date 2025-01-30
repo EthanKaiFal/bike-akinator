@@ -238,39 +238,18 @@ export async function updateBrandStats(bikeData: BikeType) {
       avgSatisScore: brandData.avgSatisScore
     }
 
-    // Increment totalNumBikes
-    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + 1;
+    const updatedFieldsToUpdate = await updateBrandModelStatsBy(+1, fieldsToUpdate, bikeData);
 
     // Update avgSatisScore and avgOwnership
-    const totalBikes = fieldsToUpdate.totalNumBikes;
-    fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
-    fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
-
-    // Increment broken and sold numbers
-    if (bikeData.broken) {
-      if (bikeData.broken) {
-        fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + 1;
-      }
-
-    }
-    if (bikeData.sold) {
-      fieldsToUpdate.numSold = (fieldsToUpdate.numSold ?? 0) + 1;
-    }
-
-    // Increment right bike number
-    if (bikeData.bikeNumber === 1) {
-      fieldsToUpdate.numFirstBike = (fieldsToUpdate.numFirstBike ?? 0) + 1;
-    } else if (bikeData.bikeNumber === 2) {
-      fieldsToUpdate.numSecondBike = (fieldsToUpdate.numFirstBike ?? 0) + 1;
-    } else if (bikeData.bikeNumber ?? 0 >= 3) {
-      fieldsToUpdate.numThirdPlusBike = (fieldsToUpdate.numThirdPlusBike ?? 0) + 1;
-    }
+    const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
+    updatedFieldsToUpdate.avgSatisScore = (((updatedFieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
+    updatedFieldsToUpdate.avgOwnership = (((updatedFieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
 
     // Now create a copy of the existing entry and save the updated data
     try {
       await cookieBasedClient.models.BrandStats.update({
         id: brands[0].id,
-        ...fieldsToUpdate,
+        ...updatedFieldsToUpdate,
       });
       console.log("Brand stats updated successfully");
     } catch (error) {
@@ -337,37 +316,18 @@ export async function updateModelStats(bikeData: BikeType) {
       avgOwnership: modelData.avgOwnership,
       avgSatisScore: modelData.avgSatisScore
     }
-    // Increment totalNumBikes
-    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + 1;
+    const updatedFieldsToUpdate = await updateBrandModelStatsBy(+1, fieldsToUpdate, bikeData);
 
     // Update avgSatisScore and avgOwnership
-    const totalBikes = fieldsToUpdate.totalNumBikes;
-    fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
-    fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
-
-    // Increment broken and sold numbers
-    if (bikeData.broken) {
-      fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + 1;
-    }
-
-    if (bikeData.sold) {
-      fieldsToUpdate.numSold = (fieldsToUpdate.numSold ?? 0) + 1;
-    }
-
-    // Increment right bike number
-    if (bikeData.bikeNumber === 1) {
-      fieldsToUpdate.numFirstBike = (fieldsToUpdate.numFirstBike ?? 0) + 1;
-    } else if (bikeData.bikeNumber === 2) {
-      fieldsToUpdate.numSecondBike = (fieldsToUpdate.numFirstBike ?? 0) + 1;
-    } else if (bikeData.bikeNumber ?? 0 >= 3) {
-      fieldsToUpdate.numThirdPlusBike = (fieldsToUpdate.numThirdPlusBike ?? 0) + 1;
-    }
+    const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
+    updatedFieldsToUpdate.avgSatisScore = (((updatedFieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
+    updatedFieldsToUpdate.avgOwnership = (((updatedFieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
 
     // Now create a copy of the existing entry and save the updated data
     try {
       const update = {
         id: models[0].id,
-        ...fieldsToUpdate,
+        ...updatedFieldsToUpdate,
       }
       await cookieBasedClient.models.ModelStats.update(update);
       console.log("model stats updated successfully");
