@@ -4,7 +4,8 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
+import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID } from "@/compon/interfaces";
+import { updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {
   const { data: brandData, errors } = await cookieBasedClient.models.BrandStats.list({
@@ -27,7 +28,7 @@ export async function getModelStats(modelName: string) {
   if (errors) {
     console.log("error getting the brand Stat Data");
   }
-  return modelData[0] as modelData;
+  return modelData[0] as modelDataWID;
 }
 
 export async function getTotalStats() {
@@ -39,7 +40,7 @@ export async function getTotalStats() {
 export async function deleteAllStats(bikeData: BikeType) {
   deleteBrandStats(bikeData);
   deleteBikeStats(bikeData);
-  deleteAllStats(bikeData);
+  deleteModelStats(bikeData);
   deleteTotalStats(bikeData);
 
 }
@@ -63,6 +64,7 @@ async function deleteBikeStats(bikeData: BikeType) {
   const fieldsToUpdate = {
     bikeNum: pulledBikeStatData.bikeNum
   }
+  //only have to update this field
   fieldsToUpdate.bikeNum = (fieldsToUpdate.bikeNum ?? 0) - 1;
   {
     const { errors } = await cookieBasedClient.models.BikeStats.update(
@@ -82,7 +84,53 @@ async function deleteBrandStats(bikedata: BikeType) {
 }
 
 async function deleteModelStats(bikeData: BikeType) {
+  // Query for existing model stats
+  var modelData: modelDataWID = await getModelStats(bikeData.model ?? "");
 
+
+  // If model exists, update the existing entry
+
+  const fieldsToUpdate: brandModelFieldsToUpdate = {
+    totalNumBikes: modelData.totalNumBikes ?? 0,
+    numBroken: modelData.numBroken ?? 0,
+    numSold: modelData.numSold ?? 0,
+    numFirstBike: modelData.numFirstBike ?? 0,
+    numSecondBike: modelData.numSecondBike ?? 0,
+    numThirdPlusBike: modelData.numThirdPlusBike ?? 0,
+    avgOwnership: modelData.avgOwnership ?? 0,
+    avgSatisScore: modelData.avgSatisScore ?? 0
+  }
+
+  const updatedFieldsToUpdate = updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
+
+  // Update avgSatisScore and avgOwnership
+  const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
+  if (totalBikes == 0) {
+    console.error("for some reason we have zero total bikes and we are deleting");
+    return;
+  }
+  const newTotalBikes = totalBikes - 1;
+
+  updatedFieldsToUpdate.avgSatisScore = newTotalBikes > 0
+    ? ((updatedFieldsToUpdate.avgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / newTotalBikes
+    : 0;
+
+  updatedFieldsToUpdate.avgOwnership = newTotalBikes > 0
+    ? ((updatedFieldsToUpdate.avgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / newTotalBikes
+    : 0;
+
+
+  // Now create a copy of the existing entry and save the updated data
+  try {
+    const update = {
+      id: modelData.id,
+      ...updatedFieldsToUpdate,
+    }
+    await cookieBasedClient.models.ModelStats.update(update);
+    console.log("model stats updated successfully");
+  } catch (error) {
+    console.error("Error updating model data:", error);
+  }
 }
 
 async function deleteTotalStats(bikeData: BikeType) {
