@@ -97,6 +97,18 @@ export interface totalData {
   totalAvgOwnership: number | null,
 }
 
+export interface totalDataWID {
+  id: string,
+  totalAvgSatisScore: number | null,
+  totalNumBikes: number | null,
+  totalNumFirst: number | null,
+  totalNumSecond: number | null,
+  totalNumThird: number | null,
+  totalNumBroken: number | null,
+  totalNumSold: number | null,
+  totalAvgOwnership: number | null,
+}
+
 export interface brandModelFieldsToUpdate {
   totalNumBikes: number | null,
   numBroken: number | null,
