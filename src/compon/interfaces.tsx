@@ -67,6 +67,19 @@ export interface modelDataWID {
   avgOwnership: number | null,
 }
 
+export interface brandDataWID {
+  id: string,
+  brandName: string | null,
+  avgSatisScore: number | null,
+  totalNumBikes: number | null, // Start counting from 1 for the first entry
+  numFirstBike: number | null,
+  numSecondBike: number | null,
+  numThirdPlusBike: number | null,
+  numBroken: number | null, // Initialize based on current bike
+  numSold: number | null, // Initialize based on current bike
+  avgOwnership: number | null,
+}
+
 export interface bikeData {
   modelName: string | null,
   bikeYear: number | null,

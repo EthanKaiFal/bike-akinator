@@ -4,7 +4,7 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID } from "@/compon/interfaces";
+import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID } from "@/compon/interfaces";
 import { updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {
@@ -16,7 +16,7 @@ export async function getBrandStats(brandName: string) {
   if (errors) {
     console.log("error getting the brand Stat Data");
   }
-  return brandData[0] as brandData;
+  return brandData[0] as brandDataWID;
 }
 
 export async function getModelStats(modelName: string) {
@@ -79,8 +79,51 @@ async function deleteBikeStats(bikeData: BikeType) {
   }
 }
 
-async function deleteBrandStats(bikedata: BikeType) {
+async function deleteBrandStats(bikeData: BikeType) {
+  // Query for existing model stats
+  var brandData: brandDataWID = await getBrandStats(bikeData.brand ?? "");
 
+
+  // If model exists, update the existing entry
+
+  const fieldsToUpdate: brandModelFieldsToUpdate = {
+    totalNumBikes: brandData.totalNumBikes ?? 0,
+    numBroken: brandData.numBroken ?? 0,
+    numSold: brandData.numSold ?? 0,
+    numFirstBike: brandData.numFirstBike ?? 0,
+    numSecondBike: brandData.numSecondBike ?? 0,
+    numThirdPlusBike: brandData.numThirdPlusBike ?? 0,
+    avgOwnership: brandData.avgOwnership ?? 0,
+    avgSatisScore: brandData.avgSatisScore ?? 0
+  }
+
+  const updatedFieldsToUpdate = updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
+
+  // Update avgSatisScore and avgOwnership
+  const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
+
+  //new formula for updating avg data post delete from chatGPT
+
+  updatedFieldsToUpdate.avgSatisScore = totalBikes > 0
+    ? ((updatedFieldsToUpdate.avgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / totalBikes
+    : 0;
+
+  updatedFieldsToUpdate.avgOwnership = totalBikes > 0
+    ? ((updatedFieldsToUpdate.avgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / totalBikes
+    : 0;
+
+
+  // Now create a copy of the existing entry and save the updated data
+  try {
+    const update = {
+      id: brandData.id,
+      ...updatedFieldsToUpdate,
+    }
+    await cookieBasedClient.models.ModelStats.update(update);
+    console.log("model stats updated successfully");
+  } catch (error) {
+    console.error("Error updating brand data:", error);
+  }
 }
 
 async function deleteModelStats(bikeData: BikeType) {
@@ -109,14 +152,15 @@ async function deleteModelStats(bikeData: BikeType) {
     console.error("for some reason we have zero total bikes and we are deleting");
     return;
   }
-  const newTotalBikes = totalBikes - 1;
 
-  updatedFieldsToUpdate.avgSatisScore = newTotalBikes > 0
-    ? ((updatedFieldsToUpdate.avgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / newTotalBikes
+  //new formula for updating avg data post delete from chatGPT
+
+  updatedFieldsToUpdate.avgSatisScore = totalBikes > 0
+    ? ((updatedFieldsToUpdate.avgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / totalBikes
     : 0;
 
-  updatedFieldsToUpdate.avgOwnership = newTotalBikes > 0
-    ? ((updatedFieldsToUpdate.avgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / newTotalBikes
+  updatedFieldsToUpdate.avgOwnership = totalBikes > 0
+    ? ((updatedFieldsToUpdate.avgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / totalBikes
     : 0;
 
 
