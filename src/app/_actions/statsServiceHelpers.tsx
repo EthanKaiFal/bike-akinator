@@ -5,7 +5,7 @@ import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalDat
 
 
 
-export function updateBrandModelStatsBy(num: number, fieldsToUpdate: brandModelFieldsToUpdate, bikeData: BikeType) {
+export async function updateBrandModelStatsBy(num: number, fieldsToUpdate: brandModelFieldsToUpdate, bikeData: BikeType) {
     // decrement totalNumBikes
     fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + num;
 

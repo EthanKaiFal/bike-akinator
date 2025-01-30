@@ -97,7 +97,7 @@ async function deleteBrandStats(bikeData: BikeType) {
     avgSatisScore: brandData.avgSatisScore ?? 0
   }
 
-  const updatedFieldsToUpdate = updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
+  const updatedFieldsToUpdate = await updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
 
   // Update avgSatisScore and avgOwnership
   const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
@@ -144,7 +144,7 @@ async function deleteModelStats(bikeData: BikeType) {
     avgSatisScore: modelData.avgSatisScore ?? 0
   }
 
-  const updatedFieldsToUpdate = updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
+  const updatedFieldsToUpdate = await updateBrandModelStatsBy(-1, fieldsToUpdate, bikeData);
 
   // Update avgSatisScore and avgOwnership
   const totalBikes = updatedFieldsToUpdate.totalNumBikes ?? 0;
