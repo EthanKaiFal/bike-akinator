@@ -37,11 +37,11 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
         //new formula for updating avg data post delete from chatGPT
 
         fieldsToUpdate.avgSatisScore = totalBikes > 0
-            ? ((fieldsToUpdate.avgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / totalBikes
+            ? ((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes + 1) - (bikeData.score ?? 0)) / totalBikes
             : 0;
 
         fieldsToUpdate.avgOwnership = totalBikes > 0
-            ? ((fieldsToUpdate.avgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / totalBikes
+            ? ((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes + 1) - (bikeData.ownershipMonths ?? 0)) / totalBikes
             : 0;
     }
     return fieldsToUpdate;
@@ -78,11 +78,11 @@ export async function incrementTotalStatsBy(incr: number, fieldsToUpdate: totalS
         //new formula for updating avg data post delete from chatGPT
 
         fieldsToUpdate.totalAvgSatisScore = totalBikes > 0
-            ? ((fieldsToUpdate.totalAvgSatisScore ?? 0) * totalBikes - (bikeData.score ?? 0)) / totalBikes
+            ? ((fieldsToUpdate.totalAvgSatisScore ?? 0) * (totalBikes + 1) - (bikeData.score ?? 0)) / totalBikes
             : 0;
 
         fieldsToUpdate.totalAvgOwnership = totalBikes > 0
-            ? ((fieldsToUpdate.totalAvgOwnership ?? 0) * totalBikes - (bikeData.ownershipMonths ?? 0)) / totalBikes
+            ? ((fieldsToUpdate.totalAvgOwnership ?? 0) * (totalBikes + 1) - (bikeData.ownershipMonths ?? 0)) / totalBikes
             : 0;
     }
     return fieldsToUpdate;
