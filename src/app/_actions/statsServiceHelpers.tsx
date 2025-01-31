@@ -48,6 +48,8 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
 }
 
 export async function incrementTotalStatsBy(incr: number, fieldsToUpdate: totalStatsFieldsToUpdate, bikeData: BikeType) {
+    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
+
     if (bikeData.broken) {
         fieldsToUpdate.totalNumBroken = (fieldsToUpdate.totalNumBroken ?? 0) + incr;
     }

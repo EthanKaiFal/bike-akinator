@@ -135,7 +135,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
       totalNumBikes: fieldsToUpdate.avgOwnership,
       numFirstBike: fieldsToUpdate.numFirstBike,
       numSecondBike: fieldsToUpdate.numSecondBike,
-      numThirdBike: fieldsToUpdate.numThirdPlusBike,
+      numThirdPlusBike: fieldsToUpdate.numThirdPlusBike,
       numBroken: fieldsToUpdate.numBroken,
       numSold: fieldsToUpdate.numSold,
       avgOwnership: fieldsToUpdate.avgOwnership
@@ -144,7 +144,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
     const { errors } = await cookieBasedClient.models.ModelStats.create(createData) // Use the model constructor
     console.log("New model data created successfully");
     if (errors) {
-      console.error("Error saving new model data:" + errors);
+      console.error("Error saving new model data:" + JSON.stringify(errors));
     }
   }
   else {
