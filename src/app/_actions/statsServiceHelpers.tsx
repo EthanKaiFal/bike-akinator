@@ -8,7 +8,8 @@ import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalDat
 export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: brandModelFieldsToUpdate, bikeData: BikeType) {
     // decrement totalNumBikes
     fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
-
+    console.log("decrement" + incr);
+    console.log(fieldsToUpdate.totalNumBikes);
     // Increment broken and sold numbers
     if (bikeData.broken) {
         fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + incr;
@@ -22,7 +23,7 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
     if (bikeData.bikeNumber === 1) {
         fieldsToUpdate.numFirstBike = (fieldsToUpdate.numFirstBike ?? 0) + incr;
     } else if (bikeData.bikeNumber === 2) {
-        fieldsToUpdate.numSecondBike = (fieldsToUpdate.numFirstBike ?? 0) + incr;
+        fieldsToUpdate.numSecondBike = (fieldsToUpdate.numSecondBike ?? 0) + incr;
     } else if (bikeData.bikeNumber ?? 0 >= 3) {
         fieldsToUpdate.numThirdPlusBike = (fieldsToUpdate.numThirdPlusBike ?? 0) + incr;
     }
@@ -49,7 +50,6 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
 
 export async function incrementTotalStatsBy(incr: number, fieldsToUpdate: totalStatsFieldsToUpdate, bikeData: BikeType) {
     fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
-
     if (bikeData.broken) {
         fieldsToUpdate.totalNumBroken = (fieldsToUpdate.totalNumBroken ?? 0) + incr;
     }

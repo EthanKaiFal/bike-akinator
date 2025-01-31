@@ -48,8 +48,9 @@ export async function getTotalStats() {
 
 
 export async function updateBrandStats(bikeData: BikeType, increment: number) {
+  console.log("bike Data" + JSON.stringify(bikeData));
   var brandData: brandDataWID | null = await getBrandStats(bikeData.brand ?? "");
-
+  console.log("brad Data" + JSON.stringify(brandData));
 
   // Create new brand entry if the brand does not exist
   if (brandData === null) {
@@ -67,7 +68,7 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
     if (bikeData.bikeNumber === 1) {
       createData.numFirstBike = (createData.numFirstBike ?? 0) + 1;
     } else if (bikeData.bikeNumber === 2) {
-      createData.numSecondBike = (createData.numFirstBike ?? 0) + 1;
+      createData.numSecondBike = (createData.numSecondBike ?? 0) + 1;
     } else if (bikeData.bikeNumber ?? 0 >= 3) {
       createData.numThirdPlusBike = (createData.numThirdPlusBike ?? 0) + 1;
     }
@@ -132,7 +133,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
       modelName: bikeData.model,
       brandName: bikeData.brand,
       avgSatisScore: fieldsToUpdate.avgSatisScore,
-      totalNumBikes: fieldsToUpdate.avgOwnership,
+      totalNumBikes: fieldsToUpdate.totalNumBikes,
       numFirstBike: fieldsToUpdate.numFirstBike,
       numSecondBike: fieldsToUpdate.numSecondBike,
       numThirdPlusBike: fieldsToUpdate.numThirdPlusBike,

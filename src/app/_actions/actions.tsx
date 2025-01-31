@@ -13,11 +13,13 @@ export async function onDeleteBike(idName: string) {
     const toBeDeleted = {
         id: idName
     }
+    const { data: bikeData, errors } = await cookieBasedClient.models.Bike.get(toBeDeleted);
     bikeService.deleteBike(toBeDeleted);
     //get bike data
-    const { data: bikeData, errors } = await cookieBasedClient.models.Bike.get(toBeDeleted);
     //then delete stats
-
+    if (errors) {
+        console.error(errors);
+    }
     deleteAllStats(bikeData as BikeType);
 
     // console.log("data deleted", deletedPost, errors);
