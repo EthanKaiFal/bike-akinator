@@ -18,7 +18,7 @@ export async function onDeleteBike(idName: string) {
     const { data: bikeData, errors } = await cookieBasedClient.models.Bike.get(toBeDeleted);
     //then delete stats
 
-    //statsService.deleteAllStats(bikeData as BikeType);
+    deleteAllStats(bikeData as BikeType);
 
     // console.log("data deleted", deletedPost, errors);
     revalidatePath("/profile");
@@ -63,14 +63,22 @@ export async function createBike(formData: FormData) {
 async function updateAllBikeStats(bikeData: BikeType) {
     //console.log("listing"+ JSON.stringify(bikeData));
     try {
-        statsService.updateBrandStats(bikeData);
-        statsService.updateModelStats(bikeData);
-        statsService.updateBikeStats(bikeData);
-        statsService.updateTotalStats(bikeData);
+        statsService.updateBrandStats(bikeData, 1);
+        statsService.updateModelStats(bikeData, 1);
+        statsService.updateBikeStats(bikeData, 1);
+        statsService.updateTotalStats(bikeData, 1);
     }
     catch {
         console.error("error updating");
     }
+}
+
+async function deleteAllStats(bikeData: BikeType) {
+    statsService.updateBrandStats(bikeData, -1);
+    statsService.updateBikeStats(bikeData, -1);
+    statsService.updateModelStats(bikeData, -1);
+    statsService.updateTotalStats(bikeData, -1);
+
 }
 
 

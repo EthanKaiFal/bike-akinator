@@ -119,3 +119,14 @@ export interface brandModelFieldsToUpdate {
   avgOwnership: number | null,
   avgSatisScore: number | null
 }
+
+export interface totalStatsFieldsToUpdate {
+  totalNumBikes: number | null,
+  totalNumBroken: number | null,
+  totalNumSold: number | null,
+  totalNumFirst: number | null,
+  totalNumSecond: number | null,
+  totalNumThird: number | null,
+  totalAvgOwnership: number | null,
+  totalAvgSatisScore: number | null
+}
