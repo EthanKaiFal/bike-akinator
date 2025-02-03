@@ -5,20 +5,19 @@ import BrandStats from "@/compon/BrandStats";
 const Bike = async ({ params }: { params: { id: string } }) => {
     // if (!params.id) return null;
 
-     try {
+    try {
         const { data: bikeInfo } = await cookieBasedClient.models.ModelStats.get({
             id: params.id,
         });
-         if (!bikeInfo) {
-             return <div>Bike not found</div>;
-         }
-         else{
-             console.log("print"+JSON.stringify(bikeInfo));
-         }
+        if (!bikeInfo) {
+            return <div>Bike not found</div>;
+        }
+        else {
+            // console.log("print" + JSON.stringify(bikeInfo));
+        }
 
         return (
             <div>
-                Hello
                 <BrandStats brandName={bikeInfo?.brandName ?? ""} />
             </div>
         );
