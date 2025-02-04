@@ -1,4 +1,4 @@
-interface CSVRow {
+export interface CSVRow {
     brandName: string;
     modelName: string;
     bikeYear: number;

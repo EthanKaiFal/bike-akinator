@@ -22,17 +22,19 @@
     "eslint-config-next": "15.0.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
-    "tsx": "^4.19.1",
+    "tsx": "^4.19.2",
     "typescript": "^5.6.3"
   },
   "dependencies": {
     "@aws-amplify/adapter-nextjs": "^1.2.23",
     "@aws-amplify/auth": "^6.6.0",
     "@aws-amplify/ui-react": "^6.5.4",
+    "@types/papaparse": "^5.3.15",
     "aws-amplify": "^6.6.6",
     "csv-parser": "^3.2.0",
     "fs": "^0.0.1-security",
     "next": "^14.2.15",
+    "papaparse": "^5.5.2",
     "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1"
