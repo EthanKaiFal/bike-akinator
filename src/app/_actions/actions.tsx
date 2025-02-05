@@ -56,18 +56,20 @@ export async function fetchUserId(): Promise<string> {
 export async function createBike(formData: FormData) {
     const data: BikeType = await bikeService.createBike(formData);
     //now i need to update the stats
-    updateAllBikeStats(data);
+    updateAllBikeStats(data, "", -1, -1, -1, "");
     redirect("/profile");
 }
 
 //UPDATE STATS FUNCTIONS
 
-async function updateAllBikeStats(bikeData: BikeType) {
+export async function updateAllBikeStats(bikeData: BikeType, category: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
     //console.log("listing"+ JSON.stringify(bikeData));
+    var modelId;
+
     try {
         statsService.updateBrandStats(bikeData, 1);
-        statsService.updateModelStats(bikeData, 1);
-        statsService.updateBikeStats(bikeData, 1);
+        modelId = await statsService.updateModelStats(bikeData, 1, category);
+        statsService.updateBikeStats(bikeData, 1, (modelId ?? ""), engineSize, horsePower, torque, engineConfig);
         statsService.updateTotalStats(bikeData, 1);
     }
     catch {
@@ -77,9 +79,13 @@ async function updateAllBikeStats(bikeData: BikeType) {
 
 async function deleteAllStats(bikeData: BikeType) {
     statsService.updateBrandStats(bikeData, -1);
-    statsService.updateBikeStats(bikeData, -1);
-    statsService.updateModelStats(bikeData, -1);
+    statsService.updateModelStats(bikeData, -1, "");
+    statsService.updateBikeStats(bikeData, -1, "", -1, -1, -1, "");
     statsService.updateTotalStats(bikeData, -1);
+
+}
+
+async function updateAllBikeStatsDataImport(bikeData: BikeType,) {
 
 }
 

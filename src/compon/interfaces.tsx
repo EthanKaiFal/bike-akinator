@@ -25,7 +25,6 @@ export interface Bike {
   broken: boolean | null;
   ownershipMonths: number | null;
   score: number | null;
-  userId: string | null;
 }
 
 export interface brandData {
@@ -84,6 +83,11 @@ export interface bikeData {
   modelName: string | null,
   bikeYear: number | null,
   bikeNum: number | null,
+  engineSize: number | null,
+  horsePower: number | null,
+  torque: number | null,
+  engineConfig: string | null,
+  modelStatId: string | null,
 }
 
 export interface totalData {

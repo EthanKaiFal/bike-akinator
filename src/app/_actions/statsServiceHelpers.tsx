@@ -7,9 +7,11 @@ import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalDat
 
 export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: brandModelFieldsToUpdate, bikeData: BikeType) {
     // decrement totalNumBikes
-    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
-    console.log("decrement" + incr);
-    console.log(fieldsToUpdate.totalNumBikes);
+    if (((bikeData.score ?? 0) > 0) && ((bikeData.ownershipMonths ?? 0) > 0)) {
+        fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
+    }
+    //console.log("decrement" + incr);
+    //console.log(fieldsToUpdate.totalNumBikes);
     // Increment broken and sold numbers
     if (bikeData.broken) {
         fieldsToUpdate.numBroken = (fieldsToUpdate.numBroken ?? 0) + incr;
@@ -29,9 +31,11 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
     }
 
     const totalBikes = fieldsToUpdate.totalNumBikes ?? 0;
-    if (incr > 0) {
+    if ((incr > 0) && ((bikeData.score ?? 0) > 0)) {
         fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
-        fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        if (incr > 0 && ((bikeData.ownershipMonths ?? 0) > 0)) {
+            fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        }
     }
     //decrementing case 
     else {
@@ -49,7 +53,9 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
 }
 
 export async function incrementTotalStatsBy(incr: number, fieldsToUpdate: totalStatsFieldsToUpdate, bikeData: BikeType) {
-    fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
+    if (((bikeData.score ?? 0) > 0) && ((bikeData.ownershipMonths ?? 0) > 0)) {
+        fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
+    }
     if (bikeData.broken) {
         fieldsToUpdate.totalNumBroken = (fieldsToUpdate.totalNumBroken ?? 0) + incr;
     }
@@ -69,9 +75,11 @@ export async function incrementTotalStatsBy(incr: number, fieldsToUpdate: totalS
 
     const totalBikes = fieldsToUpdate.totalNumBikes ?? 0;
 
-    if (incr > 0) {
+    if ((incr > 0) && ((bikeData.score ?? 0) > 0)) {
         fieldsToUpdate.totalAvgSatisScore = (((fieldsToUpdate.totalAvgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
-        fieldsToUpdate.totalAvgOwnership = (((fieldsToUpdate.totalAvgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        if ((incr > 0) && ((bikeData.ownershipMonths ?? 0) > 0)) {
+            fieldsToUpdate.totalAvgOwnership = (((fieldsToUpdate.totalAvgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        }
     }
     //decrementing case 
     else {

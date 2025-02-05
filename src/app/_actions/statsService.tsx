@@ -8,6 +8,7 @@ import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalDat
 import { incrementTotalStatsBy, updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {
+  //console.log("inside");
   const { data: brandData, errors } = await cookieBasedClient.models.BrandStats.list({
     filter: {
       brandName: { eq: brandName }
@@ -20,6 +21,7 @@ export async function getBrandStats(brandName: string) {
   if (brandData.length == 0) {
     return null;
   }
+  //console.log("success")
   return brandData[0] as brandDataWID;
 }
 
@@ -41,17 +43,16 @@ export async function getModelStats(modelName: string) {
 
 export async function getTotalStats() {
   const { data: totalData, errors } = await cookieBasedClient.models.TotalStats.list();
-  console.log("total stats" + JSON.stringify(totalData));
+  //console.log("total stats" + JSON.stringify(totalData));
   return totalData[0] as totalDataWID;
 }
 
 
 
 export async function updateBrandStats(bikeData: BikeType, increment: number) {
-  console.log("bike Data" + JSON.stringify(bikeData));
+  //console.log("bike Data");
   var brandData: brandDataWID | null = await getBrandStats(bikeData.brand ?? "");
-  console.log("brad Data" + JSON.stringify(brandData));
-
+  //console.log("out");
   // Create new brand entry if the brand does not exist
   if (brandData === null) {
     var createData = {
@@ -74,8 +75,8 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
     }
 
     // Save the new brand data
+    //console.log("creating");
     const { errors } = await cookieBasedClient.models.BrandStats.create(createData) // Use the model constructor
-    console.log("New brand data created successfully");
     if (errors) {
       console.error("Error saving new brand data:" + errors);
     }
@@ -101,7 +102,7 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
         id: brandData.id,
         ...updatedFieldsToUpdate,
       });
-      console.log("Brand stats updated successfully");
+      //console.log("Brand stats updated successfully");
     } catch (error) {
       console.error("Error updating brand data:", error);
     }
@@ -109,7 +110,7 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
 }
 
 
-export async function updateModelStats(bikeData: BikeType, increment: number) {
+export async function updateModelStats(bikeData: BikeType, increment: number, categoryy: string) {
   // Query for existing model stats
   var modelData: modelDataWID | null = await getModelStats(bikeData.model ?? "");
 
@@ -132,6 +133,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
     var createData = {
       modelName: bikeData.model,
       brandName: bikeData.brand,
+      category: categoryy,
       avgSatisScore: fieldsToUpdate.avgSatisScore,
       totalNumBikes: fieldsToUpdate.totalNumBikes,
       numFirstBike: fieldsToUpdate.numFirstBike,
@@ -142,11 +144,12 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
       avgOwnership: fieldsToUpdate.avgOwnership
     }
     // Save the new model data
-    const { errors } = await cookieBasedClient.models.ModelStats.create(createData) // Use the model constructor
-    console.log("New model data created successfully");
+    const { data, errors } = await cookieBasedClient.models.ModelStats.create(createData); // Use the model constructor
+    //console.log("New model data created successfully");
     if (errors) {
       console.error("Error saving new model data:" + JSON.stringify(errors));
     }
+    return data?.id;
   }
   else {
     // If model exists, update the existing entry
@@ -168,14 +171,15 @@ export async function updateModelStats(bikeData: BikeType, increment: number) {
         ...updatedFieldsToUpdate,
       }
       await cookieBasedClient.models.ModelStats.update(update);
-      console.log("model stats updated successfully");
+      //console.log("model stats updated successfully");
+      return modelData.id;
     } catch (error) {
       console.error("Error updating model data:", error);
     }
   }
 }
 
-export async function updateBikeStats(bikeData: BikeType, increment: number) {
+export async function updateBikeStats(bikeData: BikeType, increment: number, modelId: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
   const { data: bikeStats, errors } = await cookieBasedClient.models.BikeStats.list({
     filter: {
       modelName: { eq: bikeData.model ?? undefined },
@@ -192,12 +196,20 @@ export async function updateBikeStats(bikeData: BikeType, increment: number) {
     pulledBikeStatData = {
       modelName: bikeData.model,
       bikeNum: 1,
-      bikeYear: bikeData.year
+      bikeYear: bikeData.year,
+      engineSize: engineSize,
+      horsePower: horsePower,
+      torque: torque,
+      engineConfig: engineConfig,
+      modelStatId: modelId
+
     };
 
     const { errors } = await cookieBasedClient.models.BikeStats.create(pulledBikeStatData);
     if (errors) {
-      console.error("error creating new bike stat");
+      console.error("error creating new bike stat:" + JSON.stringify(errors));
+      //console.log("torque:" + torque);
+      console.log("engineSize" + engineSize);
     }
   }
   else {
@@ -225,7 +237,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
     return;
   }
   else {
-    console.log("grabbed total stats");
+    //console.log("grabbed total stats");
   }
   var pulledStatData: totalData;
 
@@ -245,7 +257,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
     pulledStatData = entries[0] as totalData;
 
   }
-  console.log("updatign with this var" + JSON.stringify(pulledStatData));
+  //console.log("updatign with this var" + JSON.stringify(pulledStatData));
   var fieldsToUpdate = {
     totalNumBikes: pulledStatData.totalNumBikes,
     totalNumBroken: pulledStatData.totalNumBroken,
@@ -261,7 +273,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
 
 
   if (entries.length != 0) {
-    console.log("updating total stats");
+    //console.log("updating total stats");
     const { data, errors } = await cookieBasedClient.models.TotalStats.update({
       id: entries[0].id,
       ...fieldsToUpdate,
@@ -270,13 +282,13 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
       console.error("error updating totalStat")
     }
     else {
-      console.log("updated data" + JSON.stringify(data));
+      //console.log("updated data" + JSON.stringify(data));
     }
   }
 
   //need to create a new entry case
   else {
-    console.log("creating total stats entry" + JSON.stringify(fieldsToUpdate));
+    //console.log("creating total stats entry" + JSON.stringify(fieldsToUpdate));
     const { errors } = await cookieBasedClient.models.TotalStats.create(
       fieldsToUpdate)
     if (errors) {
