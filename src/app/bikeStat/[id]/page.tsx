@@ -1,5 +1,4 @@
 import { cookieBasedClient } from "@/utils/amplify-utils";
-import Link from "next/link";
 
 const bikeStat = async ({ params }: { params: { id: string } }) => {
     // if (!params.id) return null;

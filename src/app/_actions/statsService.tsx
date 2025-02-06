@@ -2,7 +2,7 @@
 //cookie based client is my repo layer
 //this is my service layer
 import { cookieBasedClient } from "@/utils/amplify-utils"
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID } from "@/compon/interfaces";
+import { Bike as BikeType, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID } from "@/compon/interfaces";
 import { incrementTotalStatsBy, updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {
@@ -40,7 +40,7 @@ export async function getModelStats(modelName: string) {
 }
 
 export async function getTotalStats() {
-  const { data: totalData, errors } = await cookieBasedClient.models.TotalStats.list();
+  const { data: totalData } = await cookieBasedClient.models.TotalStats.list();
   //console.log("total stats" + JSON.stringify(totalData));
   return totalData[0] as totalDataWID;
 }
@@ -49,11 +49,11 @@ export async function getTotalStats() {
 
 export async function updateBrandStats(bikeData: BikeType, increment: number) {
   //console.log("bike Data");
-  var brandData: brandDataWID | null = await getBrandStats(bikeData.brand ?? "");
+  const brandData: brandDataWID | null = await getBrandStats(bikeData.brand ?? "");
   //console.log("out");
   // Create new brand entry if the brand does not exist
   if (brandData === null) {
-    var createData = {
+    const createData = {
       brandName: bikeData.brand,
       avgSatisScore: bikeData.score,
       totalNumBikes: 1, // Start counting from 1 for the first entry
@@ -110,12 +110,12 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
 
 export async function updateModelStats(bikeData: BikeType, increment: number, categoryy: string) {
   // Query for existing model stats
-  var modelData: modelDataWID | null = await getModelStats(bikeData.model ?? "");
+  const modelData: modelDataWID | null = await getModelStats(bikeData.model ?? "");
 
 
   // Create new model entry if the model does not exist
   if (modelData === null) {
-    var fieldsToUpdate: brandModelFieldsToUpdate = {
+    let fieldsToUpdate: brandModelFieldsToUpdate = {
       totalNumBikes: 0,
       numBroken: 0,
       numSold: 0,
@@ -128,7 +128,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
 
     fieldsToUpdate = await updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
 
-    var createData = {
+    const createData = {
       modelName: bikeData.model,
       brandName: bikeData.brand,
       category: categoryy,
@@ -189,7 +189,7 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
     return;
   }
 
-  var pulledBikeStatData: bikeData;
+  let pulledBikeStatData: bikeData;
   if (bikeStats.length === 0) {
     pulledBikeStatData = {
       modelName: bikeData.model,
@@ -237,7 +237,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
   else {
     //console.log("grabbed total stats");
   }
-  var pulledStatData: totalData;
+  let pulledStatData: totalData;
 
   if (entries.length === 0) {
     pulledStatData = {
@@ -256,7 +256,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
 
   }
   //console.log("updatign with this var" + JSON.stringify(pulledStatData));
-  var fieldsToUpdate = {
+  let fieldsToUpdate = {
     totalNumBikes: pulledStatData.totalNumBikes,
     totalNumBroken: pulledStatData.totalNumBroken,
     totalNumSold: pulledStatData.totalNumSold,
@@ -272,7 +272,7 @@ export async function updateTotalStats(bikeData: BikeType, increment: number) {
 
   if (entries.length != 0) {
     //console.log("updating total stats");
-    const { data, errors } = await cookieBasedClient.models.TotalStats.update({
+    const { errors } = await cookieBasedClient.models.TotalStats.update({
       id: entries[0].id,
       ...fieldsToUpdate,
     })

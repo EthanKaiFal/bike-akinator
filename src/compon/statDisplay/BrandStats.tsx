@@ -34,7 +34,7 @@ const BrandStats = ({ brandName }: {
          setLoading(false);
       });
 
-   }, []);
+   },);
 
    if (loading) return <div>Loading...</div>;
 
@@ -49,7 +49,7 @@ const BrandStats = ({ brandName }: {
 
    const avgSatisScoreByBrand = brandStat?.avgSatisScore;
    const totalAvgSatisScore = totalStat?.totalAvgSatisScore;
-   const totalAvgOwnerShip = totalStat?.totalAvgOwnership;
+   //const totalAvgOwnerShip = totalStat?.totalAvgOwnership;
 
    // data groups for charts
    const bikeData = {

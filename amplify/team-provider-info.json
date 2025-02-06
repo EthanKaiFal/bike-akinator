@@ -1,0 +1,20 @@
+{
+  "dbvthree": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-cloudwork-dbvthree-27b9c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::010526249838:role/amplify-cloudwork-dbvthree-27b9c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::010526249838:role/amplify-cloudwork-dbvthree-27b9c-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-cloudwork-dbvthree-27b9c-deployment",
+      "UnauthRoleName": "amplify-cloudwork-dbvthree-27b9c-unauthRole",
+      "StackName": "amplify-cloudwork-dbvthree-27b9c",
+      "StackId": "arn:aws:cloudformation:us-east-1:010526249838:stack/amplify-cloudwork-dbvthree-27b9c/b81796f0-8811-11ef-aa18-0affeef06bdf",
+      "AmplifyAppId": "d3ao0vrc5bac3j"
+    },
+    "categories": {
+      "auth": {
+        "cloudwork0d19c9cc": {}
+      }
+    }
+  }
+}

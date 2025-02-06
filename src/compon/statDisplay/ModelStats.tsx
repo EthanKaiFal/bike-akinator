@@ -34,7 +34,7 @@ const ModelStats = ({ modelName }: {
             setLoading(false);
         });
 
-    }, []);
+    },);
 
     if (loading) return <div>Loading...</div>;
 
@@ -49,7 +49,7 @@ const ModelStats = ({ modelName }: {
 
     const avgSatisScoreBymodel = modelStat?.avgSatisScore;
     const totalAvgSatisScore = totalStat?.totalAvgSatisScore;
-    const totalAvgOwnerShip = totalStat?.totalAvgOwnership;
+    //const totalAvgOwnerShip = totalStat?.totalAvgOwnership;
 
     // data groups for charts
     const bikeData = {

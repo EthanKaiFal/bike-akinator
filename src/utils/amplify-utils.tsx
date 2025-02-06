@@ -20,7 +20,7 @@ export const isAuthenticated = async () =>
                 const user = await getCurrentUser(contextSpec);
                 return !!user;
             }
-            catch (error) {
+            catch {
                 return false;
             }
         }
@@ -36,7 +36,7 @@ export const getUserName = async () =>
                 const user = await getCurrentUser(contextSpec);
                 return user.signInDetails?.loginId;
             }
-            catch (error) {
+            catch {
 
                 return false;
             }

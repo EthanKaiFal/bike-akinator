@@ -2,10 +2,10 @@
 //cookie based client is my repo layer
 //this is my service layer
 import { cookieBasedClient } from "@/utils/amplify-utils"
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
+import { Bike as BikeType, justId } from "@/compon/interfaces";
 
-export async function deleteBike(toBeDeleted: any) {
-    const { data: deletedBike, errors } = await cookieBasedClient.models.Bike.delete(toBeDeleted);
+export async function deleteBike(toBeDeleted: justId) {
+    await cookieBasedClient.models.Bike.delete(toBeDeleted);
 }
 
 export async function createBike(formData: FormData) {
@@ -21,7 +21,7 @@ export async function createBike(formData: FormData) {
         ownershipMonths: Number(formData.get("monthsOwned")) || 0,
         score: Number(formData.get("bikeScore")) || 0,
     }
-    const { data, errors } = await cookieBasedClient.models.Bike.create(bikeData);
+    const { data } = await cookieBasedClient.models.Bike.create(bikeData);
     //console.log("printing"+ JSON.stringify(data));
     //now i need to update the stats
     return data as BikeType;

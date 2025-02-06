@@ -1,0 +1,69 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+type UserProfile @model {
+  id: ID! @primaryKey
+  userIdAMP: String! @index(name: "userIdIndex", queryField: "userByUserId")
+  riderLevel: String
+  bikesOwned: [Bike] @hasMany(indexName: "byUserProfile", fields: ["id"])
+}
+
+type Bike @model {
+  id: ID! @primaryKey
+  bikeNumber: Int!
+  brand: String!
+  model: String!
+  year: Int
+  sold: Boolean
+  broken: Boolean
+  ownershipMonths: Int
+  score: Int
+  userId: ID! @index(name: "byUserProfile") # Foreign key linking the bike to a user
+  owner: UserProfile @belongsTo(fields: ["userId"])
+}
+
+type brandStats @model {
+  brandName: String! @primaryKey
+  avgSatisScore: Int
+  totalNumBikes: Int
+  numFirstBike: Int
+  numSecondBike: Int
+  numThirdPlusBike: Int
+  numBroken: Int
+  numSold: Int
+  avgOwnership: Int
+}
+
+type makeStats @model {
+  modelName: String! @primaryKey
+  brandName: String!
+  avgSatisScore: Int
+  totalNumBikes: Int
+  numFirstBike: Int
+  numSecondBike: Int
+  numThirdPlusBike: Int
+  numBroken: Int
+  numSold: Int
+  avgOwnership: Int
+}
+
+type bikeStats @model {
+  id: ID! @primaryKey
+  modelName: String!
+  bikeYear: Int!
+  bikeNum: Int
+}
+
+type totalStats @model {
+  id: ID! @primaryKey
+  totalNumBikes: Int!
+  totalNumBroken: Int!
+  totalNumSold: Int!
+  totalNumFirst: Int!
+  totalNumSecond: Int!
+  totalNumThird: Int!
+  totalAvgOwnerShip: Int!
+  totalAvgSatisScore: Int!
+}

@@ -5,19 +5,19 @@ import BikeModel from "@/compon/bikeModel";
 
 
 export default async function Bikes() {
-    const {data: models, errors} = await cookieBasedClient.models.ModelStats.list();
+  const { data: models } = await cookieBasedClient.models.ModelStats.list();
 
 
 
   return (
     <div>
-        {models.map((model, index) => (
-            <BikeModel
-            bikeModelId={model.id}
-            bikeModel={model.modelName??""}
-            bikeBrand={model.brandName??""}
-            />
-        ))}
-        </div>
+      {models.map((model, index) => (
+        <BikeModel key={index}
+          bikeModelId={model.id}
+          bikeModel={model.modelName ?? ""}
+          bikeBrand={model.brandName ?? ""}
+        />
+      ))}
+    </div>
   );
 }

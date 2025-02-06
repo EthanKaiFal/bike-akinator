@@ -134,3 +134,7 @@ export interface totalStatsFieldsToUpdate {
   totalAvgOwnership: number | null,
   totalAvgSatisScore: number | null
 }
+
+export interface justId {
+  id: string
+}

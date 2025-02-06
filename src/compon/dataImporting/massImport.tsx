@@ -3,24 +3,21 @@ import React from "react";
 import { Bike as Bike } from "../interfaces"
 import * as statsService from '../../app/_actions/statsService';
 
-import * as Papa from 'papaparse';
+//import * as Papa from 'papaparse';
 
-function delay(ms: number, callback: () => void) {
-    setTimeout(callback, ms);
-}
 
-type DataEntry = {
-    'Brand': string;
-    'Model': string;
-    'Year': number;
-    'Category': string;
-    'Rating': number;
-    'Displacement (ccm)': number;
-    'Power (hp)': number;
-    'Torque (Nm)': number;
-    'Engine cylinder': string;
-    'Engine stroke': string;
-};
+// type DataEntry = {
+//     'Brand': string;
+//     'Model': string;
+//     'Year': number;
+//     'Category': string;
+//     'Rating': number;
+//     'Displacement (ccm)': number;
+//     'Power (hp)': number;
+//     'Torque (Nm)': number;
+//     'Engine cylinder': string;
+//     'Engine stroke': string;
+// };
 
 export function updateAllBikeStats(bikeData: Bike, category: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
     //console.log("listing"+ JSON.stringify(bikeData));
@@ -41,74 +38,74 @@ export function updateAllBikeStats(bikeData: Bike, category: string, engineSize:
 
 
 export default async function DataImportCompon() {
-    // fetch('../dataImport/all_bikes_curated.csv')
-    //     .then(response => response.text())
-    //     .then(responseText => {
-    //         var data = Papa.parse(responseText);
-    //         console.log('data:', data);
-    //         setLoading(false);
-    //     });
-    const response = await fetch('http://127.0.0.1:3001/all_bikez_curated.csv');
-    const text = await response.text();
-    const batchSize = 2000;
-    var stepCount = 0;
+    // // fetch('../dataImport/all_bikes_curated.csv')
+    // //     .then(response => response.text())
+    // //     .then(responseText => {
+    // //         var data = Papa.parse(responseText);
+    // //         console.log('data:', data);
+    // //         setLoading(false);
+    // //     });
+    // const response = await fetch('http://127.0.0.1:3001/all_bikez_curated.csv');
+    // const text = await response.text();
+    // const batchSize = 2000;
+    // let stepCount = 0;
 
-    Papa.parse<DataEntry>(text, {
-        delimiter: ',',
-        dynamicTyping: true,
-        header: true,
-        preview: batchSize,
-        skipEmptyLines: true,
-        transform: (value) => {
-            return value === "_" ? "" : value; // Replace "_" back to an empty string
-        },
-        complete: (result) => {
-            console.log('Finished parsing');
-        },
-        error: (error: any) => {
-            console.error(error);
-        },
-        step: (results, parser) => {
-            stepCount = stepCount + 1;
-            console.log(stepCount);
-            // console.log(results.data['Brand']);
-            // console.log(results.data['Model']);
-            // console.log(results.data['Year']);
-            // console.log(results.data['Category']);
-            // console.log(results.data['Rating']);
-            // console.log(results.data['Displacement (ccm)']);
-            // console.log(results.data['Power (hp)']);
-            // console.log(results.data['Torque (Nm)']);
-            // console.log(results.data['Engine cylinder']);
-            // console.log(results.data['Engine stroke']);
+    // Papa.parse<DataEntry>(text, {
+    //     delimiter: ',',
+    //     dynamicTyping: true,
+    //     header: true,
+    //     preview: batchSize,
+    //     skipEmptyLines: true,
+    //     transform: (value) => {
+    //         return value === "_" ? "" : value; // Replace "_" back to an empty string
+    //     },
+    //     complete: () => {
+    //         console.log('Finished parsing');
+    //     },
+    //     error: () => {
+    //         console.log("import error");
+    //     },
+    //     step: (results, parser) => {
+    //         stepCount = stepCount + 1;
+    //         console.log(stepCount);
+    //         // console.log(results.data['Brand']);
+    //         // console.log(results.data['Model']);
+    //         // console.log(results.data['Year']);
+    //         // console.log(results.data['Category']);
+    //         // console.log(results.data['Rating']);
+    //         // console.log(results.data['Displacement (ccm)']);
+    //         // console.log(results.data['Power (hp)']);
+    //         // console.log(results.data['Torque (Nm)']);
+    //         // console.log(results.data['Engine cylinder']);
+    //         // console.log(results.data['Engine stroke']);
 
-            const bikeData: Bike = {
-                id: "",
-                year: results.data['Year'],
-                bikeNumber: 0,
-                brand: results.data['Brand'],
-                model: results.data['Model'],
-                sold: false,
-                broken: false,
-                ownershipMonths: ((results.data['Rating']) * 2) ** 2,
-                score: ((results.data['Rating']) * 2),
-            }
-            //put into DB per row
-            //batch.push(bikeData);
-            parser.pause();
-            updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
-            setTimeout(function () { parser.resume(); }, 5000);
+    //         const bikeData: Bike = {
+    //             id: "",
+    //             year: results.data['Year'],
+    //             bikeNumber: 0,
+    //             brand: results.data['Brand'],
+    //             model: results.data['Model'],
+    //             sold: false,
+    //             broken: false,
+    //             ownershipMonths: ((results.data['Rating']) * 2) ** 2,
+    //             score: ((results.data['Rating']) * 2),
+    //         }
+    //         //put into DB per row
+    //         //batch.push(bikeData);
+    //         parser.pause();
+    //         updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
+    //         setTimeout(function () { parser.resume(); }, 5000);
 
-        },
-    });
+    //     },
+    // });
 
-    if (stepCount < batchSize) {
-        return (
-            <div>
-                importing...
-            </div>
-        )
-    }
+    // if (stepCount < batchSize) {
+    //     return (
+    //         <div>
+    //             importing...
+    //         </div>
+    //     )
+    // }
 
 
 

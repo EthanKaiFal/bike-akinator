@@ -1,5 +1,4 @@
 
-import { cookieBasedClient, isAuthenticated } from "@/utils/amplify-utils";
 
 
 export default async function Home() {

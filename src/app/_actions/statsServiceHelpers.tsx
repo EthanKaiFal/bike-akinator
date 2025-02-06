@@ -1,6 +1,6 @@
 "use server"
 
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData, brandModelFieldsToUpdate, totalStatsFieldsToUpdate } from "@/compon/interfaces";
+import { Bike as BikeType, brandModelFieldsToUpdate, totalStatsFieldsToUpdate } from "@/compon/interfaces";
 
 
 

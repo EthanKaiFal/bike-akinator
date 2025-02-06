@@ -3,14 +3,13 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
-import { UserProfile, Bike as BikeType, brandData, modelData, bikeData, totalData } from "@/compon/interfaces";
-import * as postService from './postService';
+import { Bike as BikeType, justId } from "@/compon/interfaces";
 import * as bikeService from './bikeService';
 import * as statsService from './statsService';
 import * as profileService from './profileService'
 
 export async function onDeleteBike(idName: string) {
-    const toBeDeleted = {
+    const toBeDeleted: justId = {
         id: idName
     }
     const { data: bikeData, errors } = await cookieBasedClient.models.Bike.get(toBeDeleted);
@@ -64,7 +63,7 @@ export async function createBike(formData: FormData) {
 
 export async function updateAllBikeStats(bikeData: BikeType, category: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
     //console.log("listing"+ JSON.stringify(bikeData));
-    var modelId;
+    let modelId;
 
     try {
         statsService.updateBrandStats(bikeData, 1);
@@ -85,9 +84,6 @@ async function deleteAllStats(bikeData: BikeType) {
 
 }
 
-async function updateAllBikeStatsDataImport(bikeData: BikeType,) {
-
-}
 
 
 
