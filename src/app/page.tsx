@@ -1,4 +1,4 @@
-import Post from "@/compon/Post";
+
 import { cookieBasedClient, isAuthenticated } from "@/utils/amplify-utils";
 
 

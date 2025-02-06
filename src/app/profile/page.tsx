@@ -2,11 +2,9 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import "@aws-amplify/ui-react/styles.css";
 import * as DBWork from "../_actions/actions"
-import Bike from "../../compon/Bike"
+import Bike from "../../compon/userBike/Bike"
 import { isAuthenticated } from "@/utils/amplify-utils";
-import Auth from "@aws-amplify/auth";
 import { getUserName } from "@/utils/amplify-utils";
-import { revalidatePath } from "next/cache";
 import Link from "next/link";
 
 

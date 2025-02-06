@@ -1,5 +1,5 @@
 import React from 'react'
-import DataImportCompon from '@/compon/massImport';
+import DataImportCompon from '@/compon/dataImporting/massImport';
 
 const ImportData = () => {
     return (

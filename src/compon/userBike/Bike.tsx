@@ -1,8 +1,6 @@
 "use client"
 import React from "react";
-import { Schema } from "../../amplify/data/resource";
-import { useRouter } from "next/navigation"
-import { Bike as BikeType } from "./interfaces"
+import { Bike as BikeType } from "../interfaces"
 
 
 const Bike = ({

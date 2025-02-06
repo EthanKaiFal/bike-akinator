@@ -1,5 +1,5 @@
 import React from 'react'
-import BikeInputForm from '@/compon/BikeInputForm';
+import BikeInputForm from '@/compon/userBike/BikeInputForm';
 const AddPost = () => {
     return (
         <BikeInputForm />

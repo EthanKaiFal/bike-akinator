@@ -1,7 +1,7 @@
 
 import React from "react";
-import { Bike as Bike } from "./interfaces"
-import * as statsService from '../app/_actions/statsService';
+import { Bike as Bike } from "../interfaces"
+import * as statsService from '../../app/_actions/statsService';
 
 import * as Papa from 'papaparse';
 
@@ -50,15 +50,14 @@ export default async function DataImportCompon() {
     //     });
     const response = await fetch('http://127.0.0.1:3001/all_bikez_curated.csv');
     const text = await response.text();
-    const batchSize = 10;
+    const batchSize = 2000;
     var stepCount = 0;
-    let batch: Bike[] = [];
 
     Papa.parse<DataEntry>(text, {
         delimiter: ',',
         dynamicTyping: true,
         header: true,
-        preview: 2000,
+        preview: batchSize,
         skipEmptyLines: true,
         transform: (value) => {
             return value === "_" ? "" : value; // Replace "_" back to an empty string
@@ -103,13 +102,19 @@ export default async function DataImportCompon() {
         },
     });
 
-
+    if (stepCount < batchSize) {
+        return (
+            <div>
+                importing...
+            </div>
+        )
+    }
 
 
 
     return (
         <div>
-            finished
+            finished import
         </div>
     )
 }

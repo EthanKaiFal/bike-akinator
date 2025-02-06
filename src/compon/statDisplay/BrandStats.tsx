@@ -1,6 +1,6 @@
 "use client"
 import { getBrandStats, getTotalStats } from "@/app/_actions/actions"
-import { brandData, totalData } from "./interfaces"
+import { brandData, totalData } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
@@ -101,6 +101,7 @@ const BrandStats = ({ brandName }: {
    console.log("in here");
    return (
       <div className="chart-container">
+         <h2> Brand</h2>
          <div className="chart-item">
             <h3>Bikes Distribution</h3>
             <Pie data={bikeData} />

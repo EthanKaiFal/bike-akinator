@@ -2,20 +2,19 @@
 
 import { useState, useEffect, useTransition, } from 'react';
 import Link from "next/link";
-import {Button, Divider, Flex } from "@aws-amplify/ui-react";
+import { Button, Divider, Flex } from "@aws-amplify/ui-react";
 import { signOut, } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
-import {Hub} from "aws-amplify/utils";
+import { Hub } from "aws-amplify/utils";
 import { revalidatePath } from 'next/cache';
 
 
-export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
+export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
     const [authCheck, setAuthCheck] = useState(isSignedIn);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
-    console.log("here 4"+isSignedIn);
+
     useEffect(() => {
-        console.log("here 3"+isSignedIn);
         const hubListenerCancel = Hub.listen("auth", (data) => {
             switch (data.payload.event) {
                 case "signedIn":
@@ -38,7 +37,6 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
         return () => hubListenerCancel();
 
     }, [router]);
-    console.log("here 5"+isSignedIn);
     const signOutSignIn = async () => {
         if (authCheck) {
             await signOut();
@@ -46,7 +44,7 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
         else {
             router.push("/signIn");
         }
-        }
+    }
     const defaultRoutes = [
         {
             href: "/",
@@ -66,16 +64,16 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
     ];
 
     const routes = defaultRoutes.filter(
-        (route) => route.loggedIn === authCheck || route.loggedIn ===undefined);
-        console.log("here 6"+isSignedIn);
-        return (
-            <>
-                <Flex
+        (route) => route.loggedIn === authCheck || route.loggedIn === undefined);
+    console.log("here 6" + isSignedIn);
+    return (
+        <>
+            <Flex
                 direction="row"
                 justifyContent="space-between"
                 alignItems="center"
                 padding={"1rem"}
-                >
+            >
 
                 <Flex as="nav" alignItems="center" gap="3rem" margin="0 2rem">
                     {routes.map((route) => (
@@ -85,15 +83,15 @@ export default function NavBar({isSignedIn}: { isSignedIn: boolean }){
                     ))}
                 </Flex>
                 <Button
-                        variation="primary"
-                        borderRadius="2rem"
-                        className="mr-4"
-                        onClick={signOutSignIn}>
-                        {authCheck ? "Sign Out" : "Sign In"}
-                        </Button>
-                </Flex>
-                <Divider size="small"></Divider>
-            </>
-        )
-    }
+                    variation="primary"
+                    borderRadius="2rem"
+                    className="mr-4"
+                    onClick={signOutSignIn}>
+                    {authCheck ? "Sign Out" : "Sign In"}
+                </Button>
+            </Flex>
+            <Divider size="small"></Divider>
+        </>
+    )
+}
 
