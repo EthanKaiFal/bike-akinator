@@ -2,22 +2,23 @@
 import React from "react";
 import { Bike as Bike } from "../interfaces"
 import * as statsService from '../../app/_actions/statsService';
+import fs from 'fs';
+import path from 'path'
+import * as Papa from 'papaparse';
 
-//import * as Papa from 'papaparse';
 
-
-// type DataEntry = {
-//     'Brand': string;
-//     'Model': string;
-//     'Year': number;
-//     'Category': string;
-//     'Rating': number;
-//     'Displacement (ccm)': number;
-//     'Power (hp)': number;
-//     'Torque (Nm)': number;
-//     'Engine cylinder': string;
-//     'Engine stroke': string;
-// };
+type DataEntry = {
+    'Brand': string;
+    'Model': string;
+    'Year': number;
+    'Category': string;
+    'Rating': number;
+    'Displacement (ccm)': number;
+    'Power (hp)': number;
+    'Torque (Nm)': number;
+    'Engine cylinder': string;
+    'Engine stroke': string;
+};
 
 export function updateAllBikeStats(bikeData: Bike, category: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
     //console.log("listing"+ JSON.stringify(bikeData));
@@ -38,74 +39,81 @@ export function updateAllBikeStats(bikeData: Bike, category: string, engineSize:
 
 
 export default async function DataImportCompon() {
-    // // fetch('../dataImport/all_bikes_curated.csv')
-    // //     .then(response => response.text())
-    // //     .then(responseText => {
-    // //         var data = Papa.parse(responseText);
-    // //         console.log('data:', data);
-    // //         setLoading(false);
-    // //     });
-    // const response = await fetch('http://127.0.0.1:3001/all_bikez_curated.csv');
-    // const text = await response.text();
-    // const batchSize = 2000;
-    // let stepCount = 0;
+    // fetch('../dataImport/all_bikes_curated.csv')
+    //     .then(response => response.text())
+    //     .then(responseText => {
+    //         var data = Papa.parse(responseText);
+    //         console.log('data:', data);
+    //         setLoading(false);
+    //     });
+    const filePath = path.resolve(process.cwd(), 'src', 'compon', 'dataImporting', 'all_bikez_curated.csv');
 
-    // Papa.parse<DataEntry>(text, {
-    //     delimiter: ',',
-    //     dynamicTyping: true,
-    //     header: true,
-    //     preview: batchSize,
-    //     skipEmptyLines: true,
-    //     transform: (value) => {
-    //         return value === "_" ? "" : value; // Replace "_" back to an empty string
-    //     },
-    //     complete: () => {
-    //         console.log('Finished parsing');
-    //     },
-    //     error: () => {
-    //         console.log("import error");
-    //     },
-    //     step: (results, parser) => {
-    //         stepCount = stepCount + 1;
-    //         console.log(stepCount);
-    //         // console.log(results.data['Brand']);
-    //         // console.log(results.data['Model']);
-    //         // console.log(results.data['Year']);
-    //         // console.log(results.data['Category']);
-    //         // console.log(results.data['Rating']);
-    //         // console.log(results.data['Displacement (ccm)']);
-    //         // console.log(results.data['Power (hp)']);
-    //         // console.log(results.data['Torque (Nm)']);
-    //         // console.log(results.data['Engine cylinder']);
-    //         // console.log(results.data['Engine stroke']);
+    if (!fs.existsSync(filePath)) {
+        console.error("CSV file not found:", filePath);
+        process.exit(1); // Prevents further execution if the file is missing
+    }
 
-    //         const bikeData: Bike = {
-    //             id: "",
-    //             year: results.data['Year'],
-    //             bikeNumber: 0,
-    //             brand: results.data['Brand'],
-    //             model: results.data['Model'],
-    //             sold: false,
-    //             broken: false,
-    //             ownershipMonths: ((results.data['Rating']) * 2) ** 2,
-    //             score: ((results.data['Rating']) * 2),
-    //         }
-    //         //put into DB per row
-    //         //batch.push(bikeData);
-    //         parser.pause();
-    //         updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
-    //         setTimeout(function () { parser.resume(); }, 5000);
+    const file = fs.createReadStream(filePath);
+    // const text = await file.text();
+    const batchSize = 2000;
+    let stepCount = 0;
 
-    //     },
-    // });
+    Papa.parse<DataEntry>(file, {
+        delimiter: ',',
+        dynamicTyping: true,
+        header: true,
+        preview: batchSize,
+        skipEmptyLines: true,
+        transform: (value) => {
+            return value === "_" ? "" : value; // Replace "_" back to an empty string
+        },
+        complete: () => {
+            console.log('Finished parsing');
+        },
+        error: () => {
+            console.log("import error");
+        },
+        step: (results, parser) => {
+            stepCount = stepCount + 1;
+            console.log(stepCount);
+            // console.log(results.data['Brand']);
+            // console.log(results.data['Model']);
+            // console.log(results.data['Year']);
+            // console.log(results.data['Category']);
+            // console.log(results.data['Rating']);
+            // console.log(results.data['Displacement (ccm)']);
+            // console.log(results.data['Power (hp)']);
+            // console.log(results.data['Torque (Nm)']);
+            // console.log(results.data['Engine cylinder']);
+            // console.log(results.data['Engine stroke']);
 
-    // if (stepCount < batchSize) {
-    //     return (
-    //         <div>
-    //             importing...
-    //         </div>
-    //     )
-    // }
+            const bikeData: Bike = {
+                id: "",
+                year: results.data['Year'],
+                bikeNumber: 0,
+                brand: results.data['Brand'],
+                model: results.data['Model'],
+                sold: false,
+                broken: false,
+                ownershipMonths: ((results.data['Rating']) * 2) ** 2,
+                score: ((results.data['Rating']) * 2),
+            }
+            //put into DB per row
+            //batch.push(bikeData);
+            parser.pause();
+            updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
+            setTimeout(function () { parser.resume(); }, 5000);
+
+        },
+    });
+
+    if (stepCount < batchSize) {
+        return (
+            <div>
+                importing...
+            </div>
+        )
+    }
 
 
 
