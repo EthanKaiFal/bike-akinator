@@ -55,7 +55,7 @@ export default async function DataImportCompon() {
 
     const file = fs.createReadStream(filePath);
     // const text = await file.text();
-    const batchSize = 2000;
+    const batchSize = 5;
     let stepCount = 0;
 
     Papa.parse<DataEntry>(file, {
