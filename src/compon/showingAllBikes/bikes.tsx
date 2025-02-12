@@ -34,7 +34,7 @@ const Bikes = () => {
         console.log("Input value changed:", inputValue);
         setSearchList(filterStrings(wholeList, inputValue));
         setLoading(false);
-    }, [inputValue]);
+    }, [inputValue, wholeList]);
 
     return (
         <div>

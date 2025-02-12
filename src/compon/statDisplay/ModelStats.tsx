@@ -1,6 +1,6 @@
 "use client"
 import { getModelStats, getTotalStats } from "@/app/_actions/actions"
-import { modelData, modelDataWID, totalData, totalDataWID } from "../interfaces"
+import { modelDataWID, totalDataWID } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";

@@ -37,6 +37,7 @@ export async function getModelStats(modelName: string) {
     return null;
   }
   const { bikeStats, ...filteredModel } = modelData[0];
+  console.log(bikeStats);
   return filteredModel as modelDataWID;
 }
 
@@ -50,7 +51,10 @@ export async function getAllModelStats() {
     return null;
   }
 
-  const filteredData: modelDataWID[] = modelData.map(({ bikeStats, ...model }) => model);
+  const filteredData: modelDataWID[] = modelData.map(({ bikeStats, ...model }) => {
+    console.log("Filtered out bikeStats:", bikeStats); // Prevents unused variable error
+    return model;
+  });
   return filteredData;
 }
 
