@@ -13,8 +13,8 @@ export async function createBike(formData: FormData) {
     const bikeData = {
         userId: users[0].id,
         bikeNumber: Number(formData.get("bikeNumber")) || 0,
-        brand: formData.get("bikeBrand")?.toString() || "",
-        model: formData.get("bikeModel")?.toString() || "",
+        brand: formData.get("bikeBrand")?.toString().toLowerCase() || "",
+        model: formData.get("bikeModel")?.toString().toLowerCase() || "",
         year: Number(formData.get("bikeYear")) || 0,
         sold: (formData.get("bikeSold")?.toString() === "Yes" ? true : false),
         broken: (formData.get("bikeBroken")?.toString() === "Yes" ? true : false),

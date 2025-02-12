@@ -46,7 +46,7 @@ export default async function DataImportCompon() {
     //         console.log('data:', data);
     //         setLoading(false);
     //     });
-    const filePath = path.resolve(process.cwd(), 'src', 'compon', 'dataImporting', 'all_bikez_curated.csv');
+    const filePath = path.resolve(process.cwd(), 'src', 'compon', 'dataImporting', 'certain_bikez_curated.csv');
 
     if (!fs.existsSync(filePath)) {
         console.error("CSV file not found:", filePath);
@@ -55,7 +55,7 @@ export default async function DataImportCompon() {
 
     const file = fs.createReadStream(filePath);
     // const text = await file.text();
-    const batchSize = 5;
+    const batchSize = 45;
     let stepCount = 0;
 
     Papa.parse<DataEntry>(file, {
@@ -110,7 +110,7 @@ export default async function DataImportCompon() {
     if (stepCount < (batchSize - 1)) {
         return (
             <div>
-                importing...
+                importing... Step:{stepCount}
             </div>
         )
     }

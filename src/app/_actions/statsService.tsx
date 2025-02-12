@@ -65,12 +65,12 @@ export async function getTotalStats() {
 
 export async function updateBrandStats(bikeData: BikeType, increment: number) {
   //console.log("bike Data");
-  const brandData: brandDataWID | null = await getBrandStats(bikeData.brand ?? "");
+  const brandData: brandDataWID | null = await getBrandStats((bikeData.brand ?? "").toLowerCase());
   //console.log("out");
   // Create new brand entry if the brand does not exist
   if (brandData === null) {
     const createData = {
-      brandName: bikeData.brand,
+      brandName: (bikeData.brand ?? "").toLowerCase(),
       avgSatisScore: bikeData.score,
       totalNumBikes: 1, // Start counting from 1 for the first entry
       numFirstBike: 0,
@@ -126,7 +126,7 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
 
 export async function updateModelStats(bikeData: BikeType, increment: number, categoryy: string) {
   // Query for existing model stats
-  const modelData: modelDataWID | null = await getModelStats(bikeData.model ?? "");
+  const modelData: modelDataWID | null = await getModelStats((bikeData.model ?? "").toLowerCase());
 
 
   // Create new model entry if the model does not exist
@@ -145,9 +145,9 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
     fieldsToUpdate = await updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
 
     const createData = {
-      modelName: bikeData.model,
-      brandName: bikeData.brand,
-      category: categoryy,
+      modelName: bikeData.model?.toLowerCase(),
+      brandName: bikeData.brand?.toLowerCase(),
+      category: categoryy.toLowerCase(),
       avgSatisScore: fieldsToUpdate.avgSatisScore,
       totalNumBikes: fieldsToUpdate.totalNumBikes,
       numFirstBike: fieldsToUpdate.numFirstBike,
@@ -196,8 +196,8 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
 export async function updateBikeStats(bikeData: BikeType, increment: number, modelId: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
   const { data: bikeStats, errors } = await cookieBasedClient.models.BikeStats.list({
     filter: {
-      modelName: { eq: bikeData.model ?? undefined },
-      bikeYear: { eq: bikeData.year ?? undefined }
+      modelName: { eq: (bikeData.model ?? "").toLowerCase() },
+      bikeYear: { eq: bikeData.year ?? 0 }
     }
   });
   if (errors) {
@@ -208,7 +208,7 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
   let pulledBikeStatData: bikeData;
   if (bikeStats.length === 0) {
     pulledBikeStatData = {
-      modelName: bikeData.model,
+      modelName: (bikeData.model ?? "").toLowerCase(),
       bikeNum: 1,
       bikeYear: bikeData.year,
       engineSize: engineSize,
