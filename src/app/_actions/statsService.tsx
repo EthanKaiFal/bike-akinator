@@ -36,8 +36,24 @@ export async function getModelStats(modelName: string) {
   if (modelData.length == 0) {
     return null;
   }
-  return modelData[0] as modelDataWID;
+  const { bikeStats, ...filteredModel } = modelData[0];
+  return filteredModel as modelDataWID;
 }
+
+export async function getAllModelStats() {
+  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list();
+  if (errors) {
+    console.log("error getting the brand Stat Data");
+  }
+
+  if (!modelData || modelData.length == 0) {
+    return null;
+  }
+
+  const filteredData: modelDataWID[] = modelData.map(({ bikeStats, ...model }) => model);
+  return filteredData;
+}
+
 
 export async function getTotalStats() {
   const { data: totalData } = await cookieBasedClient.models.TotalStats.list();

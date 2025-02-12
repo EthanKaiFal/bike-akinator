@@ -56,6 +56,7 @@ export interface modelDataWID {
   id: string,
   modelName: string | null,
   brandName: string | null,
+  category: string | null,
   avgSatisScore: number | null,
   totalNumBikes: number | null, // Start counting from 1 for the first entry
   numFirstBike: number | null,

@@ -1,6 +1,6 @@
 "use client"
 import { getModelStats, getTotalStats } from "@/app/_actions/actions"
-import { modelData, totalData } from "../interfaces"
+import { modelData, modelDataWID, totalData, totalDataWID } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
@@ -12,8 +12,8 @@ const ModelStats = ({ modelName }: {
 }
 
 ) => {
-    const [totalStat, setTotalStat] = useState<totalData | null>(null);
-    const [modelStat, setModelStat] = useState<modelData | null>(null);
+    const [totalStat, setTotalStat] = useState<totalDataWID | null>(null);
+    const [modelStat, setModelStat] = useState<modelDataWID | null>(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -101,6 +101,7 @@ const ModelStats = ({ modelName }: {
     console.log("in here");
     return (
         <div className="chart-container">
+            <div>Category:{modelStat?.category}</div>
             <h2> Model</h2>
             <div className="chart-item">
                 <h3>Bikes Distribution</h3>

@@ -107,7 +107,7 @@ export default async function DataImportCompon() {
         },
     });
 
-    if (stepCount < batchSize) {
+    if (stepCount < (batchSize - 1)) {
         return (
             <div>
                 importing...
