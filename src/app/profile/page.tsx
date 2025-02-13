@@ -1,12 +1,11 @@
 
-import { cookieBasedClient } from "@/utils/amplify-utils"
+import { cookieBasedClient, isAuthenticated } from "@/utils/amplify-utils"
 import "@aws-amplify/ui-react/styles.css";
 import * as DBWork from "../_actions/actions"
-import Bike from "../../compon/userBike/Bike"
+import { Bike as BikeType } from "../../compon/interfaces"
 import "../../compon/userBike/profilePage.css"
-import { isAuthenticated } from "@/utils/amplify-utils";
 import { getUserName } from "@/utils/amplify-utils";
-import Link from "next/link";
+import ProfileBikes from "@/compon/userBike/profileBikes";
 
 
 
@@ -23,30 +22,10 @@ export default async function Login() {
     selectionSet: ["bikeNumber", "brand", "model", "year", "sold", "broken", "ownershipMonths", "score", "id", "userId"],
   });
 
-  //console.log("bike info grabbed" + JSON.stringify(bikes));
+  const bikesList: BikeType[] = bikes as BikeType[];
 
-  //   async function getUserEmail(): Promise<string | undefined> {
-  //     const { user } = useAuthenticator((context) => [context.user]);
-  //     return user.username
-  // }
 
-  // Helper to display user bikes
-  const displayUserBikes = () => {
-    return (
-      <div className="bikes-container">
-        {bikes.map(async (userBike, idx) => (
-          <div className="profile-card">
-            <Bike
-              onDelete={DBWork.onDeleteBike}
-              bike={userBike}
-              key={idx}
-              isSignedIn={await isAuthenticated()}
-            />
-          </div>
-        ))}
-      </div>
-    );
-  };
+
 
 
   return (
@@ -55,12 +34,9 @@ export default async function Login() {
       {/* <hr style={{ width: "100%", marginBottom: "1rem" }} /> Divider replacement */}
       <div className="profile-container">
         <div key={userId}  >
-          <div className="w-full">
-            <div style={{ justifyContent: "center" }}>{displayUserBikes()}</div>
-            <Link className="add-bike" key={"/add"} href={"/add"}>
-              {"Add Bike"}
-            </Link>
-          </div>
+          <ProfileBikes
+            bikes={bikesList}
+            isAuth={await isAuthenticated()}></ProfileBikes>
         </div>
       </div>
     </div>

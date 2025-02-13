@@ -3,7 +3,7 @@
     display: flex;
     flex-direction: column;
     justify-content:flex-start;
-    align-items: center;
+    align-items: flex-start;
     height: 100vh;
     background: #f4f4f4;
     padding-top: 80px;
@@ -27,20 +27,40 @@
     margin-top: 130px;
   }
   /* Profile Card */
-  .profile-card {
-    width: 350px;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  .bike-card {
+    min-width: 90%; /* Card width */
+    margin-right: 10%; /* Spacing between cards */
     text-align: center;
-    transition: transform 0.3s ease-in-out;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+    margin-top: 20px;
+    margin-bottom: 20px;
   }
-  
-  .profile-card:hover {
+
+  .bike-card:hover {
     transform: translateY(-5px);
   }
   
+  /* Scroll button */
+.scroll-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-left: 50%;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+}
+
+.scroll-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-5px);
+}
   /* Avatar */
   .avatar-section {
     display: flex;
@@ -139,9 +159,9 @@
   }
 
   .add-bike {
-    position: absolute;
-    bottom: 100px;
-    left: 45%;
+    position: relative;
+    bottom: -50px;
+    left: 135%;
     background: rgb(68, 201, 108);
     font-size: 18px;
     padding: 18px 30px;
@@ -157,8 +177,27 @@
   
   /* Responsive Design */
   @media (max-width: 500px) {
-    .profile-card {
+    .bike-card {
       width: 90%;
     }
   }
   
+  /* Container for the scrollable area */
+.bikes-wheel {
+  position: relative;
+  overflow: hidden;
+  width: 200%; /* Adjust to the desired width */
+  height: 100%;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  margin-left:50%;
+  background: grey;
+  padding-left: 15%;
+  border-radius: 20px;
+
+}
+
+.bike-wheel-inner {
+  display: flex;
+  transition: transform 0.5s ease-in-out; /* Smooth scroll animation */
+}

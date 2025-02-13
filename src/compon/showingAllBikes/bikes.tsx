@@ -10,31 +10,33 @@ const Bikes = () => {
     const [wholeList, setWholeList] = useState<modelDataWID[]>([]);
     const [isLoading, setLoading] = useState(true);
 
-    //grab the whole list just once
-    useEffect(() => {
-        statsService.getAllModelStats().then((data) => {
-            setWholeList(data ?? []);
+
+    //now we want to create a shorter list that pattern matches
+    // const [searchList, setSearchList] = useState<modelDataWID[]>([]);
+    const [inputValue, setInputValue] = useState<string>("");
+
+    // const filterStrings = (list: modelDataWID[], pattern: string): modelDataWID[] => {
+    //     return list.filter((model) => `${model.brandName} ${model.modelName}`
+    //         .toLowerCase()
+    //         .includes(pattern.toLowerCase()));
+    // };
+    //will reload whenever the input value is changed
+    const handleSearch = async () => {
+        statsService.getAllModelStats(inputValue).then((data) => {
+            setWholeList((prevList) => [...prevList, ...data ?? []]);
         }).catch((error) => {
             console.error("Error fetching stats:", error);
         });
-
-    },);
-
-    //now we want to create a shorter list that pattern matches
-    const [searchList, setSearchList] = useState<modelDataWID[]>([]);
-    const [inputValue, setInputValue] = useState<string>("");
-
-    const filterStrings = (list: modelDataWID[], pattern: string): modelDataWID[] => {
-        return list.filter((model) => `${model.brandName} ${model.modelName}`
-            .toLowerCase()
-            .includes(pattern.toLowerCase()));
-    };
-    //will reload whenever the input value is changed
-    useEffect(() => {
-        console.log("Input value changed:", inputValue);
-        setSearchList(filterStrings(wholeList, inputValue));
+        // const thing = await statsService.getStats();
+        // console.log("thingy" + JSON.stringify(thing));
+        // wholeList.push(thing);
+        // setWholeList(wholeList);
         setLoading(false);
-    }, [inputValue, wholeList]);
+    }
+
+    // console.log("Input value changed:", inputValue);
+    // setSearchList(filterStrings(wholeList, inputValue));
+    // setLoading(false);
 
     return (
         <div>
@@ -46,11 +48,13 @@ const Bikes = () => {
                 placeholder="Click and type..."
                 className="border p-2 w-full"
             />
+            <button onClick={handleSearch}>Search</button>
+
             <div>
                 {isLoading ? (
                     <p className="text-gray-500 mt-2">Loading...</p> // Show loading message
                 ) : (
-                    searchList.map((model, index) => (
+                    wholeList.map((model, index) => (
                         <BikeModel key={index}
                             bikeModelId={model.id}
                             bikeModel={model.modelName ?? ""}

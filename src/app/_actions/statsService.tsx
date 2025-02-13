@@ -41,13 +41,29 @@ export async function getModelStats(modelName: string) {
   return filteredModel as modelDataWID;
 }
 
-export async function getAllModelStats() {
-  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list();
+export async function getStats(): Promise<modelDataWID> {
+  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.get({
+    id: 'f1812211-ae9b-4dae-adbb-04fecf1445eb'
+  });
   if (errors) {
-    console.log("error getting the brand Stat Data");
+    console.log("error getting the brand Stat Data" + JSON.stringify(errors));
   }
+  const { bikeStats, ...filteredData } = { ...modelData };
+  console.log("hello" + JSON.stringify(modelData));
+  return filteredData as modelDataWID;
+}
+
+export async function getAllModelStats(pattern: string) {
+  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
+    filter: {
+      brandName: {
+        contains: pattern.toLowerCase().trim(),
+      }
+    }
+  });
 
   if (!modelData || modelData.length == 0) {
+    console.log("null?")
     return null;
   }
 
