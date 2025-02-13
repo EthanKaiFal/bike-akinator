@@ -1,0 +1,164 @@
+/* Profile Page Container */
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-start;
+    align-items: center;
+    height: 100vh;
+    background: #f4f4f4;
+    padding-top: 80px;
+  }
+  .background {
+    background: #f4f4f4;
+  }
+  .profile-title {
+    display:flex;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .bikes-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    margin-top: 130px;
+  }
+  /* Profile Card */
+  .profile-card {
+    width: 350px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .profile-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Avatar */
+  .avatar-section {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 3px solid #007bff;
+    object-fit: cover;
+  }
+  
+  /* Name */
+  .profile-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  /* Location & Email */
+  .profile-location,
+  .profile-email {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  /* Bio */
+  .bike-bio {
+    font-size: 14px;
+    color: #444;
+    margin: 10px 0;
+  }
+  
+  /* Profile Stats */
+  .bike-stats {
+    display: flex;
+    justify-content: space-between;
+    margin: 15px 0;
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stat-number {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #777;
+  }
+  
+  /* Buttons */
+  .profile-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .edit-profile,
+  .follow-profile {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+  }
+  
+  .edit-profile {
+    background: #007bff;
+    color: white;
+  }
+  
+  .edit-profile:hover {
+    background: #0056b3;
+  }
+  
+  .remove-bike {
+    background: #570808;
+    color: white;
+  }
+  
+  .remove-bike:hover {
+    background: #bb2626;
+  }
+
+  .add-bike {
+    position: absolute;
+    bottom: 100px;
+    left: 45%;
+    background: rgb(68, 201, 108);
+    font-size: 18px;
+    padding: 18px 30px;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+  }
+
+  .add-bike:hover {
+    background: rgb(28, 128, 58);
+    transform: translateY(-5px);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 500px) {
+    .profile-card {
+      width: 90%;
+    }
+  }
+  
