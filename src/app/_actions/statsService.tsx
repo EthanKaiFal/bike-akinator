@@ -23,10 +23,10 @@ export async function getBrandStats(brandName: string) {
   return brandData[0] as brandDataWID;
 }
 
-export async function getModelStats(modelName: string) {
+export async function getModelStats(modelNames: string) {
   const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
     filter: {
-      modelName: { eq: modelName }
+      modelName: { eq: modelNames }
     }
   });
   if (errors) {
@@ -198,6 +198,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
 
   // Create new model entry if the model does not exist
   if (modelData === null) {
+    console.log("in here creating");
     let fieldsToUpdate: brandModelFieldsToUpdate = {
       totalNumBikes: 0,
       numBroken: 0,
@@ -233,6 +234,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
     return data?.id;
   }
   else {
+    console.log("in here not creating");
     // If model exists, update the existing entry
     const fieldsToUpdate = {
       totalNumBikes: modelData.totalNumBikes,
