@@ -34,7 +34,7 @@ const BrandStats = ({ brandName }: {
          setLoading(false);
       });
 
-   },);
+   }, []);
 
    if (loading) return <div>Loading...</div>;
 
@@ -98,7 +98,7 @@ const BrandStats = ({ brandName }: {
          },
       ],
    };
-   console.log("in here");
+   //console.log("in here");
    return (
       <div className="chart-container">
          <h2> Brand</h2>

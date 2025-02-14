@@ -34,7 +34,7 @@ const ModelStats = ({ modelName }: {
             setLoading(false);
         });
 
-    },);
+    }, []);
 
     if (loading) return <div>Loading...</div>;
 

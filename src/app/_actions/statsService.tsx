@@ -41,37 +41,84 @@ export async function getModelStats(modelName: string) {
   return filteredModel as modelDataWID;
 }
 
-export async function getStats(): Promise<modelDataWID> {
-  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.get({
-    id: 'f1812211-ae9b-4dae-adbb-04fecf1445eb'
-  });
-  if (errors) {
-    console.log("error getting the brand Stat Data" + JSON.stringify(errors));
-  }
-  const { bikeStats, ...filteredData } = { ...modelData };
-  console.log("hello" + JSON.stringify(modelData));
-  return filteredData as modelDataWID;
+function fixUnused(unUsed: any) {
+  return unUsed;
 }
 
+
 export async function getAllModelStats(pattern: string) {
-  const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
+  let pageTokens: string[] = [];
+  let allData: modelDataWID[] = [];
+  let currentPageIndex = 1;
+  let hasMorePages = true;
+  //driver
+  //console.log("begin");
+  const { data: modelsData, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
     filter: {
       brandName: {
-        contains: pattern.toLowerCase().trim(),
+        beginsWith: pattern.trim(),
       }
     }
   });
 
-  if (!modelData || modelData.length == 0) {
-    console.log("null?")
-    return null;
+  if (errors) {
+    console.error("problem grabbing all model stats")
   }
 
-  const filteredData: modelDataWID[] = modelData.map(({ bikeStats, ...model }) => {
-    console.log("Filtered out bikeStats:", bikeStats); // Prevents unused variable error
-    return model;
+  if (!nextToken) {
+    //console.log("here");
+    hasMorePages = false;
+  }
+  //queque next page
+  pageTokens.push(nextToken ?? "");
+  //bring in the data
+  modelsData.map(({ bikeStats, ...model }) => {
+    fixUnused(bikeStats); // Prevents unused variable error
+    allData.push(model as modelDataWID);
+    //this is so that we are never pulling everything from db becauz expensive
+    if (pattern.length < 4) {
+      hasMorePages = false;
+    }
   });
-  return filteredData;
+  //do the pagination chain
+  while ((hasMorePages) && (currentPageIndex === pageTokens.length)) {
+    const { data: modelData, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
+      nextToken: pageTokens[pageTokens.length - 1],
+      filter: {
+        brandName: {
+          beginsWith: pattern.toLowerCase().trim(),
+        }
+      }
+    });
+
+
+    if (errors) {
+      console.error("error in pagination");
+    }
+    //we done case
+    if (!nextToken) {
+      //console.log("done");
+      hasMorePages = false;
+    }
+    else {
+      //queue
+      pageTokens.push(nextToken ?? "");
+      currentPageIndex = currentPageIndex + 1;
+
+      if (!modelData || modelData.length == 0) {
+        //console.log("null?");
+        hasMorePages = true;
+      }
+    }
+
+    //bring in the data
+    modelData.map(({ bikeStats, ...model }) => {
+      console.log("Filtered out bikeStats:" + model.brandName, bikeStats); // Prevents unused variable error
+      allData.push(model as modelDataWID);
+    });
+  }
+
+  return allData;
 }
 
 
