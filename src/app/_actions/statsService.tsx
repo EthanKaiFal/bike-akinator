@@ -23,21 +23,25 @@ export async function getBrandStats(brandName: string) {
   return brandData[0] as brandDataWID;
 }
 
-export async function getModelStats(modelNames: string) {
+export async function getModelStats(modelName: string, brandName: string) {
   const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
     filter: {
-      modelName: { eq: modelNames }
+      and: [
+        { modelName: { eq: (modelName).trim() } },
+        { brandName: { eq: (brandName).trim() } }
+      ]
     }
   });
   if (errors) {
     console.log("error getting the brand Stat Data");
   }
-
-  if (modelData.length == 0) {
+  if (modelData.length === 0) {
+    console.log("is null");
     return null;
   }
   const { bikeStats, ...filteredModel } = modelData[0];
-  console.log(bikeStats);
+  fixUnused(bikeStats);
+
   return filteredModel as modelDataWID;
 }
 
@@ -193,7 +197,8 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
 
 export async function updateModelStats(bikeData: BikeType, increment: number, categoryy: string) {
   // Query for existing model stats
-  const modelData: modelDataWID | null = await getModelStats((bikeData.model ?? "").toLowerCase());
+  console.log(bikeData.model);
+  const modelData: modelDataWID | null = await getModelStats((bikeData.model ?? "").toLowerCase(), (bikeData.brand ?? "").toLowerCase());
 
 
   // Create new model entry if the model does not exist
@@ -213,8 +218,8 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
     fieldsToUpdate = await updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
 
     const createData = {
-      modelName: bikeData.model?.toLowerCase(),
-      brandName: bikeData.brand?.toLowerCase(),
+      modelName: bikeData.model?.toLowerCase().trim(),
+      brandName: bikeData.brand?.toLowerCase().trim(),
       category: categoryy.toLowerCase(),
       avgSatisScore: fieldsToUpdate.avgSatisScore,
       totalNumBikes: fieldsToUpdate.totalNumBikes,
@@ -253,7 +258,10 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
         id: modelData.id,
         ...updatedFieldsToUpdate,
       }
-      await cookieBasedClient.models.ModelStats.update(update);
+      const { errors } = await cookieBasedClient.models.ModelStats.update(update);
+      if (errors) {
+        console.log("error in update");
+      }
       //console.log("model stats updated successfully");
       return modelData.id;
     } catch (error) {
@@ -263,12 +271,13 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
 }
 
 export async function updateBikeStats(bikeData: BikeType, increment: number, modelId: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
-  const { data: bikeStats, errors } = await cookieBasedClient.models.BikeStats.list({
-    filter: {
-      modelName: { eq: (bikeData.model ?? "").toLowerCase() },
-      bikeYear: { eq: bikeData.year ?? 0 }
-    }
+  const modelName: string = (bikeData.model ?? "").toLowerCase();
+  const bikeYear: number = bikeData.year ?? 0;
+  const { data: firstFilter, errors } = await cookieBasedClient.models.BikeStats.list({
+    filter: { modelName: { eq: modelName.trim().toLowerCase() } }
   });
+
+  const bikeStats = firstFilter.filter((b) => b.bikeYear === bikeYear);
   if (errors) {
     console.error("error fetching bikeStats");
     return;
@@ -276,8 +285,9 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
 
   let pulledBikeStatData: bikeData;
   if (bikeStats.length === 0) {
+    console.log("not where to b");
     pulledBikeStatData = {
-      modelName: (bikeData.model ?? "").toLowerCase(),
+      modelName: modelName.trim(),
       bikeNum: 1,
       bikeYear: bikeData.year,
       engineSize: engineSize,
@@ -292,10 +302,10 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
     if (errors) {
       console.error("error creating new bike stat:" + JSON.stringify(errors));
       //console.log("torque:" + torque);
-      console.log("engineSize" + engineSize);
     }
   }
   else {
+    console.log("indise where we b" + bikeStats[0].bikeYear);
     pulledBikeStatData = bikeStats[0] as bikeData;
     const fieldsToUpdate = {
       bikeNum: pulledBikeStatData.bikeNum

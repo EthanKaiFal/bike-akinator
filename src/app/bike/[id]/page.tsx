@@ -28,7 +28,7 @@ const Bike = async ({ params }: { params: { id: string } }) => {
             <div>
 
                 <BrandStats brandName={bikeInfo?.brandName ?? ""} />
-                <ModelStats modelName={bikeInfo?.modelName ?? ""} />
+                <ModelStats modelName={bikeInfo?.modelName ?? ""} brandName={bikeInfo?.brandName ?? ""} />
                 <div>Bikes</div>
                 {bikeStats.map(async (bikeStat) => (
                     <Link key={`../bikeStat/${bikeStat.id}`} href={`../bikeStat/${bikeStat.id}`}> {bikeStat.modelName}  {bikeStat.bikeYear}</Link>

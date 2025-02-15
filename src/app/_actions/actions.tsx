@@ -94,8 +94,8 @@ export async function getBrandStats(brandName: string) {
     return statsService.getBrandStats(brandName);
 }
 
-export async function getModelStats(modelName: string) {
-    return statsService.getModelStats(modelName);
+export async function getModelStats(modelName: string, brandName: string) {
+    return statsService.getModelStats(modelName, brandName);
 }
 
 export async function getTotalStats() {

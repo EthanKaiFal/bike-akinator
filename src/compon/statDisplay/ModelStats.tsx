@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const ModelStats = ({ modelName }: {
-    modelName: string
+const ModelStats = ({ modelName, brandName }: {
+    modelName: string,
+    brandName: string
 }
 
 ) => {
@@ -26,7 +27,7 @@ const ModelStats = ({ modelName }: {
             setLoading(false);
         });
 
-        getModelStats(modelName).then((data) => {
+        getModelStats(modelName, brandName).then((data) => {
             setModelStat(data);
             setLoading(false);
         }).catch((error) => {
