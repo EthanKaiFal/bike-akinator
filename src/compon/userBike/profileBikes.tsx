@@ -20,11 +20,10 @@ const ProfileBikes = ({
                 <div className="bikes-wheel">
                     <div className="bike-wheel-inner" style={{ transform: `translateX(-${activeIndex * 100}%)` }}>
                         {bikes.map((userBike, idx) => (
-                            <div className="bike-card">
+                            <div className="bike-card" key={idx}>
                                 <Bike
                                     onDelete={DBWork.onDeleteBike}
                                     bike={userBike}
-                                    key={idx}
                                     isSignedIn={isAuth}
                                 />
                             </div>

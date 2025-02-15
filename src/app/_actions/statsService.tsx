@@ -40,19 +40,16 @@ export async function getModelStats(modelName: string, brandName: string) {
     return null;
   }
   const { bikeStats, ...filteredModel } = modelData[0];
-  fixUnused(bikeStats);
+  console.log(bikeStats);
 
   return filteredModel as modelDataWID;
 }
 
-function fixUnused(unUsed: any) {
-  return unUsed;
-}
 
 
 export async function getAllModelStats(pattern: string) {
-  let pageTokens: string[] = [];
-  let allData: modelDataWID[] = [];
+  const pageTokens: string[] = [];
+  const allData: modelDataWID[] = [];
   let currentPageIndex = 1;
   let hasMorePages = true;
   //driver
@@ -77,7 +74,7 @@ export async function getAllModelStats(pattern: string) {
   pageTokens.push(nextToken ?? "");
   //bring in the data
   modelsData.map(({ bikeStats, ...model }) => {
-    fixUnused(bikeStats); // Prevents unused variable error
+    console.log(bikeStats); // Prevents unused variable error
     allData.push(model as modelDataWID);
     //this is so that we are never pulling everything from db becauz expensive
     if (pattern.length < 4) {

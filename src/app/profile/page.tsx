@@ -30,7 +30,7 @@ export default async function Login() {
 
   return (
     <div className="background">
-      <h1 className="profile-title">{await getUserName()}'s Bikes</h1>
+      <h1 className="profile-title">{`${await getUserName()}'s Bikes`}</h1>
       {/* <hr style={{ width: "100%", marginBottom: "1rem" }} /> Divider replacement */}
       <div className="profile-container">
         <div key={userId}  >

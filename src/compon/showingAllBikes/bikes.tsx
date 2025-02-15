@@ -2,13 +2,12 @@
 import BikeModel from "@/compon/bikeModel";
 import { modelDataWID } from "@/compon/interfaces";
 import * as statsService from '../../app/_actions/statsService';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@aws-amplify/ui-react";
 // Define the types for bikeModels and other state
 
 
 const Bikes = () => {
-    const [wholeList, setWholeList] = useState<modelDataWID[]>([]);
     const [isLoading, setLoading] = useState(true);
     const [smallerList, setSmallerList] = useState<modelDataWID[]>([]);
 
@@ -30,7 +29,7 @@ const Bikes = () => {
         statsService.getAllModelStats(inputBrand).then((data) => {
             //setWholeList(data as modelDataWID[]);
             const pulledlist: modelDataWID[] = data as modelDataWID[];
-            let modelList: (modelDataWID)[] = pulledlist.map((bike) => {
+            const modelList: (modelDataWID)[] = pulledlist.map((bike) => {
                 console.log(inputModel);
                 if ((bike.modelName ?? "").includes(inputModel)) {
                     return bike as modelDataWID;

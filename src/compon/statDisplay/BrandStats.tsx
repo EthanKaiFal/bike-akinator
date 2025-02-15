@@ -34,7 +34,7 @@ const BrandStats = ({ brandName }: {
          setLoading(false);
       });
 
-   }, []);
+   }, [brandName]);
 
    if (loading) return <div>Loading...</div>;
 
