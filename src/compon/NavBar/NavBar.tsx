@@ -7,13 +7,28 @@ import { signOut, } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { Hub } from "aws-amplify/utils";
 import { revalidatePath } from 'next/cache';
-
+import "./NavStyle.css"
 
 export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
     const [authCheck, setAuthCheck] = useState(isSignedIn);
     const [, startTransition] = useTransition();
+    const [scrolled, setScrolled] = useState(false);
     const router = useRouter();
+    const [activeLink, setActive] = useState("Home");
 
+    useEffect(() => {
+        const onScroll = () => {
+            if (window.scrollY > 50) {
+                setScrolled(true);
+            }
+            else {
+                setScrolled(false);
+            }
+        }
+
+        window.addEventListener("scroll", onScroll)
+        return () => window.removeEventListener("scroll", onScroll);
+    }, [])
     useEffect(() => {
         const hubListenerCancel = Hub.listen("auth", (data) => {
             switch (data.payload.event) {
@@ -25,7 +40,7 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
                     router.push("/");
                     break;
                 case "signedOut":
-                    console.log("here");
+                    //console.log("here");
                     setAuthCheck(false);
                     startTransition(() => router.push("/"));
                     startTransition(() => router.refresh());
@@ -37,6 +52,8 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
         return () => hubListenerCancel();
 
     }, [router]);
+
+    //signout/sign in handler
     const signOutSignIn = async () => {
         if (authCheck) {
             await signOut();
@@ -63,35 +80,46 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
 
     ];
 
+    const onUpdateActive = (value: string) => {
+        setActive(value);
+    }
+
+    //filters routes by what is allowed to be accessed
     const routes = defaultRoutes.filter(
         (route) => route.loggedIn === authCheck || route.loggedIn === undefined);
-    console.log("here 6" + isSignedIn);
+    //console.log("here 6" + isSignedIn);
     return (
-        <>
-            <Flex
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-                padding={"1rem"}
+        <div className={scrolled ? "scrolled" : ""}>
+            <div className="navbar"
             >
 
-                <Flex as="nav" alignItems="center" gap="3rem" margin="0 2rem">
+                <Flex className={scrolled ? "scrolled" : ""} as="nav">
+                    <a className="navbar-brand" href="/">
+                        <img
+                            src={"../../assets/logo.svg"}
+                            width="60"
+                            height="60"
+                            className="d-inline-block align-center"
+                            alt="" />
+                        <span className="fw-bolder fs-4">Bike Akinator</span>
+                    </a>
                     {routes.map((route) => (
-                        <Link key={route.href} href={route.href}>
+                        <Link className={(activeLink === route.label) ? "active-navbar-link" : "navbar-link"} key={route.href} href={route.href} onClick={() => onUpdateActive(route.label)}>
                             {route.label}
                         </Link>
                     ))}
+                    <Button
+                        variation="primary"
+                        margin-left="auto"
+                        borderRadius="2rem"
+                        className="navbar-button"
+                        onClick={signOutSignIn}>
+                        {authCheck ? "Sign Out" : "Sign In"}
+                    </Button>
                 </Flex>
-                <Button
-                    variation="primary"
-                    borderRadius="2rem"
-                    className="mr-4"
-                    onClick={signOutSignIn}>
-                    {authCheck ? "Sign Out" : "Sign In"}
-                </Button>
-            </Flex>
+            </div>
             <Divider size="small"></Divider>
-        </>
+        </div>
     )
 }
 

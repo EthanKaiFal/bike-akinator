@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Auth from "@/compon/auth/Auth";
-import NavBar from "@/compon/NavBar";
+import NavBar from "@/compon/NavBar/NavBar";
 import { isAuthenticated } from "@/utils/amplify-utils";
 // import { Amplify } from 'aws-amplify';
 // import outputs from '../../amplify_outputs.json';
