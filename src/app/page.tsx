@@ -1,14 +1,18 @@
+import { Container, Row, Col } from "react-bootstrap";
+import Banner from "@/compon/Banner/Banner";
+import "../compon/Banner/Banner.css"
 
-
+const motoPng = "/moto.png"
 
 export default async function Home() {
   try {
 
 
     return (
-      <main className="flex flex-col items-center justify-between p-24">
-        <h1 className="text-2xl pb-10">Welcome to Bike Akinator!!!!</h1>
-      </main>
+      <section className="banner" id="home">
+
+        <Banner />
+      </section>
 
     );
   }

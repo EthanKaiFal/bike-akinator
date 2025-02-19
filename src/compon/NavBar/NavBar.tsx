@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { Hub } from "aws-amplify/utils";
 import { revalidatePath } from 'next/cache';
 import "./NavStyle.css"
+const logoImg = "/logo.svg";
 
 export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
     const [authCheck, setAuthCheck] = useState(isSignedIn);
@@ -96,11 +97,11 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
                 <Flex className={scrolled ? "scrolled" : ""} as="nav">
                     <a className="navbar-brand" href="/">
                         <img
-                            src={"../../assets/logo.svg"}
-                            width="60"
-                            height="60"
-                            className="d-inline-block align-center"
-                            alt="" />
+                            src={logoImg}
+                            width="100"
+                            height="200"
+                            className=""
+                            alt="Logo" />
                         <span className="fw-bolder fs-4">Bike Akinator</span>
                     </a>
                     {routes.map((route) => (
