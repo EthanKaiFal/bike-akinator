@@ -6,7 +6,7 @@ import { Bike as BikeType } from "../../compon/interfaces"
 import "../../compon/userBike/profilePage.css"
 import { getUserName } from "@/utils/amplify-utils";
 import ProfileBikes from "@/compon/userBike/profileBikes";
-
+import "../../compon/NavBar/NavStyle.css"
 
 
 
@@ -32,7 +32,7 @@ export default async function Login() {
     <div className="background">
       <h1 className="profile-title">{`${await getUserName()}'s Bikes`}</h1>
       {/* <hr style={{ width: "100%", marginBottom: "1rem" }} /> Divider replacement */}
-      <div className="profile-container">
+      <div className="">
         <div key={userId}  >
           <ProfileBikes
             bikes={bikesList}

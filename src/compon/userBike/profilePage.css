@@ -5,18 +5,23 @@
     justify-content:flex-start;
     align-items: flex-start;
     height: 100vh;
-    background: #f4f4f4;
     padding-top: 80px;
   }
   .background {
-    background: #f4f4f4;
+    margin-top: 0;
+    padding: 50px 0 300px 0;
+    background-image: url('/glxyBg.png');
+    background-position: top center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
   }
   .profile-title {
     display:flex;
     justify-content: center;
     font-size: 24px;
     font-weight: bold;
-    color: #333;
+    color: white;
     margin-bottom: 20px;
   }
 
@@ -27,54 +32,53 @@
     margin-top: 130px;
   }
   /* Profile Card */
-  .bike-card {
-    min-width: 90%; /* Card width */
-    margin-right: 10%; /* Spacing between cards */
-    text-align: center;
-    border-radius: 8px;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
-    margin-top: 20px;
-    margin-bottom: 20px;
+  .skill {
+    padding: 0 0 50px 0;
+    position: relative;
   }
 
-  .bike-card:hover {
-    transform: translateY(-5px);
+  .skill-bx {
+    background: #151515;
+    border-radius: 64px;
+    text-align: center;
+    padding: 30px 50px;
+    margin-top: 160px;
+    margin-left: 50px;
+    margin-right: 50px;
   }
-  
-  /* Scroll button */
-.scroll-button {
-  background-color: #007bff;
+
+.skill h5 {
+  font-size: 45px;
+  font-weight:700;
+}
+.skill h2 {
   color: white;
-  padding: 10px 20px;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: bold;
-  margin-left: 50%;
-  cursor: pointer;
-  border: none;
+  font-size: 45px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.skill-slider {
+  width: 80%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.skill-slider .item {
+  color:white;
+  font-size: 25px;
+  font-weight:700;
   transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
 }
 
-.scroll-button:hover {
-  background-color: #0056b3;
+.skill-slider .item:hover {
   transform: translateY(-5px);
 }
-  /* Avatar */
-  .avatar-section {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-  }
+
+
   
-  .avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    border: 3px solid #007bff;
-    object-fit: cover;
-  }
+
+
   
   /* Name */
   .profile-name {
@@ -130,16 +134,6 @@
     margin-top: 15px;
   }
   
-  .edit-profile,
-  .follow-profile {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
-  }
-  
   .edit-profile {
     background: #007bff;
     color: white;
@@ -161,7 +155,7 @@
   .add-bike {
     position: relative;
     bottom: -50px;
-    left: 135%;
+    left: 45%;
     background: rgb(68, 201, 108);
     font-size: 18px;
     padding: 18px 30px;
@@ -182,22 +176,4 @@
     }
   }
   
-  /* Container for the scrollable area */
-.bikes-wheel {
-  position: relative;
-  overflow: hidden;
-  width: 200%; /* Adjust to the desired width */
-  height: 100%;
-  margin-bottom: 20px;
-  margin-top: 50px;
-  margin-left:50%;
-  background: grey;
-  padding-left: 15%;
-  border-radius: 20px;
 
-}
-
-.bike-wheel-inner {
-  display: flex;
-  transition: transform 0.5s ease-in-out; /* Smooth scroll animation */
-}
