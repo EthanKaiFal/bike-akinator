@@ -2,14 +2,19 @@
 import BikeModel from "@/compon/bikeModel";
 import { modelDataWID } from "@/compon/interfaces";
 import * as statsService from '../../app/_actions/statsService';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@aws-amplify/ui-react";
+import "./bikes.css"
 // Define the types for bikeModels and other state
 
 
 const Bikes = () => {
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
     const [smallerList, setSmallerList] = useState<modelDataWID[]>([]);
+
+    useEffect(() => {
+        //setSmallerList([]);
+    })
 
 
     //now we want to create a shorter list that pattern matches
@@ -48,28 +53,30 @@ const Bikes = () => {
     }
 
     return (
-        <div>
-            <input
-                type="text"
-                value={inputBrand}
-                onFocus={() => setInputBrand("")} // Clears input when clicked
-                onChange={(e) => { setInputBrand(e.target.value); setLoading(true); }} // Updates state when typing
-                placeholder="Click and type a brand"
-                className="border p-2 w-full"
-            />
+        <div className="search-container">
+            <div className="search-bar">
+                <input
+                    type="text"
+                    value={inputBrand}
+                    onFocus={() => setInputBrand("")} // Clears input when clicked
+                    onChange={(e) => { setInputBrand(e.target.value); setLoading(true); }} // Updates state when typing
+                    placeholder="Click and type a brand"
+                    className="border p-2 w-full"
+                />
 
-            <input
-                type="text"
-                value={inputModel}
-                onFocus={() => setInputModel("")} // Clears input when clicked
-                onChange={(r) => { setInputModel(r.target.value); setLoading(true); }} // Updates state when typing
-                placeholder="Click and type a model"
-                className="border p-2 w-full"
-            />
-            <Button onClick={handleSearch}>Search</Button>
-            <div>
+                <input
+                    type="text"
+                    value={inputModel}
+                    onFocus={() => setInputModel("")} // Clears input when clicked
+                    onChange={(r) => { setInputModel(r.target.value); setLoading(true); }} // Updates state when typing
+                    placeholder="Click and type a model"
+                    className="border p-2 w-full"
+                />
+                <Button className="search-button" onClick={handleSearch}>Search</Button>
+            </div>
+            <div className="all-bikes">
                 {isLoading ? (
-                    <p className="text-gray-500 mt-2">Loading...</p> // Show loading message
+                    <p className="loading">Loading...</p> // Show loading message
                 ) : (
                     smallerList.map((model, index) => (
                         <BikeModel key={index}

@@ -1,0 +1,43 @@
+.search-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    color: black;
+}
+
+.all-bikes{
+    color:white;
+    margin-top: 10px;
+}
+
+.loading{
+    color: white;
+}
+
+.search-button{
+    background-color: white;
+    border-radius: 50px;
+}
+
+.search-button:hover{
+    background-color: gray;
+}
+
+/* Add this CSS to your stylesheet */
+input {
+    caret-color: blue; /* Set the cursor color to blue or any color you prefer */
+    animation: blinkCaret 0.8s step-end infinite; /* Blink effect */
+    border-radius: 10px;
+  }
+  
+  @keyframes blinkCaret {
+    50% {
+      caret-color: transparent; /* Hides the caret at 50% of the animation cycle */
+    }
+  }
+
+.search-container{
+    margin-top: 20px;
+    margin-left: 20px;
+}
