@@ -42,7 +42,7 @@
     border-radius: 64px;
     text-align: center;
     padding: 30px 50px;
-    margin-top: 160px;
+    margin-top: 100px;
     margin-left: 50px;
     margin-right: 50px;
   }
@@ -176,4 +176,91 @@
     }
   }
   
+  .profile-Satis-Bar {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width:50%;
+    height: 200px;
+    color: white;
+    margin-left: 7%;
 
+  }
+
+  .bar{
+    margin-left: 70%;
+  }
+  .user-bike-container{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    gap:20px;
+  }
+
+  .bools{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap:10px;
+  }
+
+  .bools p:after{
+    content: "|";  /* Add the pipe separator */
+  color: gray;   /* Style the separator */
+  margin-left: 0px; /* Space after the pipe */
+  }
+
+  .bools p:last-child::after {
+    content: ""; /* Remove pipe from the last item */
+  }
+
+  .bools p{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap:10px;
+  }
+
+  .basic-info{
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    max-width: 100%;
+    flex-wrap: nowrap;
+  }
+
+  .basic-info p{
+    white-space: nowrap; /* Ensures text stays on one line */
+    overflow: hidden; /* Prevents overflow if needed */
+    text-overflow: ellipsis; /* Adds "..." if the text is too long */
+  }
+
+  .basic-info p:after{
+    content: "|";  /* Add the pipe separator */
+  color: gray;   /* Style the separator */
+  margin-left: 20px; /* Space after the pipe */
+  }
+
+  .basic-info p:last-child::after {
+    content: ""; /* Remove pipe from the last item */
+  }
+
+  .remove-bike{
+    background-color: rgb(56, 8, 95);
+    border-radius: 25px;
+    width: 30%;
+    margin-left: 33%;
+  }
+
+  .remove-bike:hover{
+    background-color: #bb2626;
+  }
+
+
+
+  

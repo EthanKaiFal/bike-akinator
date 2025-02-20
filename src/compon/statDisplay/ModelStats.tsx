@@ -63,6 +63,7 @@ const ModelStats = ({ modelName, brandName }: {
         ],
     };
 
+
     const satisScoreData = {
         labels: ['Average Satisfaction Score'],
         datasets: [
