@@ -1,50 +1,51 @@
 "use client"
 import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import Image from "next/image";
 import "./Banner.css";
 
 const motoPng = "/moto.png"
-
-const Banner = ({ }: {
-}) => {
+const Banner = () => {
     const [loopNum, setLoopNum] = useState(0);
     const [isDeleting, setIsDeleting] = useState(false);
-    const toRotate = ["Yamaha", "Kawasaki", "KTM", "Aprilia", "Husqvarna"];
     const [text, setText] = useState('');
     const [delta, setDelta] = useState(300 - Math.random() * 100);
     const period = 2000;
 
+
+
     useEffect(() => {
-        let ticker = setInterval(() => {
+        const toRotate = ["Yamaha", "Kawasaki", "KTM", "Aprilia", "Husqvarna"];
+        const tick = () => {
+            //gets desired index with overflow beign ok
+            const i = loopNum % toRotate.length;
+            const fullText = toRotate[i];
+            const updatedText = isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1);
+
+            setText(updatedText);
+            //accelerate the deltign process i believe
+            if (isDeleting) {
+                setDelta(prevDelta => prevDelta / 2);
+            }
+
+            //done typing this index
+            if (!isDeleting && updatedText === fullText) {
+                setIsDeleting(true);
+                //normal pace
+                setDelta(period);
+            }
+            else if (isDeleting && updatedText === '') {
+                setIsDeleting(false);
+                setLoopNum(loopNum + 1);
+                setDelta(500);
+            }
+        }
+        const ticker = setInterval(() => {
             tick();
         }, delta)
         return () => { clearInterval(ticker) };
-    }, [text])
+    }, [text, delta, isDeleting, loopNum])
 
-    const tick = () => {
-        //gets desired index with overflow beign ok
-        let i = loopNum % toRotate.length;
-        let fullText = toRotate[i];
-        let updatedText = isDeleting ? fullText.substring(0, text.length - 1) : fullText.substring(0, text.length + 1);
-
-        setText(updatedText);
-        //accelerate the deltign process i believe
-        if (isDeleting) {
-            setDelta(prevDelta => prevDelta / 2);
-        }
-
-        //done typing this index
-        if (!isDeleting && updatedText === fullText) {
-            setIsDeleting(true);
-            //normal pace
-            setDelta(period);
-        }
-        else if (isDeleting && updatedText === '') {
-            setIsDeleting(false);
-            setLoopNum(loopNum + 1);
-            setDelta(500);
-        }
-    }
     return (
         <Container>
             <Row className="align-items-center">
@@ -54,7 +55,7 @@ const Banner = ({ }: {
                     <p>About the app right here</p>
                 </Col>
                 <Col xs={12} md={6} xl={6}>
-                    <img className="img-fluid" src={motoPng} height={500} width={500} alt="Headder Img"></img>
+                    <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
 
                 </Col>
             </Row>

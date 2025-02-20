@@ -7,6 +7,7 @@ import { signOut, } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import { Hub } from "aws-amplify/utils";
 import { revalidatePath } from 'next/cache';
+import Image from "next/image"
 import "./NavStyle.css"
 const logoImg = "/logo.svg";
 
@@ -95,15 +96,15 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
             >
 
                 <Flex className={scrolled ? "scrolled" : ""} as="nav">
-                    <a className="navbar-brand" href="/">
-                        <img
+                    <Link className="navbar-brand" href="/">
+                        <Image
                             src={logoImg}
                             width="100"
                             height="200"
                             className=""
                             alt="Logo" />
                         <span className="fw-bolder fs-4">Bike Akinator</span>
-                    </a>
+                    </Link>
                     {routes.map((route) => (
                         <Link className={(activeLink === route.label) ? "active-navbar-link" : "navbar-link"} key={route.href} href={route.href} onClick={() => onUpdateActive(route.label)}>
                             {route.label}

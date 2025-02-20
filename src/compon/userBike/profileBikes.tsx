@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Bike as BikeType } from "../interfaces"
 import Bike from "./Bike"
 import * as DBWork from "../../app/_actions/actions"
-import { useState } from "react";
 import Carousel from "react-multi-carousel";
 import "./profilePage.css";
 import "../NavBar/NavStyle.css"
@@ -57,11 +56,6 @@ const ProfileBikes = ({
             </div>
         );
     };
-    const [activeIndex, setActiveIndex] = useState(0);
-    const scrollToNext = () => {
-        setActiveIndex((prevIndex) => (prevIndex + 1) % bikes.length);
-    };
-
     return (
         <section className="skill" id="skills">
             <Container>
