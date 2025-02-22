@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
-import { Col, Container, Row } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
+import "./Quiz.css"
 
 export const Quiz = () => {
     const quiz = {
@@ -8,7 +9,7 @@ export const Quiz = () => {
             [
                 {
                     Id: 1,
-                    Question: "How many bikes have you owned",
+                    Question: "How many bikes have you owned?",
                     Answers:
                     {
                         "0": [0, 500],
@@ -84,6 +85,8 @@ export const Quiz = () => {
     const [question, setQuizQuestion] = useState("");
     const [answers, setQuestionAnswers] = useState<string[]>([]);
 
+    const [answer, setAnswer] = useState("");
+
     useEffect(() => {
         if (quizIndex < quiz.questions.length) {
             setQuizQuestion(quiz.questions[quizIndex].Question);
@@ -95,10 +98,22 @@ export const Quiz = () => {
 
     }, [quizIndex]);
 
-    const handleNextQuestion = (retrievedAnswer: string) => {
+    const handleSelectAnswer = (grabbedAnswer: string) => {
+        setAnswer(grabbedAnswer);
+    }
+
+    const handleGoBack = () => {
+        setQuizIndex(quizIndex - 1);
+        setAnswer("");
+    }
+
+    const handleNextQuestion = () => {
         const selectedAnswers = quiz.questions[quizIndex].Answers;
+        //reset just in case
+        setAnswer("");
+
         if (quiz.questions[quizIndex].Id === 1) {
-            const range = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const range = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(range) && typeof range[0] === 'number' && typeof range[1] === 'number') {
                 // Now we know 'range' is a number array
                 setMinEngineSize(range[0]);
@@ -110,7 +125,7 @@ export const Quiz = () => {
             }
         }
         else if (quiz.questions[quizIndex].Id === 2) {
-            const cats = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const cats = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(cats) && typeof cats[0] === 'string') {
                 setCategories(cats as string[]);
             }
@@ -119,7 +134,7 @@ export const Quiz = () => {
             }
         }
         else if (quiz.questions[quizIndex].Id === 3) {
-            const maintain = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const maintain = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (typeof maintain === 'boolean') {
                 setExcludeToughMaintBikes(!(maintain as boolean));
             }
@@ -128,7 +143,7 @@ export const Quiz = () => {
             }
         }
         else if (quiz.questions[quizIndex].Id === 4) {
-            const newOrUsed = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const newOrUsed = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(newOrUsed) && typeof newOrUsed[0] === 'number' && typeof newOrUsed[1] === 'number') {
                 setMinYear(newOrUsed[0]);
                 setMaxYear(newOrUsed[1]);
@@ -138,7 +153,7 @@ export const Quiz = () => {
             }
         }
         else if (quiz.questions[quizIndex].Id === 5) {
-            const ownTime = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const ownTime = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(ownTime) && typeof ownTime[0] === 'number' && typeof ownTime[1] === 'number') {
                 setMinYear(ownTime[0]);
                 setMaxYear(ownTime[1]);
@@ -149,7 +164,7 @@ export const Quiz = () => {
         }
 
         else if (quiz.questions[quizIndex].Id === 6) {
-            const brandNat = selectedAnswers[retrievedAnswer as keyof typeof selectedAnswers] ?? [];
+            const brandNat = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (typeof brandNat === 'string') {
                 setBrandNationality(brandNat);
             }
@@ -162,23 +177,27 @@ export const Quiz = () => {
 
 
     return (
-        <Container>
+        <Container className="quiz-container">
             <Row>
-                <Col>
-                    <span>{question}</span>
+                <Col className="question" xs={2} md={6} xl={5}>
+                    <h2>{question}</h2>
                 </Col>
             </Row>
-            {answers.map((answer, idx) => (
-                <Row key={idx}>
-                    <Col>
-                        <span>{answer}</span>
-                    </Col>
-                </Row>
-            ))}
+            <div className="answersContainer">
+                {answers.map((curAnswer, idx) => (
+                    <Row key={idx}>
+                        <Col className={answer === curAnswer ? "active-answers" : "answers"} onClick={() => handleSelectAnswer(curAnswer)} xs={2} md={6} xl={5}>
+                            <Button >{curAnswer}</Button>
+                        </Col>
+                    </Row>
+                ))}
+            </div>
 
-            <Row>
-                {/* <Col><Button onClick={()=> handleNextQuestion()}></Button></Col> */}
+            <Row className="quizButtonsContainer">
+                {quizIndex === 0 ? <div></div> : <Col className="quizButtons" onClick={() => handleGoBack()}> <Button >Go Back</Button></Col>}
+                {answer === "" ? <div></div> : <Col className="quizButtons" onClick={() => handleNextQuestion()}><Button>Next Question</Button></Col>}
             </Row>
+
         </Container>
     )
 
