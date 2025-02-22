@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import Image from "next/image";
 import "./Banner.css";
+import Link from "next/link";
+
 
 const motoPng = "/moto.png"
 const Banner = () => {
@@ -53,6 +55,10 @@ const Banner = () => {
                     <span className="welcome">Welcome to Bike Akinator!!!!</span>
                     <h1><span className="intro">This is a website designed to help YOU find your next motorcycle whether it is a </span>{text}</h1>
                     <p>About the app right here</p>
+                </Col>
+                <Col>
+                    <Link href="/quiz"> Find your next bike here
+                    </Link>
                 </Col>
                 <Col xs={12} md={6} xl={6}>
                     <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
