@@ -2,7 +2,7 @@
 //cookie based client is my repo layer
 //this is my service layer
 import { cookieBasedClient } from "@/utils/amplify-utils"
-import { Bike as BikeType, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID } from "@/compon/interfaces";
+import { Bike as BikeType, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID, modelDataWBikeStats, queryData } from "@/compon/interfaces";
 import { incrementTotalStatsBy, updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {
@@ -59,7 +59,7 @@ export async function getAllModelStats(pattern: string) {
       brandName: {
         beginsWith: pattern.trim(),
       }
-    }
+    },
   });
 
   if (errors) {
@@ -70,11 +70,9 @@ export async function getAllModelStats(pattern: string) {
     //console.log("here");
     hasMorePages = false;
   }
-  //queque next page
-  pageTokens.push(nextToken ?? "");
   //bring in the data
   modelsData.map(({ bikeStats, ...model }) => {
-    console.log(bikeStats); // Prevents unused variable error
+    console.log(JSON.stringify(bikeStats)); // Prevents unused variable error
     allData.push(model as modelDataWID);
     //this is so that we are never pulling everything from db becauz expensive
     if (pattern.length < 4) {
@@ -89,7 +87,7 @@ export async function getAllModelStats(pattern: string) {
         brandName: {
           beginsWith: pattern.toLowerCase().trim(),
         }
-      }
+      },
     });
 
 
@@ -114,11 +112,95 @@ export async function getAllModelStats(pattern: string) {
 
     //bring in the data
     modelData.map(({ bikeStats, ...model }) => {
-      console.log("Filtered out bikeStats:" + model.brandName, bikeStats); // Prevents unused variable error
+      console.log("bikeStats" + JSON.stringify(bikeStats));  // Prevents unused variable error
       allData.push(model as modelDataWID);
     });
   }
 
+  return allData;
+}
+
+function createOrCondition(field: string, values: string[]): object[] {
+  return values.map(value => ({ [field]: { eq: value } }));
+}
+
+export async function getModelByBrandCat(brands: Set<string>, categories: string[]) {
+  //setup for the page looking
+  const pageTokens: string[] = [];
+  const allData: modelDataWBikeStats[] = [];
+  let currentPageIndex = 1;
+  let hasMorePages = true;
+
+  console.log("nope" + brands.size);
+  console.log("big?" + categories.length);
+  const brandsList = Array.from(brands);
+  const filters = {
+    and: [
+      {
+        or: brandsList.map(brand => ({ brandName: { contains: brand } }))
+      },
+      {
+        or: categories.map(categorys => ({ category: { contains: categorys } }))
+      }
+    ]
+  };
+
+  const { data: modelStats, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
+    filter: filters,
+    selectionSet: ['id', 'modelName', 'brandName', 'category', 'avgSatisScore', 'totalNumBikes', 'numFirstBike', 'numSecondBike', 'numThirdPlusBike', 'numBroken', 'numSold', 'avgOwnership', 'bikeStats.*']
+  });
+
+  if (errors) {
+    console.error("problem grabbing all model stats" + JSON.stringify(errors));
+  }
+
+  if (!nextToken) {
+    //console.log("here");
+    hasMorePages = false;
+  }
+  //queque next page
+  pageTokens.push(nextToken ?? "");
+  modelStats.map((model) => {
+    console.log("sup"); // Prevents unused variable error
+    allData.push(model as modelDataWBikeStats);
+  });
+
+  while ((hasMorePages) && (currentPageIndex === pageTokens.length)) {
+    console.log("empty");
+    const { data: modelStats, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
+      nextToken: pageTokens[pageTokens.length - 1],
+      filter: filters,
+      selectionSet: ['id', 'modelName', 'brandName', 'category', 'avgSatisScore', 'totalNumBikes', 'numFirstBike', 'numSecondBike', 'numThirdPlusBike', 'numBroken', 'numSold', 'avgOwnership', 'bikeStats.*']
+    });
+
+
+    if (errors) {
+      console.error("error in pagination");
+    }
+    //we done case
+    if (!nextToken) {
+      console.log("done");
+      hasMorePages = false;
+    }
+    else {
+      //queue
+      console.log("l");
+      pageTokens.push(nextToken ?? "");
+      currentPageIndex = currentPageIndex + 1;
+      hasMorePages = true;
+      if (!modelStats || modelStats.length == 0) {
+        //console.log("null?");
+        hasMorePages = true;
+      }
+    }
+
+    //bring in the data
+    modelStats.map(async (model) => {
+      //console.log("Filtered out bikeStats:" + model.brandName, bikeStats); // Prevents unused variable error
+      allData.push(model as modelDataWBikeStats);
+    });
+  }
+  console.log("outside");
   return allData;
 }
 

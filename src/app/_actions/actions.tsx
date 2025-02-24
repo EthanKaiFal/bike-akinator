@@ -3,10 +3,11 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
-import { Bike as BikeType, justId } from "@/compon/interfaces";
+import { Bike as BikeType, justId, modelDataWBikeStats, modelDataWID, queryData } from "@/compon/interfaces";
 import * as bikeService from './bikeService';
 import * as statsService from './statsService';
 import * as profileService from './profileService'
+import { bikeStats, LazybikeStats } from "@/models";
 
 export async function onDeleteBike(idName: string) {
     const toBeDeleted: justId = {
@@ -57,6 +58,14 @@ export async function createBike(formData: FormData) {
     //now i need to update the stats
     updateAllBikeStats(data, "", -1, -1, -1, "");
     redirect("/profile");
+}
+
+
+
+export async function getBikes(queryData: queryData, categories: string[]) {
+    const Models: modelDataWBikeStats[] = await statsService.getModelByBrandCat(queryData.brands, categories);
+    console.log("what the" + queryData.brands.size);
+    return Models;
 }
 
 //UPDATE STATS FUNCTIONS

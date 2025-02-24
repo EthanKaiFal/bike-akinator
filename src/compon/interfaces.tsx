@@ -15,6 +15,19 @@ export interface modelStats {
   avgOwnership: number,
 }
 
+export interface bikeStats {
+  id: string;
+  modelName: string | null;
+  bikeYear: number | null;
+  bikeNum: number | null;
+  engineSize: number | null;
+  horsePower: number | null;
+  torque: number | null;
+  engineConfig: string | null;
+  modelStatId: string; // Foreign key reference to ModelStats
+}
+
+
 export interface Bike {
   id: string;
   bikeNumber: number | null;
@@ -65,6 +78,22 @@ export interface modelDataWID {
   numBroken: number | null, // Initialize based on current bike
   numSold: number | null, // Initialize based on current bike
   avgOwnership: number | null,
+}
+
+export interface modelDataWBikeStats {
+  id: string,
+  modelName: string | null,
+  brandName: string | null,
+  category: string | null,
+  avgSatisScore: number | null,
+  totalNumBikes: number | null, // Start counting from 1 for the first entry
+  numFirstBike: number | null,
+  numSecondBike: number | null,
+  numThirdPlusBike: number | null,
+  numBroken: number | null, // Initialize based on current bike
+  numSold: number | null, // Initialize based on current bike
+  avgOwnership: number | null,
+  bikeStats: bikeStats[];
 }
 
 export interface brandDataWID {
@@ -138,4 +167,15 @@ export interface totalStatsFieldsToUpdate {
 
 export interface justId {
   id: string
+}
+
+export interface queryData {
+  minEngineSize: number,
+  maxEngineSize: number,
+  categories: string[],
+  brands: Set<string>,
+  minYear: number,
+  maxYear: number,
+  minAvgMonths: number,
+  maxAvgMonths: number,
 }

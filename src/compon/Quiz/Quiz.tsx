@@ -1,7 +1,9 @@
 "use client"
 import { useEffect, useState } from "react"
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { grabQueriedBikes } from "./bikeQueryCall";
 import "./Quiz.css"
+import { bikeStats, modelDataWBikeStats } from "../interfaces";
 
 export const Quiz = () => {
     const quiz = {
@@ -22,11 +24,11 @@ export const Quiz = () => {
                     Id: 2,
                     Question: "What style rider are you?",
                     Answers: {
-                        "OffRoad": ["enduro", "offroad"],
-                        "Travel": ["enduro", "touring"],
-                        "Street Cruise": ["cruiser", "naked"],
-                        "Sport": ["naked", "sport"],
-                        "Stunt": ["motard"]
+                        "OffRoad": ["nduro", "ffroad"],
+                        "Travel": ["nduro", "ouring"],
+                        "Street Cruise": ["ruiser", "aked"],
+                        "Sport": ["aked", "port"],
+                        "Stunt": ["otard"]
                     }
                 },
                 {
@@ -79,6 +81,9 @@ export const Quiz = () => {
     const [maxAvgMonths, setMaxAvgMonths] = useState(30000);
     const [brandNationality, setBrandNationality] = useState("");
 
+    //this is a condition that controls if we are in quiz or done with it
+    const [finishedQuiz, setFinishedQuiz] = useState(false);
+    const [modelsAndYears, setModelsAndYears] = useState<modelDataWBikeStats[]>([]);
 
     //setting up quiz question
     const [quizIndex, setQuizIndex] = useState(0);
@@ -100,6 +105,16 @@ export const Quiz = () => {
 
     const handleSelectAnswer = (grabbedAnswer: string) => {
         setAnswer(grabbedAnswer);
+    }
+
+    const handleSubmit = () => {
+        setFinishedQuiz(true);
+        //backend call to query
+        grabQueriedBikes(minEngineSize, maxEngineSize, categories, excludeToughMaintBikes, minYear, maxYear, minAvgMonths, maxAvgMonths, brandNationality).then((data) => {
+            setModelsAndYears(data);
+        });
+
+        console.log("pull;ed" + modelsAndYears);
     }
 
     const handleGoBack = () => {
@@ -127,9 +142,11 @@ export const Quiz = () => {
         else if (quiz.questions[quizIndex].Id === 2) {
             const cats = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(cats) && typeof cats[0] === 'string') {
+                console.log("rigth");
                 setCategories(cats as string[]);
             }
             else {
+                console.log("wrong");
                 setCategories([]);
             }
         }
@@ -166,6 +183,7 @@ export const Quiz = () => {
         else if (quiz.questions[quizIndex].Id === 6) {
             const brandNat = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (typeof brandNat === 'string') {
+                console.log("settign this" + brandNat);
                 setBrandNationality(brandNat);
             }
             else {
@@ -178,25 +196,56 @@ export const Quiz = () => {
 
     return (
         <Container className="quiz-container">
-            <Row>
-                <Col className="question" xs={2} md={6} xl={5}>
-                    <h2>{question}</h2>
-                </Col>
-            </Row>
-            <div className="answersContainer">
-                {answers.map((curAnswer, idx) => (
-                    <Row key={idx}>
-                        <Col className={answer === curAnswer ? "active-answers" : "answers"} onClick={() => handleSelectAnswer(curAnswer)} xs={2} md={6} xl={5}>
-                            <Button >{curAnswer}</Button>
-                        </Col>
-                    </Row>
-                ))}
-            </div>
+            {finishedQuiz ? <div>{modelsAndYears.map((model) => {
+                let show: boolean = false;
+                return (
+                    <div className="post-container" key={model.id}>
+                        {model.bikeStats && model.bikeStats.map((bikeStat, index) => {
+                            // Define your year and engine size range
 
-            <Row className="quizButtonsContainer">
-                {quizIndex === 0 ? <div></div> : <Col className="quizButtons" onClick={() => handleGoBack()}> <Button >Go Back</Button></Col>}
-                {answer === "" ? <div></div> : <Col className="quizButtons" onClick={() => handleNextQuestion()}><Button>Next Question</Button></Col>}
-            </Row>
+                            // Check if bikeStat's year and engine size are within the range
+                            if (
+                                ((bikeStat.bikeYear ?? -1) >= minYear && (bikeStat.bikeYear ?? -1) <= maxYear) &&
+                                ((bikeStat.engineSize ?? -1) >= minEngineSize && (bikeStat.engineSize ?? -1) <= maxEngineSize)
+                            ) {
+                                show = true;
+                                return (
+                                    <div key={index}>
+                                        {/* Display bike stat details here */}
+                                        <span>Bike Year: {bikeStat.bikeYear}</span>
+                                        <span>Engine Size: {bikeStat.engineSize}</span>
+                                        {/* Add any other properties you want to display */}
+                                    </div>
+                                );
+                            }
+                            return null; // If the bikeStat doesn't meet the condition, return nothing
+                        })}
+                        {show ? <span>{model.brandName} {model.modelName}</span> : <div></div>}
+                    </div>
+                )
+            })}</div> : <div>
+                <Row>
+                    <Col className="question" xs={2} md={6} xl={5}>
+                        <h2>{question}</h2>
+                    </Col>
+                </Row>
+                <div className="answersContainer">
+                    {answers.map((curAnswer, idx) => (
+                        <Row key={idx}>
+                            <Col className={answer === curAnswer ? "active-answers" : "answers"} onClick={() => handleSelectAnswer(curAnswer)} xs={2} md={6} xl={5}>
+                                <Button >{curAnswer}</Button>
+                            </Col>
+                        </Row>
+                    ))}
+                </div>
+
+                <Row className="quizButtonsContainer">
+                    {quizIndex === 0 ? <div></div> : <Col className="quizButtons" onClick={() => handleGoBack()}> <Button >Go Back</Button></Col>}
+                    {(answer !== "" && quizIndex < quiz.questions.length - 1) ? <Col className="quizButtons" onClick={() => handleNextQuestion()}><Button>Next Question</Button></Col> : <div></div>}
+                    {quizIndex >= (quiz.questions.length - 1) ? <Col className="quizButtons" onClick={() => { handleSubmit(); handleNextQuestion(); }}><Button>Submit Quiz</Button></Col> : <div></div>}
+                </Row>
+            </div>
+            }
 
         </Container>
     )
