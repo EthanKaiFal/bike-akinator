@@ -96,8 +96,12 @@ export const Quiz = () => {
 
     const [answer, setAnswer] = useState("");
 
+    //sets the quetion details up eachtime the index is updated
     useEffect(() => {
-        if (quizIndex < quiz.questions.length) {
+        if (quizIndex >= quiz.questions.length) {
+            handleSubmit(); // Call handleSubmit when quizIndex is updated
+        }
+        else if (quizIndex < quiz.questions.length) {
             setQuizQuestion(quiz.questions[quizIndex].Question);
             const getAnswers: string[] = Object.keys(quiz.questions[quizIndex].Answers);
             setQuestionAnswers(getAnswers);
@@ -105,7 +109,8 @@ export const Quiz = () => {
         }
 
 
-    }, [quizIndex]);
+    }, [quizIndex, quiz.questions]);
+
 
     const handleSelectAnswer = (grabbedAnswer: string) => {
         setAnswer(grabbedAnswer);
@@ -115,10 +120,12 @@ export const Quiz = () => {
         setLoading(true);
         setFinishedQuiz(true);
         //backend call to query
+        console.log("final" + brandNationality);
         grabQueriedBikes(minEngineSize, maxEngineSize, categories, excludeToughMaintBikes, minYear, maxYear, minAvgMonths, maxAvgMonths, brandNationality).then((data) => {
             setModelsAndYears(data);
-            console.log("final" + data.length)
             setLoading(false);
+            localStorage.setItem('quizResults', JSON.stringify(data));
+
         });
 
         console.log("pull;ed" + modelsAndYears);
@@ -204,7 +211,7 @@ export const Quiz = () => {
     if (isLoading) {
         return (
             <div className="loading">
-                Loading Result Please watch this Motorcycle in the meantime
+                Loading Result Please watch this Motorcycle in the meantime it usually moves
                 <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
             </div>
         )
@@ -212,36 +219,9 @@ export const Quiz = () => {
 
     return (
         <Container className="quiz-container">
-            {finishedQuiz ? <div>{modelsAndYears.map((model) => {
-                let show: boolean = false;
-                return (
-                    <div className="post-container" key={model.id}>
-                        {model.bikeStats && model.bikeStats.map((bikeStat, index) => {
-                            // Define your year and engine size range
-
-                            // Check if bikeStat's year and engine size are within the range
-                            if (
-                                // ((bikeStat.bikeYear ?? -1) >= minYear && (bikeStat.bikeYear ?? -1) <= maxYear) &&
-                                // ((bikeStat.engineSize ?? -1) >= minEngineSize && (bikeStat.engineSize ?? -1) <= maxEngineSize)
-                                true
-                            ) {
-                                show = true;
-                                return (
-                                    <div key={index}>
-                                        {/* Display bike stat details here */}
-                                        <Link key={`../bikeStat/${bikeStat.id}`} href={`../bikeStat/${bikeStat.id}`}>{bikeStat.bikeYear} {bikeStat.modelName}</Link>
-                                        {/* Add any other properties you want to display */}
-                                    </div>
-                                );
-                            }
-                            return null; // If the bikeStat doesn't meet the condition, return nothing
-                        })}
-                        {show ? <Link style={{ display: "flex", justifyContent: "flex-start", paddingTop: 12, paddingBottom: 0 }} key={`bike/${model.id}`} href={`bike/${model.id}`}>
-                            {model.brandName} {model.modelName} SatisfactionScore:{model.avgSatisScore}
-                        </Link> : <div></div>}
-                    </div>
-                )
-            })}</div> : <div>
+            {finishedQuiz ? <div>
+                <Link href="./quizResult"> The results are in, click this to see the bikes</Link>
+            </div> : <div>
                 <Row>
                     <Col className="question" xs={2} md={6} xl={5}>
                         <h2>{question}</h2>
@@ -260,7 +240,9 @@ export const Quiz = () => {
                 <Row className="quizButtonsContainer">
                     {quizIndex === 0 ? <div></div> : <Col className="quizButtons" onClick={() => handleGoBack()}> <Button >Go Back</Button></Col>}
                     {(answer !== "" && quizIndex < quiz.questions.length - 1) ? <Col className="quizButtons" onClick={() => handleNextQuestion()}><Button>Next Question</Button></Col> : <div></div>}
-                    {quizIndex >= (quiz.questions.length - 1) ? <Col className="quizButtons" onClick={() => { handleSubmit(); handleNextQuestion(); }}><Button>Submit Quiz</Button></Col> : <div></div>}
+                    {quizIndex >= (quiz.questions.length - 1) ? <Col className="quizButtons" onClick={() => {
+                        handleNextQuestion();
+                    }}><Button>Submit Quiz</Button></Col> : <div></div>}
                 </Row>
             </div>
             }

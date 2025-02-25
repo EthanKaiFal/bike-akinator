@@ -2,7 +2,7 @@
 //cookie based client is my repo layer
 //this is my service layer
 import { cookieBasedClient } from "@/utils/amplify-utils"
-import { Bike as BikeType, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID, modelDataWBikeStats, queryData } from "@/compon/interfaces";
+import { Bike as BikeType, bikeData, totalData, brandModelFieldsToUpdate, modelDataWID, brandDataWID, totalDataWID, modelDataWBikeStats } from "@/compon/interfaces";
 import { incrementTotalStatsBy, updateBrandModelStatsBy } from "./statsServiceHelpers";
 
 export async function getBrandStats(brandName: string) {

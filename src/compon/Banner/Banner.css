@@ -1,6 +1,6 @@
 .banner{
     margin-top: 0;
-    padding: 50px 0 300px 0;
+    padding: 50px 0 50% 0;
     background-image: url('/motoBg.jpg');
     background-position: top center;
     background-size: cover;
@@ -12,7 +12,7 @@
     letter-spacing: 0.8;
     padding: 8px 10px;
     background: linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(191, 194, 193, 0.5);
     font-size: 40px;
     margin-bottom: 25px;
     display: inline-block;
@@ -55,4 +55,30 @@
 
 .txt-rotate > .welcome {
     border-right: 0.08em solid #666;
+}
+
+.quiz-clicker{
+
+    background: linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);
+    border-radius: 25px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 40px;
+}
+.quiz-clicker:hover{
+    color:rgb(39, 98, 153);
+}
+
+.quiz-clicker-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 100px;
+    margin-left: 30px;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+}
+
+.quiz-clicker-container:hover{
+    transform: translateY(-5px);
 }

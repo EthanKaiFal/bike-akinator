@@ -3,11 +3,10 @@
 import { cookieBasedClient } from "@/utils/amplify-utils"
 import { redirect } from 'next/navigation';
 import { revalidatePath } from "next/cache";
-import { Bike as BikeType, justId, modelDataWBikeStats, modelDataWID, queryData } from "@/compon/interfaces";
+import { Bike as BikeType, justId, modelDataWBikeStats, queryData } from "@/compon/interfaces";
 import * as bikeService from './bikeService';
 import * as statsService from './statsService';
 import * as profileService from './profileService'
-import { bikeStats, LazybikeStats } from "@/models";
 
 export async function onDeleteBike(idName: string) {
     const toBeDeleted: justId = {

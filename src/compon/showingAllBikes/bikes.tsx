@@ -5,7 +5,6 @@ import * as statsService from '../../app/_actions/statsService';
 import { useEffect, useState } from "react";
 import { Button } from "@aws-amplify/ui-react";
 import "./bikes.css"
-import Link from "next/link";
 import Image from "next/image";
 const motoPng = "/moto.png"
 // Define the types for bikeModels and other state
@@ -80,7 +79,8 @@ const Bikes = () => {
             <div className="all-bikes">
                 {isLoading ? (
                     <div className="loading">
-                        Loading Result Please watch this Motorcycle in the meantime
+                        <span>Loading result please watch this Motorcycle in the meantime...</span>
+                        <span>Usually it moves</span>
                         <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
                     </div>
                 ) : (

@@ -1,10 +1,11 @@
 import { getBikes } from "@/app/_actions/actions";
-import { bikeStats, modelDataWBikeStats, queryData } from "../interfaces";
-import { LazybikeStats } from "@/models";
+import { modelDataWBikeStats, queryData } from "../interfaces";
 
 export const grabQueriedBikes = async (minEngineSize: number, maxEngineSize: number, categories: string[], excludeToughMaintBikes: boolean, minYear: number, maxYear: number, minAvgMonths: number, maxAvgMonths: number, brandNationality: string) => {
     const brands = new Set<string>();
+    console.log("national" + brandNationality);
     if (brandNationality === "asian") {
+        console.log("in aisan");
         brands.add("yamaha");
         brands.add("suzuki");
         brands.add("cfmoto");
