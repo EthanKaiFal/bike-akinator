@@ -65,6 +65,12 @@ export async function createBike(formData: FormData) {
 export async function getBikes(queryData: queryData, categories: string[]) {
     const Models: modelDataWBikeStats[] = await statsService.getModelByBrandCat(queryData.brands, categories);
     console.log("what the" + queryData.brands.size);
+    const filteredAvgMonths: modelDataWBikeStats[] = [];
+    Models.map((model) => {
+        if (((model.avgOwnership ?? -1) < queryData.maxAvgMonths) && ((model.avgOwnership ?? -1) > queryData.minAvgMonths)) {
+            filteredAvgMonths.push(model);
+        }
+    });
     return Models;
 }
 

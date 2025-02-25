@@ -3,7 +3,10 @@ import { useEffect, useState } from "react"
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { grabQueriedBikes } from "./bikeQueryCall";
 import "./Quiz.css"
-import { bikeStats, modelDataWBikeStats } from "../interfaces";
+import { modelDataWBikeStats } from "../interfaces";
+import Link from "next/link";
+import Image from "next/image";
+const motoPng = "/moto.png"
 
 export const Quiz = () => {
     const quiz = {
@@ -84,6 +87,7 @@ export const Quiz = () => {
     //this is a condition that controls if we are in quiz or done with it
     const [finishedQuiz, setFinishedQuiz] = useState(false);
     const [modelsAndYears, setModelsAndYears] = useState<modelDataWBikeStats[]>([]);
+    const [isLoading, setLoading] = useState(false);
 
     //setting up quiz question
     const [quizIndex, setQuizIndex] = useState(0);
@@ -108,10 +112,13 @@ export const Quiz = () => {
     }
 
     const handleSubmit = () => {
+        setLoading(true);
         setFinishedQuiz(true);
         //backend call to query
         grabQueriedBikes(minEngineSize, maxEngineSize, categories, excludeToughMaintBikes, minYear, maxYear, minAvgMonths, maxAvgMonths, brandNationality).then((data) => {
             setModelsAndYears(data);
+            console.log("final" + data.length)
+            setLoading(false);
         });
 
         console.log("pull;ed" + modelsAndYears);
@@ -172,8 +179,8 @@ export const Quiz = () => {
         else if (quiz.questions[quizIndex].Id === 5) {
             const ownTime = selectedAnswers[answer as keyof typeof selectedAnswers] ?? [];
             if (Array.isArray(ownTime) && typeof ownTime[0] === 'number' && typeof ownTime[1] === 'number') {
-                setMinYear(ownTime[0]);
-                setMaxYear(ownTime[1]);
+                setMinAvgMonths(ownTime[0]);
+                setMaxAvgMonths(ownTime[1]);
             }
             else {
                 console.log("problem");
@@ -191,8 +198,17 @@ export const Quiz = () => {
             }
         }
         setQuizIndex(quizIndex + 1);
+
     }
 
+    if (isLoading) {
+        return (
+            <div className="loading">
+                Loading Result Please watch this Motorcycle in the meantime
+                <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
+            </div>
+        )
+    }
 
     return (
         <Container className="quiz-container">
@@ -205,22 +221,24 @@ export const Quiz = () => {
 
                             // Check if bikeStat's year and engine size are within the range
                             if (
-                                ((bikeStat.bikeYear ?? -1) >= minYear && (bikeStat.bikeYear ?? -1) <= maxYear) &&
-                                ((bikeStat.engineSize ?? -1) >= minEngineSize && (bikeStat.engineSize ?? -1) <= maxEngineSize)
+                                // ((bikeStat.bikeYear ?? -1) >= minYear && (bikeStat.bikeYear ?? -1) <= maxYear) &&
+                                // ((bikeStat.engineSize ?? -1) >= minEngineSize && (bikeStat.engineSize ?? -1) <= maxEngineSize)
+                                true
                             ) {
                                 show = true;
                                 return (
                                     <div key={index}>
                                         {/* Display bike stat details here */}
-                                        <span>Bike Year: {bikeStat.bikeYear}</span>
-                                        <span>Engine Size: {bikeStat.engineSize}</span>
+                                        <Link key={`../bikeStat/${bikeStat.id}`} href={`../bikeStat/${bikeStat.id}`}>{bikeStat.bikeYear} {bikeStat.modelName}</Link>
                                         {/* Add any other properties you want to display */}
                                     </div>
                                 );
                             }
                             return null; // If the bikeStat doesn't meet the condition, return nothing
                         })}
-                        {show ? <span>{model.brandName} {model.modelName}</span> : <div></div>}
+                        {show ? <Link style={{ display: "flex", justifyContent: "flex-start", paddingTop: 12, paddingBottom: 0 }} key={`bike/${model.id}`} href={`bike/${model.id}`}>
+                            {model.brandName} {model.modelName} SatisfactionScore:{model.avgSatisScore}
+                        </Link> : <div></div>}
                     </div>
                 )
             })}</div> : <div>

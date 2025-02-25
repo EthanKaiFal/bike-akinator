@@ -120,9 +120,6 @@ export async function getAllModelStats(pattern: string) {
   return allData;
 }
 
-function createOrCondition(field: string, values: string[]): object[] {
-  return values.map(value => ({ [field]: { eq: value } }));
-}
 
 export async function getModelByBrandCat(brands: Set<string>, categories: string[]) {
   //setup for the page looking
@@ -131,8 +128,6 @@ export async function getModelByBrandCat(brands: Set<string>, categories: string
   let currentPageIndex = 1;
   let hasMorePages = true;
 
-  console.log("nope" + brands.size);
-  console.log("big?" + categories.length);
   const brandsList = Array.from(brands);
   const filters = {
     and: [
@@ -161,12 +156,10 @@ export async function getModelByBrandCat(brands: Set<string>, categories: string
   //queque next page
   pageTokens.push(nextToken ?? "");
   modelStats.map((model) => {
-    console.log("sup"); // Prevents unused variable error
     allData.push(model as modelDataWBikeStats);
   });
 
   while ((hasMorePages) && (currentPageIndex === pageTokens.length)) {
-    console.log("empty");
     const { data: modelStats, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
       nextToken: pageTokens[pageTokens.length - 1],
       filter: filters,

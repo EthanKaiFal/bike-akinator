@@ -31,7 +31,7 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
     }
 
     const totalBikes = fieldsToUpdate.totalNumBikes ?? 0;
-    if ((incr > 0) && ((bikeData.score ?? 0) > 0)) {
+    if ((incr > 0) && ((bikeData.score ?? 0) > 0) && totalBikes !== 0) {
         fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
         if (incr > 0 && ((bikeData.ownershipMonths ?? 0) > 0)) {
             fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;

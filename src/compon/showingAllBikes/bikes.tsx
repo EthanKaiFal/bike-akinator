@@ -1,10 +1,13 @@
 "use client"
-import BikeModel from "@/compon/bikeModel";
+import BikeModel from "@/compon/showingAllBikes/bikeModel";
 import { modelDataWID } from "@/compon/interfaces";
 import * as statsService from '../../app/_actions/statsService';
 import { useEffect, useState } from "react";
 import { Button } from "@aws-amplify/ui-react";
 import "./bikes.css"
+import Link from "next/link";
+import Image from "next/image";
+const motoPng = "/moto.png"
 // Define the types for bikeModels and other state
 
 
@@ -76,7 +79,10 @@ const Bikes = () => {
             </div>
             <div className="all-bikes">
                 {isLoading ? (
-                    <p className="loading">Loading...</p> // Show loading message
+                    <div className="loading">
+                        Loading Result Please watch this Motorcycle in the meantime
+                        <Image className="img-fluid" src={motoPng} height={500} width={500} alt="Header Img" />
+                    </div>
                 ) : (
                     smallerList.map((model, index) => (
                         <BikeModel key={index}

@@ -45,3 +45,7 @@ input {
     background-repeat: no-repeat;
 
 }
+
+.loading img {
+    animation: updown 3s linear infinite;
+}

@@ -70,3 +70,7 @@
 .post-container{
     margin-bottom: 50px;
 }
+
+.loading img {
+    animation: updown 3s linear infinite;
+}
