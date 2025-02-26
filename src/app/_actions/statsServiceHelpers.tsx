@@ -7,7 +7,7 @@ import { Bike as BikeType, brandModelFieldsToUpdate, totalStatsFieldsToUpdate } 
 
 export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: brandModelFieldsToUpdate, bikeData: BikeType) {
     // decrement totalNumBikes
-    if (((bikeData.score ?? 0) > 0) && ((bikeData.ownershipMonths ?? 0) > 0)) {
+    if ((bikeData.score ?? 0) > 0) {
         fieldsToUpdate.totalNumBikes = (fieldsToUpdate.totalNumBikes ?? 0) + incr;
     }
     //console.log("decrement" + incr);
@@ -31,23 +31,41 @@ export async function updateBrandModelStatsBy(incr: number, fieldsToUpdate: bran
     }
 
     const totalBikes = fieldsToUpdate.totalNumBikes ?? 0;
-    if ((incr > 0) && ((bikeData.score ?? 0) > 0) && totalBikes !== 0) {
-        fieldsToUpdate.avgSatisScore = (((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes - 1)) + (bikeData.score ?? 0)) / totalBikes;
-        if (incr > 0 && ((bikeData.ownershipMonths ?? 0) > 0)) {
-            fieldsToUpdate.avgOwnership = (((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes - 1)) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+    if (((bikeData.score ?? 0) > 0) && totalBikes > 0) {
+        if (incr > 0) {
+            // For addition: oldCount is totalBikes before adding the new bike.
+            const oldCount = totalBikes - incr;
+            fieldsToUpdate.avgSatisScore =
+                ((fieldsToUpdate.avgSatisScore ?? 0) * oldCount + (bikeData.score ?? 0)) / totalBikes;
+        } else {
+            // For removal: oldCount is the count before removal.
+            const oldCount = totalBikes - incr; // since incr is negative, this adds back 1.
+            fieldsToUpdate.avgSatisScore =
+                totalBikes > 0
+                    ? (((fieldsToUpdate.avgSatisScore ?? 0) * oldCount) - (bikeData.score ?? 0)) / totalBikes
+                    : 0;
         }
     }
-    //decrementing case 
+
+
     else {
-        //new formula for updating avg data post delete from chatGPT
+        //fieldsToUpdate.avgSatisScore = 0;
+    }
 
-        fieldsToUpdate.avgSatisScore = totalBikes > 0
-            ? ((fieldsToUpdate.avgSatisScore ?? 0) * (totalBikes + 1) - (bikeData.score ?? 0)) / totalBikes
-            : 0;
-
-        fieldsToUpdate.avgOwnership = totalBikes > 0
-            ? ((fieldsToUpdate.avgOwnership ?? 0) * (totalBikes + 1) - (bikeData.ownershipMonths ?? 0)) / totalBikes
-            : 0;
+    if ((bikeData.ownershipMonths ?? 0) > 0) {
+        // You might also consider a separate counter for bikes that contribute to ownership average.
+        // For now, we assume totalNumBikes should include these bikes as well.
+        if (incr > 0 && totalBikes > 0) {
+            const oldCount = totalBikes - incr;
+            fieldsToUpdate.avgOwnership =
+                (((fieldsToUpdate.avgOwnership ?? 0) * oldCount) + (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        } else if (incr < 0 && totalBikes > 0) {
+            const oldCount = totalBikes - incr;
+            fieldsToUpdate.avgOwnership =
+                (((fieldsToUpdate.avgOwnership ?? 0) * oldCount) - (bikeData.ownershipMonths ?? 0)) / totalBikes;
+        }
+    } else {
+        //fieldsToUpdate.avgOwnership = 0;
     }
     return fieldsToUpdate;
 }

@@ -52,7 +52,9 @@ const Banner = () => {
                 <Col xs={2} md={6} xl={5} style={{ width: "55%", maxWidth: "55%" }}>
                     <span className="welcome">Welcome to Bike Akinator!!!!</span>
                     <h1><span className="intro">This is a website designed to help YOU find your next motorcycle whether it is a </span>{text}</h1>
-                    <p>About the app right here</p>
+                </Col>
+                <Col className="bio">
+                    <p >Click the button below and you will enter a quiz that will guide you along as we get to know you as a rider better.</p>
                 </Col>
                 <Col className="quiz-clicker-container">
                     <Link className="quiz-clicker" href="/quiz"> Find your next bike here

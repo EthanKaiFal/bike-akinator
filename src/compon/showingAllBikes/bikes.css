@@ -20,6 +20,7 @@
 }
 
 .search-button{
+    margin-top: 10px;
     background-color: white;
     border-radius: 50px;
 }
@@ -30,6 +31,7 @@
 
 /* Add this CSS to your stylesheet */
 input {
+    margin-top: 20px;
     caret-color: blue; /* Set the cursor color to blue or any color you prefer */
     animation: blinkCaret 0.8s step-end infinite; /* Blink effect */
     border-radius: 10px;
@@ -48,10 +50,10 @@ input {
 }
 
 .background{
-    padding: 50px 0 25% 0;
+    padding: 50px 0 0 0;
     background-image: url('/glxyBg.png');
     background-position: top center;
     background-size: cover;
     background-repeat: no-repeat;
-
+    min-height: 100vh;
 }

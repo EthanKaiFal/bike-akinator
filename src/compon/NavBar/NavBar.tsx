@@ -92,10 +92,10 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
     //console.log("here 6" + isSignedIn);
     return (
         <div className={scrolled ? "scrolled" : ""}>
-            <div className="navbar"
+            <div className={scrolled ? "navbar-scrolled" : "navbar"}
             >
 
-                <Flex className={scrolled ? "scrolled" : ""} as="nav">
+                <Flex className={scrolled ? "navbar-scrolled" : "navbar"} as="nav">
                     <Link className="navbar-brand" href="/">
                         <Image
                             src={logoImg}

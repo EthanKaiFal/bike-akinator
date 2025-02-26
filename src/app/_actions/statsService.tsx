@@ -24,19 +24,19 @@ export async function getBrandStats(brandName: string) {
 }
 
 export async function getModelStats(modelName: string, brandName: string) {
+  await new Promise((resolve) => setTimeout(resolve, 500));
   const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
     filter: {
-      and: [
-        { modelName: { eq: (modelName).trim() } },
-        { brandName: { eq: (brandName).trim() } }
-      ]
-    }
-  });
+      modelName: { eq: modelName.trim() },
+      brandName: { eq: brandName.trim() }
+    },
+  },
+  );
   if (errors) {
     console.log("error getting the brand Stat Data");
   }
   if (modelData.length === 0) {
-    console.log("is null");
+    console.log("not found");
     return null;
   }
   const { bikeStats, ...filteredModel } = modelData[0];
@@ -112,7 +112,7 @@ export async function getAllModelStats(pattern: string) {
 
     //bring in the data
     modelData.map(({ bikeStats, ...model }) => {
-      console.log("bikeStats" + JSON.stringify(bikeStats));  // Prevents unused variable error
+      console.log(bikeStats);  // Prevents unused variable error
       allData.push(model as modelDataWID);
     });
   }
@@ -177,7 +177,6 @@ export async function getModelByBrandCat(brands: Set<string>, categories: string
     }
     else {
       //queue
-      console.log("l");
       pageTokens.push(nextToken ?? "");
       currentPageIndex = currentPageIndex + 1;
       hasMorePages = true;
@@ -193,7 +192,6 @@ export async function getModelByBrandCat(brands: Set<string>, categories: string
       allData.push(model as modelDataWBikeStats);
     });
   }
-  console.log("outside");
   return allData;
 }
 
@@ -270,12 +268,14 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
 export async function updateModelStats(bikeData: BikeType, increment: number, categoryy: string) {
   // Query for existing model stats
   console.log(bikeData.model);
-  const modelData: modelDataWID | null = await getModelStats((bikeData.model ?? "").toLowerCase(), (bikeData.brand ?? "").toLowerCase());
+  const modelName: string = (bikeData.model ?? "").toLowerCase();
+  const brandName: string = (bikeData.brand ?? "").toLowerCase();
+  const modelData: modelDataWID | null = await getModelStats(modelName, brandName);
 
 
   // Create new model entry if the model does not exist
   if (modelData === null) {
-    console.log("in here creating");
+    //console.log("in here creating");
     let fieldsToUpdate: brandModelFieldsToUpdate = {
       totalNumBikes: 0,
       numBroken: 0,
@@ -290,8 +290,8 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
     fieldsToUpdate = await updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
 
     const createData = {
-      modelName: bikeData.model?.toLowerCase().trim(),
-      brandName: bikeData.brand?.toLowerCase().trim(),
+      modelName: modelName.trim(),
+      brandName: brandName.trim(),
       category: categoryy.toLowerCase(),
       avgSatisScore: fieldsToUpdate.avgSatisScore,
       totalNumBikes: fieldsToUpdate.totalNumBikes,
@@ -311,7 +311,7 @@ export async function updateModelStats(bikeData: BikeType, increment: number, ca
     return data?.id;
   }
   else {
-    console.log("in here not creating");
+    //console.log("in here not creating");
     // If model exists, update the existing entry
     const fieldsToUpdate = {
       totalNumBikes: modelData.totalNumBikes,
@@ -357,7 +357,6 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
 
   let pulledBikeStatData: bikeData;
   if (bikeStats.length === 0) {
-    console.log("not where to b");
     pulledBikeStatData = {
       modelName: modelName.trim(),
       bikeNum: 1,
@@ -377,7 +376,6 @@ export async function updateBikeStats(bikeData: BikeType, increment: number, mod
     }
   }
   else {
-    console.log("indise where we b" + bikeStats[0].bikeYear);
     pulledBikeStatData = bikeStats[0] as bikeData;
     const fieldsToUpdate = {
       bikeNum: pulledBikeStatData.bikeNum

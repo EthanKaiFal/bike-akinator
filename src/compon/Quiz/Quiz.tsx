@@ -31,7 +31,8 @@ export const Quiz = () => {
                         "Travel": ["nduro", "ouring"],
                         "Street Cruise": ["ruiser", "aked"],
                         "Sport": ["aked", "port"],
-                        "Stunt": ["otard"]
+                        "Stunt": ["otard"],
+                        "Scooter": ["cooter"]
                     }
                 },
                 {

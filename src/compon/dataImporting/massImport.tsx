@@ -35,6 +35,7 @@ export function updateAllBikeStats(bikeData: Bike, category: string, engineSize:
     }
 }
 
+const firstIndex = 808;
 
 
 
@@ -62,7 +63,6 @@ export default async function DataImportCompon() {
         delimiter: ',',
         dynamicTyping: true,
         header: true,
-        preview: batchSize,
         skipEmptyLines: true,
         transform: (value) => {
             return value === "_" ? "" : value; // Replace "_" back to an empty string
@@ -86,23 +86,24 @@ export default async function DataImportCompon() {
             // console.log(results.data['Torque (Nm)']);
             // console.log(results.data['Engine cylinder']);
             // console.log(results.data['Engine stroke']);
-
-            const bikeData: Bike = {
-                id: "",
-                year: results.data['Year'],
-                bikeNumber: 0,
-                brand: results.data['Brand'],
-                model: results.data['Model'],
-                sold: false,
-                broken: false,
-                ownershipMonths: ((results.data['Rating']) * 2) ** 2,
-                score: ((results.data['Rating']) * 2),
+            if (stepCount >= (firstIndex - 1) && (stepCount <= ((firstIndex - 1) + batchSize))) {
+                const bikeData: Bike = {
+                    id: "",
+                    year: results.data['Year'],
+                    bikeNumber: 0,
+                    brand: results.data['Brand'],
+                    model: results.data['Model'],
+                    sold: false,
+                    broken: false,
+                    ownershipMonths: ((results.data['Rating']) * 2) ** 2,
+                    score: ((results.data['Rating']) * 2),
+                }
+                //put into DB per row
+                //batch.push(bikeData);
+                parser.pause();
+                updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
+                setTimeout(function () { parser.resume(); }, 5000);
             }
-            //put into DB per row
-            //batch.push(bikeData);
-            parser.pause();
-            updateAllBikeStats(bikeData, results.data['Category'], results.data['Displacement (ccm)'] ?? 0, results.data['Power (hp)'] ?? 0, results.data['Torque (Nm)'] ?? 0, results.data['Engine cylinder'])
-            setTimeout(function () { parser.resume(); }, 5000);
 
         },
     });

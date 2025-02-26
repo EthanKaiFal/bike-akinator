@@ -43,8 +43,9 @@ h1, h2, h3, h4 {
     line-height: normal;
 }
 
-.navBar {
-    padding: 18px 0;
+.navbar {
+    padding: 0px 0;
+    background-color:linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);;
     position: fixed;
     width: 100%;
     top: 0;
@@ -54,12 +55,21 @@ h1, h2, h3, h4 {
     direction: row;
     justify-content: "space-between";
     align-items: "center";
-    padding:1rem
+    margin-bottom: 20px;
 }
 
-.navbar.scrolled {
+.navbar-scrolled {
     padding: 0px 0;
     background-color: #121212;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 9999;
+    transition: 0.32 ease-in-out;
+    display: flex;
+    direction: row;
+    justify-content: "space-between";
+    align-items: "center";
 }
 
 .navbar-brand {
