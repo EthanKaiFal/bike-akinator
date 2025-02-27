@@ -1,6 +1,6 @@
 "use client"
-import { getModelStats, getTotalStats, getBrandStats } from "@/app/_actions/actions"
-import { brandDataWID, modelDataWID, totalDataWID } from "../interfaces"
+import { getModelStats, getTotalStats } from "@/app/_actions/actions"
+import { modelDataWID, totalDataWID } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
@@ -16,7 +16,7 @@ const ModelStats = ({ modelName, brandName }: {
 ) => {
     const [totalStat, setTotalStat] = useState<totalDataWID | null>(null);
     const [modelStat, setModelStat] = useState<modelDataWID | null>(null);
-    const [brandStat, setBrandStat] = useState<brandDataWID | null>(null);
+    //const [brandStat, setBrandStat] = useState<brandDataWID | null>(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -37,13 +37,13 @@ const ModelStats = ({ modelName, brandName }: {
             setLoading(false);
         });
 
-        getBrandStats(brandName).then((data) => {
-            setBrandStat(data);
-            setLoading(false);
-        }).catch((error) => {
-            console.error("Error fetching stats:", error);
-            setLoading(false);
-        });
+        // getBrandStats(brandName).then((data) => {
+        //     setBrandStat(data);
+        //     setLoading(false);
+        // }).catch((error) => {
+        //     console.error("Error fetching stats:", error);
+        //     setLoading(false);
+        // });
 
     }, [brandName, modelName]);
 
@@ -139,7 +139,7 @@ const ModelStats = ({ modelName, brandName }: {
                         </div>
                         <div className="explanation-container">
                             {((avgSatisScoreBymodel ?? 0) < (totalAvgSatisScore ?? 0))
-                                ? <p>{modelName} is currently sitting below the overall average for bike satisfaction scores making it one that isn't usually worth its price. </p>
+                                ? <p>{modelName} is currently sitting below the overall average for bike satisfaction scores making it one that isn&apos;t usually worth its price. </p>
                                 : <p> {modelName} is currently sitting above the overall average values for bikes on this website making these bikes usually worth the cost.</p>}
                         </div>
                     </div>

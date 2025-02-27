@@ -44,10 +44,10 @@ const BrandStats = ({ brandName }: {
    const totalNumBikes = totalStat?.totalNumBikes;
    console.log("Total Stats" + JSON.stringify(totalStat));
    const numBrokenByBrand = brandStat?.numBroken;
-   const totalNumBroken = totalStat?.totalNumBroken;
+   //const totalNumBroken = totalStat?.totalNumBroken;
 
    const numSoldByBrand = brandStat?.numSold;
-   const totalNumSold = totalStat?.totalNumSold;
+   //const totalNumSold = totalStat?.totalNumSold;
 
    const avgSatisScoreByBrand = brandStat?.avgSatisScore;
    const totalAvgSatisScore = totalStat?.totalAvgSatisScore;
@@ -132,7 +132,7 @@ const BrandStats = ({ brandName }: {
                      <Bar data={satisScoreData} />
                   </div>
                   <div className="explanation-container">
-                     {((avgSatisScoreByBrand ?? 0) < (totalAvgSatisScore ?? 0)) ? <p>{brandName} is currently sitting below the overall average for bike satisfaction scores making it one that isn't usually worth its price. </p> : <p> {brandName} is currently sitting above the overall average values for bikes on this website making these bikes usually worth the cost.</p>}
+                     {((avgSatisScoreByBrand ?? 0) < (totalAvgSatisScore ?? 0)) ? <p>{brandName} is currently sitting below the overall average for bike satisfaction scores making it one that isn&apos;t usually worth its price. </p> : <p> {brandName} is currently sitting above the overall average values for bikes on this website making these bikes usually worth the cost.</p>}
                   </div>
                </div>
             </div>
