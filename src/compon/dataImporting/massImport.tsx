@@ -51,7 +51,13 @@ export default async function DataImportCompon() {
     let text: string;
     try {
         const result = await downloadData({
-            path: "csvfiles/certain_bikez_curated.csv",
+            path: "certain_bikez_curated.csv",
+            options: {
+                bucket: {
+                    bucketName: "amplify-d3ao0vrc5bac3j-ma-bikeakindrivebuckete2718-ahiacbyscenh",
+                    region: "us-east-1"
+                }
+            }
         }).result;
         text = await result.body.text();
     }
