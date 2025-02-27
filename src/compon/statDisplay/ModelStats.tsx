@@ -1,20 +1,22 @@
 "use client"
-import { getModelStats, getTotalStats } from "@/app/_actions/actions"
-import { modelDataWID, totalDataWID } from "../interfaces"
+import { getModelStats, getTotalStats, getBrandStats } from "@/app/_actions/actions"
+import { brandDataWID, modelDataWID, totalDataWID } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
-
+import "./stat.css"
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const ModelStats = ({ modelName, brandName }: {
     modelName: string,
-    brandName: string
+    brandName: string,
+
 }
 
 ) => {
     const [totalStat, setTotalStat] = useState<totalDataWID | null>(null);
     const [modelStat, setModelStat] = useState<modelDataWID | null>(null);
+    const [brandStat, setBrandStat] = useState<brandDataWID | null>(null);
     const [loading, setLoading] = useState(true);
 
 
@@ -29,6 +31,14 @@ const ModelStats = ({ modelName, brandName }: {
 
         getModelStats(modelName, brandName).then((data) => {
             setModelStat(data);
+            setLoading(false);
+        }).catch((error) => {
+            console.error("Error fetching stats:", error);
+            setLoading(false);
+        });
+
+        getBrandStats(brandName).then((data) => {
+            setBrandStat(data);
             setLoading(false);
         }).catch((error) => {
             console.error("Error fetching stats:", error);
@@ -103,25 +113,50 @@ const ModelStats = ({ modelName, brandName }: {
     console.log("in here");
     return (
         <div className="chart-container">
+            <h2>{brandName} {modelName} Model Stats</h2>
+
             <div>Category:{modelStat?.category}</div>
-            <h2> Model</h2>
-            <div className="chart-item">
-                <h3>Bikes Distribution</h3>
-                <Pie data={bikeData} />
-            </div>
-            <div className="chart-item">
-                <h3>Satisfaction Scores</h3>
-                <Bar data={satisScoreData} />
-            </div>
-            <div className="chart-item">
-                <h3>Broken Bikes</h3>
-                <Doughnut data={brokenBikesData} />
-            </div>
-            <div className="chart-item">
-                <h3> Sold Bikes</h3>
-                <Doughnut data={soldBikesData} />
+            <div className="item-container">
+                <div className="box">
+                    <h3>Bikes Distribution</h3>
+                    <div className="distribution-container">
+                        <div className="explanation-container">
+                            {((modelNum ?? 0) / (totalNumBikes ?? 1)) > 0.1 ? <p>{modelName} is currently sitting at over 10% of of motorcycle brands registered on this website making it a popular option</p> : <p>{brandName} is currently sitting at under 10% of the motorcycle market making it a more niche option. </p>}
+                        </div>
+                        <div className="chart-item">
+                            <h3>Bikes Distribution</h3>
+                            <Pie data={bikeData} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="box">
+                    <h3>Bikes Distribution</h3>
+                    <div className="distribution-container">
+                        <div className="chart-item">
+                            <h3>Satisfaction Scores</h3>
+                            <Bar data={satisScoreData} />
+                        </div>
+                        <div className="explanation-container">
+                            {((avgSatisScoreBymodel ?? 0) < (totalAvgSatisScore ?? 0))
+                                ? <p>{modelName} is currently sitting below the overall average for bike satisfaction scores making it one that isn't usually worth its price. </p>
+                                : <p> {modelName} is currently sitting above the overall average values for bikes on this website making these bikes usually worth the cost.</p>}
+                        </div>
+                    </div>
+                </div>
+                <div className="sold-broken-container">
+                    <div className="chart-item">
+                        <h3>Broken Bikes</h3>
+                        <Doughnut data={brokenBikesData} />
+                    </div>
+                    <div className="chart-item">
+                        <h3> Sold Bikes</h3>
+                        <Doughnut data={soldBikesData} />
+                    </div>
+                </div>
             </div>
         </div>
+
     )
 }
 export default ModelStats;

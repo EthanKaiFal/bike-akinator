@@ -4,8 +4,10 @@ import { brandData, totalData } from "../interfaces"
 import { Pie, Bar, Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { useEffect, useState } from "react";
+import "./stat.css"
+import ChartDataLabels from "chartjs-plugin-datalabels";
 
-Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend, ChartDataLabels);
 
 const BrandStats = ({ brandName }: {
    brandName: string
@@ -80,43 +82,70 @@ const BrandStats = ({ brandName }: {
    };
 
    const brokenBikesData = {
-      labels: [`${brandName} Broken Bikes`, 'Other Broken Bikes'],
+      labels: [`${brandName} Broken Bikes`, `All ${brandName} Bikes`],
       datasets: [
          {
-            data: [numBrokenByBrand, (totalNumBroken ?? 0) - (numBrokenByBrand ?? 0)],
+            data: [numBrokenByBrand, brandNum],
             backgroundColor: ['#FF9F40', '#FF6384'],
          },
       ],
    };
 
    const soldBikesData = {
-      labels: [`${brandName} Sold Bikes`, 'Other Sold Bikes'],
+      labels: [`${brandName} Sold Bikes`, `All ${brandName} Bikes`],
       datasets: [
          {
-            data: [numSoldByBrand, (totalNumSold ?? 0) - (numSoldByBrand ?? 0)],
+            data: [numSoldByBrand, brandNum],
             backgroundColor: ['#FF9F40', '#FF6384'],
          },
       ],
    };
+
+   const options = {
+      plugins: {
+         datalabels: {
+            display: true,
+         },
+      },
+   };
    //console.log("in here");
    return (
       <div className="chart-container">
-         <h2> Brand</h2>
-         <div className="chart-item">
-            <h3>Bikes Distribution</h3>
-            <Pie data={bikeData} />
-         </div>
-         <div className="chart-item">
-            <h3>Satisfaction Scores</h3>
-            <Bar data={satisScoreData} />
-         </div>
-         <div className="chart-item">
-            <h3>Broken Bikes</h3>
-            <Doughnut data={brokenBikesData} />
-         </div>
-         <div className="chart-item">
-            <h3> Sold Bikes</h3>
-            <Doughnut data={soldBikesData} />
+         <h2> {brandName} Brand Stats</h2>
+         <div className="item-container">
+            <div className="box">
+               <h3>Bikes Distribution</h3>
+               <div className="distribution-container">
+                  <div className="explanation-container">
+                     {((brandNum ?? 0) / (totalNumBikes ?? 1)) > 0.1 ? <p>{brandName} is currently sitting at over 10% of of motorcycle brands registered on this website making it a popular option</p> : <p>{brandName} is currently sitting at under 10% of the motorcycle market making it a more niche option. </p>}
+                  </div>
+                  <div className="chart-item">
+                     <Pie data={bikeData} />
+                  </div>
+               </div>
+            </div>
+            <div className="box">
+               <h3>Bikes Distribution</h3>
+               <div className="distribution-container">
+                  <div className="chart-item">
+                     <h3>Satisfaction Scores</h3>
+                     <Bar data={satisScoreData} />
+                  </div>
+                  <div className="explanation-container">
+                     {((avgSatisScoreByBrand ?? 0) < (totalAvgSatisScore ?? 0)) ? <p>{brandName} is currently sitting below the overall average for bike satisfaction scores making it one that isn't usually worth its price. </p> : <p> {brandName} is currently sitting above the overall average values for bikes on this website making these bikes usually worth the cost.</p>}
+                  </div>
+               </div>
+            </div>
+            <div className="sold-broken-container">
+               <div className="chart-item">
+                  <h3>Broken Bikes</h3>
+                  <Doughnut data={brokenBikesData} options={options} />
+               </div>
+               <div className="chart-item">
+                  <h3> Sold Bikes</h3>
+                  <Doughnut data={soldBikesData} />
+               </div>
+            </div>
          </div>
       </div>
    )
