@@ -68,7 +68,7 @@ export default async function DataImportCompon() {
 
 
     // const text = await file.text();
-    const batchSize = 5;
+    const batchSize = 100;
     let stepCount = 0;
     Papa.parse<DataEntry>(text, {
         delimiter: ',',
