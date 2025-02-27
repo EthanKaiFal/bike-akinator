@@ -2,9 +2,9 @@
 import React from "react";
 import { Bike as Bike } from "../interfaces"
 import * as statsService from '../../app/_actions/statsService';
-import fs from 'fs';
-import path from 'path'
 import * as Papa from 'papaparse';
+import { downloadData } from "aws-amplify/storage";
+
 
 
 type DataEntry = {
@@ -19,6 +19,7 @@ type DataEntry = {
     'Engine cylinder': string;
     'Engine stroke': string;
 };
+
 
 export function updateAllBikeStats(bikeData: Bike, category: string, engineSize: number, horsePower: number, torque: number, engineConfig: string) {
     //console.log("listing"+ JSON.stringify(bikeData));
@@ -47,19 +48,23 @@ export default async function DataImportCompon() {
     //         console.log('data:', data);
     //         setLoading(false);
     //     });
-    const filePath = path.resolve(process.cwd(), 'src', 'compon', 'dataImporting', 'certain_bikez_curated.csv');
-
-    if (!fs.existsSync(filePath)) {
-        console.error("CSV file not found:", filePath);
-        process.exit(1); // Prevents further execution if the file is missing
+    let text: string;
+    try {
+        const result = await downloadData({
+            path: "csvfiles/certain_bikez_curated.csv",
+        }).result;
+        text = await result.body.text();
+    }
+    catch (error) {
+        console.log(`Error: ${error}`)
+        text = "";
     }
 
-    const file = fs.createReadStream(filePath);
-    // const text = await file.text();
-    const batchSize = 200;
-    let stepCount = 0;
 
-    Papa.parse<DataEntry>(file, {
+    // const text = await file.text();
+    const batchSize = 5;
+    let stepCount = 0;
+    Papa.parse<DataEntry>(text, {
         delimiter: ',',
         dynamicTyping: true,
         header: true,
