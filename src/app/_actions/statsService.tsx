@@ -24,7 +24,6 @@ export async function getBrandStats(brandName: string) {
 }
 
 export async function getModelStats(modelName: string, brandName: string) {
-  await new Promise((resolve) => setTimeout(resolve, 500));
   const { data: modelData, errors } = await cookieBasedClient.models.ModelStats.list({
     filter: {
       modelName: { eq: modelName.trim() },
@@ -67,20 +66,25 @@ export async function getAllModelStats(pattern: string) {
   }
 
   if (!nextToken) {
-    //console.log("here");
+    console.log("here");
     hasMorePages = false;
+  }
+  else {
+    pageTokens.push(nextToken);
   }
   //bring in the data
   modelsData.map(({ bikeStats, ...model }) => {
     console.log(JSON.stringify(bikeStats)); // Prevents unused variable error
     allData.push(model as modelDataWID);
     //this is so that we are never pulling everything from db becauz expensive
-    if (pattern.length < 4) {
-      hasMorePages = false;
-    }
+    // if (pattern.length < 4) {
+    //   hasMorePages = false;
+    // }
   });
+  console.log(currentPageIndex === pageTokens.length);
   //do the pagination chain
   while ((hasMorePages) && (currentPageIndex === pageTokens.length)) {
+    console.log("page");
     const { data: modelData, errors, nextToken } = await cookieBasedClient.models.ModelStats.list({
       nextToken: pageTokens[pageTokens.length - 1],
       filter: {
@@ -250,7 +254,7 @@ export async function updateBrandStats(bikeData: BikeType, increment: number) {
       avgSatisScore: brandData.avgSatisScore
     }
 
-    const updatedFieldsToUpdate = await updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
+    const updatedFieldsToUpdate = updateBrandModelStatsBy(increment, fieldsToUpdate, bikeData);
     // Now create a copy of the existing entry and save the updated data
     try {
       await cookieBasedClient.models.BrandStats.update({
