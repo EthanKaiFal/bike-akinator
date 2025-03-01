@@ -47,14 +47,17 @@ export async function getBrandStats(brandName: string) {
 
 export async function updateModelStats(bikeDatas: BikeType[], increment: number, categoryy: string) {
     // Query for existing model stats
-    console.log(bikeDatas[0].model);
+    // console.log("model" + bikeDatas[0].model);
+    // console.log("length" + bikeDatas.length);
+
     const modelName: string = (bikeDatas[0].model ?? "").toLowerCase();
     const brandName: string = (bikeDatas[0].brand ?? "").toLowerCase();
     const modelData: modelDataWID | null = await getModelStats(modelName, brandName);
 
 
+
     // Create new model entry if the model does not exist
-    if (modelData === null) {
+    if (!modelData) {
         //console.log("in here creating");
         let fieldsToUpdate: brandModelFieldsToUpdate = {
             totalNumBikes: 0,
@@ -90,7 +93,12 @@ export async function updateModelStats(bikeDatas: BikeType[], increment: number,
         if (errors) {
             console.error("Error saving new model data:" + JSON.stringify(errors));
         }
-        return data?.id;
+        if (!data) {
+            console.error("Error saving new model data:");
+        }
+        else {
+            return data.id;
+        }
     }
 
 }

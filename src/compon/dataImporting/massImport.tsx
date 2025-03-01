@@ -1,10 +1,10 @@
-
-import React from "react";
+'use client'
 import { Bike as Bike } from "../interfaces"
 import * as statsService from '../../app/_actions/statsService';
 import * as statsServiceBatch from '../../app/_actions/statsServiceBatch';
 import * as Papa from 'papaparse';
 import { downloadData } from "aws-amplify/storage";
+import { useEffect, useState } from "react";
 
 
 
@@ -31,8 +31,14 @@ interface bikeNums {
 function uploadBatch(bikes: Bike[], category: string, bikeNums: bikeNums[]) {
     try {
         statsServiceBatch.updateModelStats(bikes, 1, category).then((modelId) => {
-            for (let j = 0; j < bikeNums.length; j++) {
-                statsService.updateBikeStats(bikes[j], 1, (modelId ?? ""), bikeNums[j].engineSize, bikeNums[j].horsePower, bikeNums[j].torque, bikeNums[j].engineConfig);
+            const modelIDD = modelId ?? "";
+            if (modelIDD === "") {
+                console.log("boo");
+            }
+            else {
+                for (let j = 0; j < bikeNums.length; j++) {
+                    statsService.updateBikeStats(bikes[j], 1, modelIDD, bikeNums[j].engineSize, bikeNums[j].horsePower, bikeNums[j].torque, bikeNums[j].engineConfig);
+                }
             }
         })
 
@@ -53,11 +59,10 @@ function uploadBatchForBrand(bikes: Bike[], brand: string) {
 }
 
 
-const firstIndex = 808;
 
 
 
-export default async function DataImportCompon() {
+const DataImportCompon = () => {
     // fetch('../dataImport/all_bikes_curated.csv')
     //     .then(response => response.text())
     //     .then(responseText => {
@@ -65,133 +70,150 @@ export default async function DataImportCompon() {
     //         console.log('data:', data);
     //         setLoading(false);
     //     });
-    let text: string;
-    try {
-        const result = await downloadData({
-            path: "certain_bikez_curated.csv",
-            options: {
-                bucket: {
-                    bucketName: "amplify-d3ao0vrc5bac3j-ma-bikeakindrivebuckete2718-ahiacbyscenh",
-                    region: "us-east-1"
-                }
+    const [stepCount, setStepCount] = useState(0);
+    const [isLoading, setLoading] = useState(true);
+    useEffect(() => {
+
+        async function fetchData() {
+
+            try {
+                const result = await downloadData({
+                    path: "certain_bikez_curated.csv",
+                    options: {
+                        bucket: {
+                            bucketName: "amplify-d3ao0vrc5bac3j-ma-bikeakindrivebuckete2718-ahiacbyscenh",
+                            region: "us-east-1",
+                        },
+                    },
+                }).result;
+
+                const text = await result.body.text();
+
+                parseCSV(text);
+            } catch (error) {
+                console.error("Error downloading data:", error);
+                setLoading(false);
             }
-        }).result;
-        text = await result.body.text();
+        }
+
+        fetchData();
+    }, []);
+
+    function parseCSV(text: string) {
+
+        // const text = await file.text();
+        const batchSize = 15;//1142;
+        const firstIndex = 808;
+        let curModel = "";
+        let localStepCount = 0
+        let bikes: Bike[] = [];
+        let curBrand = "";
+        let bikesInBrand: Bike[] = [];
+        let bikeNums: bikeNums[] = [];
+        let category = "";
+
+        Papa.parse<DataEntry>(text,
+            {
+                delimiter: ',',
+                dynamicTyping: true,
+                header: true,
+                skipEmptyLines: true,
+                transform: (value) => {
+                    return value === "_" ? "" : value; // Replace "_" back to an empty string
+                },
+                complete: () => {
+                    console.log('Finished parsing');
+                    if (bikes.length) {
+                        uploadBatch(bikes, category, bikeNums);
+                    }
+                    if (bikesInBrand.length != 0) {
+                        uploadBatchForBrand(bikesInBrand, curBrand);
+                    }
+                    setLoading(false);
+                },
+                error: () => {
+                    console.log("import error");
+                },
+                step: (results, parser) => {
+                    localStepCount = localStepCount + 1;
+                    setStepCount((prev) => prev + 1);
+                    console.log(firstIndex);
+                    console.log(localStepCount);
+                    if (localStepCount >= (firstIndex - 1) && (localStepCount <= ((firstIndex - 1) + batchSize))) {
+                        const bikeData: Bike = {
+                            id: "",
+                            year: results.data['Year'],
+                            bikeNumber: 0,
+                            brand: results.data['Brand'],
+                            model: results.data['Model'],
+                            sold: false,
+                            broken: false,
+                            ownershipMonths: ((results.data['Rating']) * 2) ** 2,
+                            score: ((results.data['Rating']) * 2),
+                        }
+
+                        const curBikeNum: bikeNums = {
+                            engineSize: results.data['Displacement (ccm)'] ?? 0,
+                            horsePower: results.data['Power (hp)'] ?? 0,
+                            torque: results.data['Torque (Nm)'] ?? 0,
+                            engineConfig: results.data['Engine cylinder']
+                        }
+                        category = results.data['Category'];
+                        //build the batch
+                        if (bikeData.model === curModel) {
+                            bikes.push(bikeData);
+                            bikeNums.push(curBikeNum);
+                        }
+                        //batch finished
+                        else {
+                            //handleUpload of batch to DB
+                            if (bikes.length != 0) {
+                                uploadBatch(bikes, results.data['Category'], bikeNums);
+                            }
+                            //reset
+                            bikes = [];
+                            bikeNums = [];
+                            curModel = bikeData.model ?? "";
+                            bikeNums.push(curBikeNum);
+                            bikes.push(bikeData);
+                        }
+                        //build brand batch
+                        if (bikeData.brand === curBrand) {
+                            bikesInBrand.push(bikeData);
+                        }
+                        else {
+                            if (bikesInBrand.length != 0) {
+                                uploadBatchForBrand(bikesInBrand, curBrand);
+                            }
+                            curBrand = bikeData.brand ?? "";
+                            bikesInBrand = [];
+                            bikesInBrand.push(bikeData);
+
+                        }
+                        //put into DB per row
+                        //batch.push(bikeData);
+                        parser.pause();
+                        setTimeout(function () { parser.resume(); }, 5000);
+
+                    }
+                }
+            });
+
+
     }
-    catch (error) {
-        console.log(`Error: ${error}`)
-        text = "";
-    }
-
-
-    // const text = await file.text();
-    const batchSize = 1142;
-    let stepCount = 0;
-    let curModel = "";
-    let bikes: Bike[] = [];
-    let curBrand = "";
-    let bikesInBrand: Bike[] = [];
-    let bikeNums: bikeNums[] = [];
-    let category = "";
-
-    Papa.parse<DataEntry>(text, {
-        delimiter: ',',
-        dynamicTyping: true,
-        header: true,
-        skipEmptyLines: true,
-        transform: (value) => {
-            return value === "_" ? "" : value; // Replace "_" back to an empty string
-        },
-        complete: () => {
-            console.log('Finished parsing');
-            uploadBatch(bikes, category, bikeNums);
-            uploadBatchForBrand(bikesInBrand, curBrand);
-        },
-        error: () => {
-            console.log("import error");
-        },
-        step: (results, parser) => {
-            stepCount = stepCount + 1;
-            // console.log(results.data['Brand']);
-            // console.log(results.data['Model']);
-            // console.log(results.data['Year']);
-            // console.log(results.data['Category']);
-            // console.log(results.data['Rating']);
-            // console.log(results.data['Displacement (ccm)']);
-            // console.log(results.data['Power (hp)']);
-            // console.log(results.data['Torque (Nm)']);
-            // console.log(results.data['Engine cylinder']);
-            // console.log(results.data['Engine stroke']);
-            if (stepCount >= (firstIndex - 1) && (stepCount <= ((firstIndex - 1) + batchSize))) {
-                console.log(stepCount);
-                const bikeData: Bike = {
-                    id: "",
-                    year: results.data['Year'],
-                    bikeNumber: 0,
-                    brand: results.data['Brand'],
-                    model: results.data['Model'],
-                    sold: false,
-                    broken: false,
-                    ownershipMonths: ((results.data['Rating']) * 2) ** 2,
-                    score: ((results.data['Rating']) * 2),
-                }
-
-                const curBikeNum: bikeNums = {
-                    engineSize: results.data['Displacement (ccm)'] ?? 0,
-                    horsePower: results.data['Power (hp)'] ?? 0,
-                    torque: results.data['Torque (Nm)'] ?? 0,
-                    engineConfig: results.data['Engine cylinder']
-                }
-                category = results.data['Category'];
-                //build the batch
-                if (bikeData.model === curModel) {
-                    bikes.push(bikeData);
-                    bikeNums.push(curBikeNum);
-                }
-                //batch finished
-                else {
-                    //handleUpload of batch to DB
-                    uploadBatch(bikes, results.data['Category'], bikeNums);
-                    //reset
-                    bikes = [];
-                    bikeNums = [];
-                    curModel = bikeData.model ?? "";
-                    bikeNums.push(curBikeNum);
-                    bikes.push(bikeData);
-                }
-                //build brand batch
-                if (bikeData.brand === curBrand) {
-                    bikesInBrand.push(bikeData);
-                }
-                else {
-                    uploadBatchForBrand(bikesInBrand, curBrand);
-                    curBrand = bikeData.brand ?? "";
-                    bikesInBrand = [];
-                    bikesInBrand.push(bikeData);
-
-                }
-                //put into DB per row
-                //batch.push(bikeData);
-                parser.pause();
-                setTimeout(function () { parser.resume(); }, 5000);
-            }
-
-        },
-    });
-
-    if (stepCount < 20000) {
+    if (isLoading) {
         return (
             <div style={{ marginTop: '50px' }}>
-                importing...{stepCount}
+                isLoading
             </div>
         )
     }
 
-
-
     return (
-        <div>
-            finished import
+        <div style={{ marginTop: '50px' }}>
+            importing...{stepCount}
         </div>
     )
+
 }
+export default DataImportCompon;
