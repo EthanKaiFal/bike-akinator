@@ -102,7 +102,7 @@ const DataImportCompon = () => {
     function parseCSV(text: string) {
 
         // const text = await file.text();
-        const batchSize = 15;//1142;
+        const batchSize = 1142;
         const firstIndex = 808;
         let curModel = "";
         let localStepCount = 0
