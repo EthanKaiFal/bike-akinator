@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 
 
+
 type DataEntry = {
     'Brand': string;
     'Model': string;
@@ -62,7 +63,10 @@ function uploadBatchForBrand(bikes: Bike[], brand: string) {
 
 
 
-const DataImportCompon = () => {
+const DataImportCompon = ({ index, size }: {
+    index: number,
+    size: number
+}) => {
     // fetch('../dataImport/all_bikes_curated.csv')
     //     .then(response => response.text())
     //     .then(responseText => {
@@ -102,8 +106,8 @@ const DataImportCompon = () => {
     function parseCSV(text: string) {
 
         // const text = await file.text();
-        const batchSize = 1142;
-        const firstIndex = 808;
+        const batchSize = size;
+        const firstIndex = index;
         let curModel = "";
         let localStepCount = 0
         let bikes: Bike[] = [];
