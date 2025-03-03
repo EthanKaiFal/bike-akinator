@@ -45,6 +45,74 @@ export async function getModelStats(modelName: string, brandName: string) {
   return filteredModel as modelDataWID;
 }
 
+export async function getAllBikeStatsByModel(modelId: string) {
+  interface bikeStat {
+    modelName: string,
+    bikeYear: number,
+    id: string
+  }
+
+  const BikeStats: bikeStat[] = [];
+  const pageTokens: string[] = [];
+  let currentPageIndex = 1;
+  let hasMorePages = true;
+  let isLoading = true;
+
+  const { data: bikeStats, nextToken } = await cookieBasedClient.models.BikeStats.list({
+    filter: {
+      modelStatId: {
+        eq: modelId
+      }
+    },
+    selectionSet: ["modelName", "bikeYear", "id"],
+  });
+  bikeStats.map((bikestat) => {
+    BikeStats.push(bikestat as bikeStat);
+  })
+  if (!nextToken) {
+    hasMorePages = false;
+  }
+  else {
+    pageTokens.push(nextToken);
+  }
+
+  while (hasMorePages && (currentPageIndex === pageTokens.length)) {
+    //console.log("inside");
+    const { data: bikeStats, errors, nextToken } = await cookieBasedClient.models.BikeStats.list({
+      nextToken: pageTokens[pageTokens.length - 1],
+      filter: {
+        modelStatId: {
+          eq: modelId
+        }
+      },
+      selectionSet: ["modelName", "bikeYear", "id"],
+    });
+    if (errors) {
+      console.error("error in pagination");
+    }
+    //we done case
+    if (!nextToken) {
+      //console.log("done");
+      hasMorePages = false;
+    }
+    else {
+      //queue
+      pageTokens.push(nextToken);
+      currentPageIndex = currentPageIndex + 1;
+      //console.log("null?");
+      hasMorePages = true;
+
+    }
+
+    bikeStats.map((bikeStat) => {
+      console.log(bikeStat);  // Prevents unused variable error
+      BikeStats.push(bikeStat as bikeStat);
+    });
+
+  }
+  return BikeStats;
+}
+
 
 
 export async function getAllModelStats(pattern: string) {
