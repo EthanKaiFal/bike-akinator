@@ -34,7 +34,7 @@ function uploadBatch(bikes: Bike[], category: string, bikeNums: bikeNums[]) {
         statsServiceBatch.updateModelStats(bikes, 1, category).then((modelId) => {
             const modelIDD = modelId ?? "";
             if (modelIDD === "") {
-                console.log("boo");
+                //console.log("boo");
             }
             else {
                 for (let j = 0; j < bikeNums.length; j++) {
