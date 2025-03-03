@@ -3,7 +3,6 @@ import { cookieBasedClient } from "@/utils/amplify-utils";
 import BrandStats from "@/compon/statDisplay/BrandStats";
 import ModelStats from "@/compon/statDisplay/ModelStats";
 import BikeLinks from "@/compon/statDisplay/BikeStats";
-import Link from "next/link";
 import "../../../compon/statDisplay/stat.css"
 
 const Bike = async ({ params }: { params: { id: string } }) => {

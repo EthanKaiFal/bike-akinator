@@ -56,7 +56,6 @@ export async function getAllBikeStatsByModel(modelId: string) {
   const pageTokens: string[] = [];
   let currentPageIndex = 1;
   let hasMorePages = true;
-  let isLoading = true;
 
   const { data: bikeStats, nextToken } = await cookieBasedClient.models.BikeStats.list({
     filter: {
