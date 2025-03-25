@@ -1,93 +1,97 @@
-.banner{
-    margin-top: 0px;
-    padding-top: 100px;
-    background-image: url('/motoBg.jpg');
-    background-position: top center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    min-height: 150vh;
+.banner {
+  margin-top: 0px;
+  padding-top: 150px;
+  background-image: url("/motoBg.jpg");
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 150vh;
 }
 
 .welcome {
-    font-weight: 700;
-    letter-spacing: 0.8;
-    padding: 8px 10px;
-    background: linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);
-    border: 1px solid rgba(191, 194, 193, 0.5);
-    font-size: 40px;
-    margin-bottom: 25px;
-    display: inline-block;
-    margin-left: 35px;
-
+  font-weight: 700;
+  letter-spacing: 0.8;
+  padding: 8px 10px;
+  background: linear-gradient(
+    90.21deg,
+    rgba(16, 83, 88, 0.5) -5.91%,
+    rgba(183, 182, 185, 0.5) 111.58%
+  );
+  border: 1px solid rgba(191, 194, 193, 0.5);
+  font-size: 40px;
+  margin-bottom: 25px;
+  display: inline-block;
+  margin-left: 35px;
 }
 
 .banner h1 {
-    font-size: 40px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    line-height: 1;
-    margin-bottom: 20px;
-    display: block;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  line-height: 1;
+  margin-bottom: 20px;
+  display: block;
 }
 
 .banner p {
-    color: #b8b8b8;
-    font-size: 18px;
-    letter-spacing: 0.8px;
-    line-height: 1.5em;
-    width: 96%;
+  color: #b8b8b8;
+  font-size: 18px;
+  letter-spacing: 0.8px;
+  line-height: 1.5em;
+  width: 96%;
 }
 
 .banner img {
-    animation: updown 3s linear infinite;
+  animation: updown 3s linear infinite;
 }
 
 @keyframes updown {
-    0% {
-        transform: translateY(-20px);
-    }
-    50% {
-        transform: translateY(20px);
-    }
-    100% {
-        transform: translateY(-20px);
-    }
+  0% {
+    transform: translateY(-20px);
+  }
+  50% {
+    transform: translateY(20px);
+  }
+  100% {
+    transform: translateY(-20px);
+  }
 }
 
 .txt-rotate > .welcome {
-    border-right: 0.08em solid #666;
+  border-right: 0.08em solid #666;
 }
 
-.quiz-clicker{
-
-    background: linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);
-    border-radius: 25px;
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 40px;
+.quiz-clicker {
+  background: linear-gradient(
+    90.21deg,
+    rgba(16, 83, 88, 0.5) -5.91%,
+    rgba(183, 182, 185, 0.5) 111.58%
+  );
+  border-radius: 25px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 40px;
 }
-.quiz-clicker:hover{
-    color:rgb(39, 98, 153);
-}
-
-.quiz-clicker-container{
-    position:relative;
-    left: 10%;
-    top: 100px;
-
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+.quiz-clicker:hover {
+  color: rgb(39, 98, 153);
 }
 
-.quiz-clicker-container:hover{
-    transform: translateY(-5px);
+.quiz-clicker-container {
+  position: relative;
+  left: 10%;
+  top: 100px;
+
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
 }
 
-.bio{
-    position: relative;
-    top:50%;
-    left:2%;
-    max-width: 50%;
-    
+.quiz-clicker-container:hover {
+  transform: translateY(-5px);
+}
 
+.bio {
+  position: relative;
+  top: 50%;
+  left: 2%;
+  max-width: 50%;
 }

@@ -9,7 +9,7 @@ import { Hub } from "aws-amplify/utils";
 import { revalidatePath } from 'next/cache';
 import Image from "next/image"
 import "./NavStyle.css"
-const logoImg = "/logo.svg";
+const logoImg = "/motor-logo.svg";
 
 export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
     const [authCheck, setAuthCheck] = useState(isSignedIn);
@@ -91,7 +91,7 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
         (route) => route.loggedIn === authCheck || route.loggedIn === undefined);
     //console.log("here 6" + isSignedIn);
     return (
-        <div className={scrolled ? "scrolled" : ""}>
+        <div style={{}} className={scrolled ? "scrolled" : ""}>
             <div className={scrolled ? "navbar-scrolled" : "navbar"}
             >
 
@@ -99,10 +99,12 @@ export default function NavBar({ isSignedIn }: { isSignedIn: boolean }) {
                     <Link className="navbar-brand" href="/">
                         <Image
                             src={logoImg}
-                            width="100"
-                            height="200"
-                            className=""
-                            alt="Logo" />
+                            width="75"
+                            height="75"
+                            className="filter-white"
+                            alt="Logo"
+                            style={{ objectFit: 'cover' }}
+                        />
                         <span className="fw-bolder fs-4">Bike Akinator</span>
                     </Link>
                     {routes.map((route) => (

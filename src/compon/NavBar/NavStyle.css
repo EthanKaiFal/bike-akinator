@@ -1,115 +1,123 @@
-@font-face{
-    font-family: Centra;
-    src: url('../../assets/fonts/CentraNo2-Bold.ttf');
-    font-weight: 700;
+@font-face {
+  font-family: Centra;
+  src: url("../../assets/fonts/CentraNo2-Bold.ttf");
+  font-weight: 700;
 }
 
-@font-face{
-    font-family: Centra;
-    src: url('../../assets/fonts/CentraNo2-Medium.ttf');
-    font-weight: 700;
+@font-face {
+  font-family: Centra;
+  src: url("../../assets/fonts/CentraNo2-Medium.ttf");
+  font-weight: 700;
 }
 
-@font-face{
-    font-family: Centra;
-    src: url('../../assets/fonts/CentraNo2-Book.ttf');
-    font-weight: 700;
+@font-face {
+  font-family: Centra;
+  src: url("../../assets/fonts/CentraNo2-Book.ttf");
+  font-weight: 700;
 }
 
 /* default CSS page stuff*/
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html {
-    scroll-behavior: smooth;
-    scroll-padding-top: 75px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 75px;
 }
 
 body {
-    font-weight: 400;
-    overflow-x: hid;
-    position: relative;
-    background-color: #121212;
-    color: #fff;
-    font-family: 'Centra', sans-serif;
+  font-weight: 400;
+  overflow-x: hid;
+  position: relative;
+  background-color: #121212;
+  color: #fff;
+  font-family: "Centra", sans-serif;
 }
 
-h1, h2, h3, h4 {
-    margin: 0;
-    padding: 0;
-    line-height: normal;
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  padding: 0;
+  line-height: normal;
 }
 
 .navbar {
-    padding: 0px 0;
-    background-color:linear-gradient(90.21deg, rgba(16, 83, 88, 0.5) -5.91%, rgba(183, 182, 185, 0.5) 111.58%);;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 9999;
-    transition: 0.32 ease-in-out;
-    display: flex;
-    direction: row;
-    justify-content: "space-between";
-    align-items: "center";
-    margin-bottom: 20px;
+  padding: 0px 0;
+  background-color: linear-gradient(
+    90.21deg,
+    rgba(16, 83, 88, 0.5) -5.91%,
+    rgba(183, 182, 185, 0.5) 111.58%
+  );
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 9999;
+  transition: 0.32 ease-in-out;
+  display: flex;
+  direction: row;
+  justify-content: "space-between";
+  align-items: "center";
+  margin-bottom: 20px;
 }
 
 .navbar-scrolled {
-    padding: 0px 0;
-    background-color: #121212;
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 9999;
-    transition: 0.32 ease-in-out;
-    display: flex;
-    direction: row;
-    justify-content: "space-between";
-    align-items: "center";
+  padding: 0px 0;
+  background-color: #121212;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 9999;
+  transition: 0.32 ease-in-out;
+  display: flex;
+  direction: row;
+  justify-content: "space-between";
+  align-items: "center";
+}
+
+.filter-white {
+  filter: invert(100%) sepia(3%) saturate(213%) hue-rotate(15deg)
+    brightness(116%) contrast(100%);
 }
 
 .navbar-brand {
-    width: 9%;
+  width: 9%;
 }
 
-.navbar-link{
-    font-weight: 400;
-    color: #fff;
-    letter-spacing: 0.8px;
-    padding: 0 25px;
-    font-size: 18px;
-    opacity: 0.75;
-    display: flex;
-    align-items: center;
+.navbar-link {
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.8px;
+  padding: 0 25px;
+  font-size: 18px;
+  opacity: 0.75;
+  display: flex;
+  align-items: center;
 }
 
 .navbar-link:hover,
 .navbar-link:active {
-    opacity: 1;
+  opacity: 1;
 }
 
 .active-navbar-link {
-    font-weight: 400;
-    color: #fff;
-    letter-spacing: 0.8px;
-    padding: 0 25px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    opacity: 1;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: 0.8px;
+  padding: 0 25px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  opacity: 1;
 }
 
 .navbar-button {
-    display: flex;
-    justify-content: flex-end;
-    margin-left: auto;
-    margin-right: 2%;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: auto;
+  margin-right: 2%;
 }
-
-
-
-

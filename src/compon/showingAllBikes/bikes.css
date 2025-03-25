@@ -1,59 +1,59 @@
-.search-bar{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 10px;
-    color: black;
+.search-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 10px;
+  color: black;
 }
 
-.all-bikes{
-    color:white;
-    margin-top: 10px;
+.all-bikes {
+  color: white;
+  margin-top: 10px;
 }
 
-.loading{
-    color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.loading {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.search-button{
-    margin-top: 10px;
-    background-color: white;
-    border-radius: 50px;
+.search-button {
+  margin-top: 10px;
+  background-color: white;
+  border-radius: 50px;
 }
 
-.search-button:hover{
-    background-color: gray;
+.search-button:hover {
+  background-color: gray;
 }
 
 /* Add this CSS to your stylesheet */
 input {
-    margin-top: 20px;
-    caret-color: blue; /* Set the cursor color to blue or any color you prefer */
-    animation: blinkCaret 0.8s step-end infinite; /* Blink effect */
-    border-radius: 10px;
-  }
-  
-  @keyframes blinkCaret {
-    50% {
-      caret-color: transparent; /* Hides the caret at 50% of the animation cycle */
-    }
-  }
-
-
-.loading img {
-    margin-top: 100px;
-    animation: updown 3s linear infinite;
+  margin-top: 20px;
+  caret-color: blue; /* Set the cursor color to blue or any color you prefer */
+  animation: blinkCaret 0.8s step-end infinite; /* Blink effect */
+  border-radius: 10px;
 }
 
-.background{
-    padding: 50px 0 0 0;
-    background-image: url('/glxyBg.png');
-    background-position: top center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
+@keyframes blinkCaret {
+  50% {
+    caret-color: transparent; /* Hides the caret at 50% of the animation cycle */
+  }
+}
+
+.loading img {
+  margin-top: 100px;
+  animation: updown 3s linear infinite;
+}
+
+.background {
+  padding: 100px 0 0 0;
+  background-image: url("/glxyBg.png");
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 150vh;
 }
