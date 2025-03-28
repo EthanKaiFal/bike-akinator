@@ -1,6 +1,6 @@
 'use client'
 import { Bike as Bike } from "../interfaces"
-//import * as statsService from '../../app/_actions/statsService';
+import * as statsService from '../../app/_actions/statsService';
 import * as statsServiceBatch from '../../app/_actions/statsServiceBatch';
 import * as Papa from 'papaparse';
 import { downloadData } from "aws-amplify/storage";
@@ -23,31 +23,31 @@ type DataEntry = {
 };
 
 
-// interface bikeNums {
-//     engineSize: number,
-//     horsePower: number,
-//     torque: number,
-//     engineConfig: string,
-// }
-// function uploadBatch(bikes: Bike[], category: string, bikeNums: bikeNums[]) {
-//     try {
-//         statsServiceBatch.updateModelStats(bikes, 1, category).then((modelId) => {
-//             const modelIDD = modelId ?? "";
-//             if (modelIDD === "") {
-//                 //console.log("boo");
-//             }
-//             else {
-//                 for (let j = 0; j < bikeNums.length; j++) {
-//                     statsService.updateBikeStats(bikes[j], 1, modelIDD, bikeNums[j].engineSize, bikeNums[j].horsePower, bikeNums[j].torque, bikeNums[j].engineConfig);
-//                 }
-//             }
-//         })
+interface bikeNums {
+    engineSize: number,
+    horsePower: number,
+    torque: number,
+    engineConfig: string,
+}
+function uploadBatch(bikes: Bike[], category: string, bikeNums: bikeNums[]) {
+    try {
+        statsServiceBatch.updateModelStats(bikes, 1, category).then((modelId) => {
+            const modelIDD = modelId ?? "";
+            if (modelIDD === "") {
+                //console.log("boo");
+            }
+            else {
+                for (let j = 0; j < bikeNums.length; j++) {
+                    statsService.updateBikeStats(bikes[j], 1, modelIDD, bikeNums[j].engineSize, bikeNums[j].horsePower, bikeNums[j].torque, bikeNums[j].engineConfig);
+                }
+            }
+        })
 
-//     }
-//     catch {
-//         console.error("error updating");
-//     }
-// }
+    }
+    catch {
+        console.error("error updating");
+    }
+}
 
 function uploadBatchForBrand(bikes: Bike[], brand: string) {
     try {
@@ -108,13 +108,13 @@ const DataImportCompon = ({ index, size }: {
         // const text = await file.text();
         const batchSize = size;
         const firstIndex = index;
-        //let curModel = "";
+        let curModel = "";
         let localStepCount = 0
-        //let bikes: Bike[] = [];
+        let bikes: Bike[] = [];
         let curBrand = "";
         let bikesInBrand: Bike[] = [];
-        //let bikeNums: bikeNums[] = [];
-        //let category = "";
+        let bikeNums: bikeNums[] = [];
+        let category = "";
 
         Papa.parse<DataEntry>(text,
             {
@@ -127,9 +127,9 @@ const DataImportCompon = ({ index, size }: {
                 },
                 complete: () => {
                     console.log('Finished parsing');
-                    // if (bikes.length) {
-                    //     uploadBatch(bikes, category, bikeNums);
-                    // }
+                    if (bikes.length) {
+                        uploadBatch(bikes, category, bikeNums);
+                    }
                     if (bikesInBrand.length != 0) {
                         uploadBatchForBrand(bikesInBrand, curBrand);
                     }
@@ -156,32 +156,32 @@ const DataImportCompon = ({ index, size }: {
                             score: ((results.data['Rating']) * 2),
                         }
 
-                        // const curBikeNum: bikeNums = {
-                        //     engineSize: results.data['Displacement (ccm)'] ?? 0,
-                        //     horsePower: results.data['Power (hp)'] ?? 0,
-                        //     torque: results.data['Torque (Nm)'] ?? 0,
-                        //     engineConfig: results.data['Engine cylinder']
-                        // }
-                        // category = results.data['Category'];
+                        const curBikeNum: bikeNums = {
+                            engineSize: results.data['Displacement (ccm)'] ?? 0,
+                            horsePower: results.data['Power (hp)'] ?? 0,
+                            torque: results.data['Torque (Nm)'] ?? 0,
+                            engineConfig: results.data['Engine cylinder']
+                        }
+                        category = results.data['Category'];
 
                         //build the batch
-                        // if (bikeData.model === curModel) {
-                        //     bikes.push(bikeData);
-                        //     bikeNums.push(curBikeNum);
-                        // }
-                        // //batch finished
-                        // else {
-                        //     //handleUpload of batch to DB
-                        //     if (bikes.length != 0) {
-                        //         uploadBatch(bikes, results.data['Category'], bikeNums);
-                        //     }
-                        //     //reset
-                        //     bikes = [];
-                        //     bikeNums = [];
-                        //     curModel = bikeData.model ?? "";
-                        //     bikeNums.push(curBikeNum);
-                        //     bikes.push(bikeData);
-                        // }
+                        if (bikeData.model === curModel) {
+                            bikes.push(bikeData);
+                            bikeNums.push(curBikeNum);
+                        }
+                        //batch finished
+                        else {
+                            //handleUpload of batch to DB
+                            if (bikes.length != 0) {
+                                uploadBatch(bikes, results.data['Category'], bikeNums);
+                            }
+                            //reset
+                            bikes = [];
+                            bikeNums = [];
+                            curModel = bikeData.model ?? "";
+                            bikeNums.push(curBikeNum);
+                            bikes.push(bikeData);
+                        }
                         //build brand batch
                         if (bikeData.brand === curBrand) {
                             bikesInBrand.push(bikeData);
