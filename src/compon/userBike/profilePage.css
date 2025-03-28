@@ -1,55 +1,54 @@
 /* Profile Page Container */
 .profile-container {
-    display: flex;
-    flex-direction: column;
-    justify-content:flex-start;
-    align-items: flex-start;
-    height: 100vh;
-    padding-top: 80px;
-  }
-  .background {
-    margin-top: 0;
-    padding: 50px 0 300px 0;
-    background-image: url('/glxyBg.png');
-    background-position: top center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: 100vh;
+  padding-top: 80px;
+}
+.background {
+  margin-top: 0;
+  padding: 125px 0 300px 0;
+  background-image: url("/glxyBg.png");
+  background-position: top center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.profile-title {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+}
 
-  }
-  .profile-title {
-    display:flex;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    margin-bottom: 20px;
-  }
+.bikes-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 130px;
+}
+/* Profile Card */
+.skill {
+  padding: 0 0 50px 0;
+  position: relative;
+}
 
-  .bikes-container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    margin-top: 130px;
-  }
-  /* Profile Card */
-  .skill {
-    padding: 0 0 50px 0;
-    position: relative;
-  }
-
-  .skill-bx {
-    background: #151515;
-    border-radius: 64px;
-    text-align: center;
-    padding: 30px 50px;
-    margin-top: 100px;
-    margin-left: 50px;
-    margin-right: 50px;
-  }
+.skill-bx {
+  background: #151515;
+  border-radius: 64px;
+  text-align: center;
+  padding: 30px 50px;
+  margin-top: 100px;
+  margin-left: 50px;
+  margin-right: 50px;
+}
 
 .skill h5 {
   font-size: 45px;
-  font-weight:700;
+  font-weight: 700;
 }
 .skill h2 {
   color: white;
@@ -65,9 +64,9 @@
 }
 
 .skill-slider .item {
-  color:white;
+  color: white;
   font-size: 25px;
-  font-weight:700;
+  font-weight: 700;
   transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
 }
 
@@ -75,192 +74,182 @@
   transform: translateY(-5px);
 }
 
+/* Name */
+.profile-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 
-  
+/* Location & Email */
+.profile-location,
+.profile-email {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
 
+/* Bio */
+.bike-bio {
+  font-size: 14px;
+  color: #444;
+  margin: 10px 0;
+}
 
-  
-  /* Name */
-  .profile-name {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 5px;
-  }
-  
-  /* Location & Email */
-  .profile-location,
-  .profile-email {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-  }
-  
-  /* Bio */
-  .bike-bio {
-    font-size: 14px;
-    color: #444;
-    margin: 10px 0;
-  }
-  
-  /* Profile Stats */
-  .bike-stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 15px 0;
-  }
-  
-  .stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .stat-number {
-    font-size: 18px;
-    font-weight: bold;
-    color: #007bff;
-  }
-  
-  .stat-label {
-    font-size: 12px;
-    color: #777;
-  }
-  
-  /* Buttons */
-  .profile-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-  }
-  
-  .edit-profile {
-    background: #007bff;
-    color: white;
-  }
-  
-  .edit-profile:hover {
-    background: #0056b3;
-  }
-  
-  .remove-bike {
-    background: #570808;
-    color: white;
-  }
-  
-  .remove-bike:hover {
-    background: #bb2626;
-  }
+/* Profile Stats */
+.bike-stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+}
 
-  .add-bike {
-    position: relative;
-    bottom: -50px;
-    left: 45%;
-    background: rgb(68, 201, 108);
-    font-size: 18px;
-    padding: 18px 30px;
-    border-radius: 25px;
-    font-weight: bold;
-    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
-  }
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
-  .add-bike:hover {
-    background: rgb(28, 128, 58);
-    transform: translateY(-5px);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 500px) {
-    .bike-card {
-      width: 90%;
-    }
-  }
-  
-  .profile-Satis-Bar {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width:50%;
-    height: 200px;
-    color: white;
-    margin-left: 7%;
+.stat-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #007bff;
+}
 
-  }
+.stat-label {
+  font-size: 12px;
+  color: #777;
+}
 
-  .bar{
-    margin-left: 70%;
-  }
-  .user-bike-container{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    gap:20px;
-  }
+/* Buttons */
+.profile-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
 
-  .bools{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap:10px;
-  }
+.edit-profile {
+  background: #007bff;
+  color: white;
+}
 
-  .bools p:after{
-    content: "|";  /* Add the pipe separator */
-  color: gray;   /* Style the separator */
+.edit-profile:hover {
+  background: #0056b3;
+}
+
+.remove-bike {
+  background: #570808;
+  color: white;
+}
+
+.remove-bike:hover {
+  background: #bb2626;
+}
+
+.add-bike {
+  position: relative;
+  bottom: -50px;
+  left: 45%;
+  background: rgb(68, 201, 108);
+  font-size: 18px;
+  padding: 18px 30px;
+  border-radius: 25px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition effects */
+}
+
+.add-bike:hover {
+  background: rgb(28, 128, 58);
+  transform: translateY(-5px);
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+  .bike-card {
+    width: 90%;
+  }
+}
+
+.profile-Satis-Bar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 200px;
+  color: white;
+  margin-left: 7%;
+}
+
+.bar {
+  margin-left: 70%;
+}
+.user-bike-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bools {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bools p:after {
+  content: "|"; /* Add the pipe separator */
+  color: gray; /* Style the separator */
   margin-left: 0px; /* Space after the pipe */
-  }
+}
 
-  .bools p:last-child::after {
-    content: ""; /* Remove pipe from the last item */
-  }
+.bools p:last-child::after {
+  content: ""; /* Remove pipe from the last item */
+}
 
-  .bools p{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap:10px;
-  }
+.bools p {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
 
-  .basic-info{
-    display:flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    max-width: 100%;
-    flex-wrap: nowrap;
-  }
+.basic-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 100%;
+  flex-wrap: nowrap;
+}
 
-  .basic-info p{
-    white-space: nowrap; /* Ensures text stays on one line */
-    overflow: hidden; /* Prevents overflow if needed */
-    text-overflow: ellipsis; /* Adds "..." if the text is too long */
-  }
+.basic-info p {
+  white-space: nowrap; /* Ensures text stays on one line */
+  overflow: hidden; /* Prevents overflow if needed */
+  text-overflow: ellipsis; /* Adds "..." if the text is too long */
+}
 
-  .basic-info p:after{
-    content: "|";  /* Add the pipe separator */
-  color: gray;   /* Style the separator */
+.basic-info p:after {
+  content: "|"; /* Add the pipe separator */
+  color: gray; /* Style the separator */
   margin-left: 20px; /* Space after the pipe */
-  }
+}
 
-  .basic-info p:last-child::after {
-    content: ""; /* Remove pipe from the last item */
-  }
+.basic-info p:last-child::after {
+  content: ""; /* Remove pipe from the last item */
+}
 
-  .remove-bike{
-    background-color: rgb(56, 8, 95);
-    border-radius: 25px;
-    width: 30%;
-    margin-left: 33%;
-  }
+.remove-bike {
+  background-color: rgb(56, 8, 95);
+  border-radius: 25px;
+  width: 30%;
+  margin-left: 33%;
+}
 
-  .remove-bike:hover{
-    background-color: #bb2626;
-  }
-
-
-
-  
+.remove-bike:hover {
+  background-color: #bb2626;
+}

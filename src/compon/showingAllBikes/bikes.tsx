@@ -38,7 +38,9 @@ const Bikes = () => {
             const pulledlist: modelDataWID[] = data as modelDataWID[];
             const modelList: (modelDataWID)[] = pulledlist.map((bike) => {
                 console.log(inputModel);
-                if ((bike.modelName ?? "").includes(inputModel)) {
+                const noWhitespaceModel = (bike.modelName ?? "").replace(/\s+/g, '');
+                const noWhitespaceInputModel = inputModel.replace(/\s+/g, '');
+                if ((noWhitespaceModel).includes(noWhitespaceInputModel)) {
                     return bike as modelDataWID;
                 }
                 return null;
