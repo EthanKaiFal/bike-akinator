@@ -198,7 +198,7 @@ const DataImportCompon = ({ index, size }: {
                         //put into DB per row
                         //batch.push(bikeData);
                         parser.pause();
-                        setTimeout(function () { parser.resume(); }, 5000);
+                        setTimeout(function () { parser.resume(); }, 50);
 
                     }
                 }
